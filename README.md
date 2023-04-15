@@ -8,6 +8,8 @@ A equipe responsável pelo desenvolvimento do Adote.cão é composta por:
 
 [Helena](https://github.com/LenaLatosinski)
 
+[Lucas](https://github.com/Lussca)
+
 # Linguagens utilizadas no desenvolvimento
 ![Java](https://img.shields.io/badge/Java-8-red)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
