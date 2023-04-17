@@ -1,0 +1,48 @@
+body{
+	background-image: url('./imgs/background_login.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+  
+.loginArea {
+	width: 30%;
+	height: 60%;
+	background: rgba(255, 255, 255, 0.25);
+	border-radius: 16px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(3.7px);
+	-webkit-backdrop-filter: blur(3.7px);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.intro{
+	display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo{
+	max-width:500px;
+    max-height:215px;
+    width: auto;
+    height: auto;
+}
+
+.loginForm{
+	display: flex;
+	align-items: center;
+	justify-items: center;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.login{
+	display: flex;
+	justify-content: center;
+	text-transform: capitalize;
+	margin: 0;
+    font-size: 40px;
+    font-weight: 550;
+	color: #fff;
+	text-shadow: 3px 4px 5px rgba(0,0,0,0.46);
+}

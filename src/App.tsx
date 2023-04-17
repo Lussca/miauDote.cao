@@ -1,42 +1,19 @@
-import './App.css'
+import './App.css';
+import React from 'react';
 import { useState } from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-//imports mui
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-
+// imports paginas
+import Login from './Login/Login';
 
 function App() {
 
-  const [age, setAge] = useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
-
   return (
-    <div className="App">
-      <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
+    <div className='App'>
+      <Login/>
     </div>
-  )
+  );
+  
 }
 
 export default App
