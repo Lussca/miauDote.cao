@@ -11,16 +11,19 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import adoteCaoProjetoModel.entity.Adress;
+import adoteCaoProjetoModel.entity.UserAdopter;
+import adoteCaoProjetoModel.entity.UserOng;
 
 
 public class Dao {
     private static final Logger LOGGER = Logger.getLogger(Dao.class.getName());
 
     private String getConfigValueByKey(String key) throws IOException {
-        File file = new File("C:\\Users\\Pichau\\Desktop\\novoWorkspace\\adoteCaoProjeto\\admin\\config.ini");
+        File file = new File("/miaudoteCao/admin/config.ini");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -66,10 +69,12 @@ public class Dao {
             statement.setString(7, user.getPublicKey());
             statement.setString(8, user.getPrivateKey());
             statement.setInt(9, idAdress);
-            int update = statement.executeUpdate();
+            @SuppressWarnings("unused")
+			int update = statement.executeUpdate();
             ResultSet keys = statement.getGeneratedKeys();
             if (keys.next()) {
-                int id = keys.getInt(1);
+                @SuppressWarnings("unused")
+				int id = keys.getInt(1);
                 return true;
             } else {
                 throw new SQLException("Nenhuma chave primaria foi gerada.");
@@ -92,10 +97,12 @@ public class Dao {
 	            statement.setString(6, user.getPublicKey());
 	            statement.setString(7, user.getPrivateKey());
 	            statement.setInt(8, idAdress);
-	            int update = statement.executeUpdate();
+	            @SuppressWarnings("unused")
+				int update = statement.executeUpdate();
 	            ResultSet keys = statement.getGeneratedKeys();
 	            if (keys.next()) {
-	                int id = keys.getInt(1);
+	                @SuppressWarnings("unused")
+					int id = keys.getInt(1);
 	                return true;
 	            } else {
 	                throw new SQLException("Nenhuma chave primaria foi gerada.");
@@ -225,7 +232,7 @@ public class Dao {
 		return false;
 	}
 
-	public boolean insertJWT(String jwt, boolean isOng, String login) throws ClassNotFoundException, SQLException, IOException {
+	public boolean insertAndUpdateJWT(String jwt, boolean isOng, String login) throws ClassNotFoundException, SQLException, IOException {
 		String sql;
 		if(isOng) {
 			sql = "UPDATE userOng set jwt=? WHERE login=?";
@@ -247,4 +254,23 @@ public class Dao {
 			return false;
 		}
 	}
+	public String getJWT(String login, boolean isOng) throws ClassNotFoundException, IOException {
+	    String sql;
+	    if (isOng) {
+	        sql = "SELECT jwt FROM userOng WHERE login=?";
+	    } else {
+	        sql = "SELECT jwt FROM userAdopter WHERE login=?";
+	    }
+	    try (Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+	        statement.setString(1, login);
+	        ResultSet rs = statement.executeQuery();
+	        if (rs.next()) {
+	            return rs.getString("jwt");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+
 }
