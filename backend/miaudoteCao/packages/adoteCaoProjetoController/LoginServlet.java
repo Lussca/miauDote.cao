@@ -62,7 +62,9 @@ public class LoginServlet extends HttpServlet {
 		}
 
 	private void configureCors(HttpServletResponse response) {
-	    response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+		response.setHeader("Access-Control-Allow-Origin", "*");
+	    // response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173/");
+	    // response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
 	    response.setHeader("Access-Control-Allow-Methods", "GET, POST");
 	    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 	    response.setHeader("Access-Control-Max-Age", "86400"); // 24 hours

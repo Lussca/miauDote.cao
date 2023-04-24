@@ -46,3 +46,8 @@ body{
 	color: #fff;
 	text-shadow: 3px 4px 5px rgba(0,0,0,0.46);
 }
+
+.alertArea{
+	display: flex;
+	justify-content: center;
+}
