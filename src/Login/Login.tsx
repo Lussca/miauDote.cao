@@ -52,8 +52,8 @@ function Login(this: any)  {
 
           if(sessionData == 15){
             setShowAlert(true);
-            setSeverity('error');
-            setMsg('Erro, email ou senha inválidos!');
+            setSeverity('warning');
+            setMsg('Atenção! email ou senha inválidos.');
           }
 
           if(httpRequest.status === 200){

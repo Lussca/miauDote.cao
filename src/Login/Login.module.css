@@ -6,11 +6,11 @@ body{
   
 .loginArea {
 	width: 30%;
-	height: 60%;
+	height: auto;
 	background: rgba(255, 255, 255, 0.25);
 	border-radius: 16px;
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(3.7px);
+	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(3.7px);
 	border: 1px solid rgba(255, 255, 255, 0.3);
 }
@@ -34,6 +34,7 @@ body{
 	justify-items: center;
 	flex-direction: column;
 	justify-content: center;
+	margin-bottom: 10px;
 }
 
 .login{
@@ -41,7 +42,7 @@ body{
 	justify-content: center;
 	text-transform: capitalize;
 	margin: 0;
-    font-size: 40px;
+    font-size: 25px;
     font-weight: 550;
 	color: #fff;
 	text-shadow: 3px 4px 5px rgba(0,0,0,0.46);

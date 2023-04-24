@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 // imports paginas
 import Login from './Login/Login';
+// import Registro from './Registro/Registro';
 
 function App() {
 
