@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+miauDote.cao\backend\miaudoteCao\admin
+miauDote.cao\backend\.metadata
+miauDote.cao\backend\Servers

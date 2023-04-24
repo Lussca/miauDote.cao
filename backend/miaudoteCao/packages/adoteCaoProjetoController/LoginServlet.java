@@ -27,6 +27,8 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Validations validations = new Validations();
 	Encrypt encrypt = new Encrypt();
+	JwtHandler jwtHandler = new JwtHandler();
+	RequestResponseHandler rrh = new RequestResponseHandler();
 	Dao dao = new Dao();
        
     /**
@@ -37,18 +39,17 @@ public class LoginServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		configureCors(response);
+		rrh.configureCors(response);
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
 		List<Boolean> confirmations = new ArrayList<Boolean>();
 		try {
 			confirmations = validations.verifyLogin(login, password);
 		} catch (NoSuchAlgorithmException | ClassNotFoundException | IOException e) {
-			sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.WRONG_CREDENTIALS);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.WRONG_CREDENTIALS);
 			e.printStackTrace();
 			}
 		
@@ -57,18 +58,9 @@ public class LoginServlet extends HttpServlet {
 			}else if(!confirmations.get(0) && confirmations.get(1)) {
 				setSessionAndSendResponse(request, response, login, false);
 			}else {
-				sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.WRONG_CREDENTIALS);
+				rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.WRONG_CREDENTIALS);
 			}
 		}
-
-	private void configureCors(HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-	    // response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173/");
-	    // response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
-	    response.setHeader("Access-Control-Allow-Methods", "GET, POST");
-	    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-	    response.setHeader("Access-Control-Max-Age", "86400"); // 24 hours
-	}
 	private void setSessionAndSendResponse(HttpServletRequest request, HttpServletResponse response, String login, boolean isOng) throws IOException {
 		HttpSession session = request.getSession();
 		session.setAttribute("login", login);
@@ -82,11 +74,11 @@ public class LoginServlet extends HttpServlet {
 		
 		String id = idGenerator();
 		String subject = login;
-		String jwt = encrypt.createJWT(id, subject, Encrypt.JWT_ISSUER);
+		String jwt = jwtHandler.createJWT(id, subject, Encrypt.JWT_ISSUER, 3600000);
 		try {
-			dao.insertJWT(jwt, isOng, login);
+			dao.insertAndUpdateJWT(jwt, isOng, login);
 		} catch (ClassNotFoundException | SQLException | IOException e1) {
-			sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
 			e1.printStackTrace();
 		}
 		
@@ -107,18 +99,10 @@ public class LoginServlet extends HttpServlet {
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
 			e.printStackTrace();
 		}
-	}
-	private void sendErrorResponse(HttpServletResponse response, int status, int message) throws IOException {
-	    response.setContentType("text/plain");
-	    response.setStatus(status);
-	    response.getWriter().println(message);
-	    response.getWriter().flush();
-	    response.getWriter().close();
-	}
-	
+	}	
 	private String idGenerator() {
 		        Random random = new Random();
 		        long newId;

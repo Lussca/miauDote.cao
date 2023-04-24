@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import adoteCaoProjetoModel.Adress;
 import adoteCaoProjetoModel.Dao;
-import adoteCaoProjetoModel.UserAdopter;
-import adoteCaoProjetoModel.UserOng;
+import adoteCaoProjetoModel.entity.Adress;
+import adoteCaoProjetoModel.entity.UserAdopter;
+import adoteCaoProjetoModel.entity.UserOng;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -23,6 +23,7 @@ public class RegisterServlet extends HttpServlet {
 	Dao dao = new Dao();
 	Encrypt encrypt = new Encrypt();
 	Validations validations = new Validations();
+	RequestResponseHandler rrh = new RequestResponseHandler();
 	int responseToClient = -1;
 	boolean hasError = true;
 
@@ -36,7 +37,7 @@ public class RegisterServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		configureCors(response);
+		rrh.configureCors(response);
 		request.setCharacterEncoding("UTF-8");
 		
 		boolean isOng = Boolean.parseBoolean(request.getParameter("isOng"));
@@ -65,34 +66,34 @@ public class RegisterServlet extends HttpServlet {
 		}	
 		switch(validate) {
 		case Validations.INVALID_CITY:
-			sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_CITY);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_CITY);
 			break;
 		case Validations.INVALID_CEP:
-			sendErrorResponse(response, 422, Validations.INVALID_CEP);
+			rrh.sendErrorResponse(response, 422, Validations.INVALID_CEP);
 			break;
 		case Validations.INVALID_LOGIN:
-			sendErrorResponse(response, 422, Validations.INVALID_LOGIN);
+			rrh.sendErrorResponse(response, 422, Validations.INVALID_LOGIN);
 			break;
 		case Validations.INVALID_PASSWORD:
-			sendErrorResponse(response, 422, Validations.INVALID_PASSWORD);
+			rrh.sendErrorResponse(response, 422, Validations.INVALID_PASSWORD);
 			break;
 		case Validations.INVALID_CPF:
-			sendErrorResponse(response, 422, Validations.INVALID_CPF);
+			rrh.sendErrorResponse(response, 422, Validations.INVALID_CPF);
 			break;
 		case Validations.INVALID_BIRTH:
-			sendErrorResponse(response, 422, Validations.INVALID_BIRTH);
+			rrh.sendErrorResponse(response, 422, Validations.INVALID_BIRTH);
 			break;
 		case Validations.FIELD_IS_EMPTY:
-			sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.FIELD_IS_EMPTY);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.FIELD_IS_EMPTY);
 			break;
 		case Validations.CPF_ALREADY_EXISTS:
-			sendErrorResponse(response, HttpServletResponse.SC_CONFLICT, Validations.CPF_ALREADY_EXISTS);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_CONFLICT, Validations.CPF_ALREADY_EXISTS);
 			break;
 		case Validations.ONG_ALREADY_EXISTS:
-			sendErrorResponse(response, HttpServletResponse.SC_CONFLICT, Validations.ONG_ALREADY_EXISTS);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_CONFLICT, Validations.ONG_ALREADY_EXISTS);
 			break;
 		case Validations.LOGIN_ALREADY_EXISTS:
-			sendErrorResponse(response, HttpServletResponse.SC_CONFLICT, Validations.LOGIN_ALREADY_EXISTS);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_CONFLICT, Validations.LOGIN_ALREADY_EXISTS);
 			break;
 		case Validations.NO_ERROR:
 			if(isOng) {
@@ -129,10 +130,10 @@ public class RegisterServlet extends HttpServlet {
 						response.setStatus(HttpServletResponse.SC_OK);
 					}
 					else {
-						sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
+						rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
 					}
 				} catch (ClassNotFoundException | SQLException | IOException e) {
-					sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
+					rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
 					e.printStackTrace();
 					}
 			}else {
@@ -166,11 +167,11 @@ public class RegisterServlet extends HttpServlet {
 					if(hasError) {
 					response.setStatus(HttpServletResponse.SC_OK);
 					} else {
-						sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
+						rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
 					}
 				} catch (ClassNotFoundException | SQLException | IOException e) {
 					e.printStackTrace();
-					sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
+					rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
 				}
 			}
 			break;
@@ -178,17 +179,5 @@ public class RegisterServlet extends HttpServlet {
 			break;
 		}
 			
-	}
-	private void configureCors(HttpServletResponse response) {
-	    response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
-	    response.setHeader("Access-Control-Allow-Methods", "GET, POST");
-	    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-	}
-	private void sendErrorResponse(HttpServletResponse response, int status, int message) throws IOException {
-	    response.setContentType("text/plain");
-	    response.setStatus(status);
-	    response.getWriter().println(message);
-	    response.getWriter().flush();
-	    response.getWriter().close();
 	}
 }
