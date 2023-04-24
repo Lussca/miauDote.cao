@@ -12,7 +12,7 @@ A equipe responsável pelo desenvolvimento do Adote.cão é composta por:
 
 # Linguagens utilizadas no desenvolvimento
 ![Java](https://img.shields.io/badge/Java-8-red)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
+![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?logo=typescript&logoColor=white&style=flat)
 ![SQL](https://img.shields.io/badge/SQL-MySQL-blue)
 ![HTML](https://img.shields.io/badge/HTML-5-orange)
 ![CSS](https://img.shields.io/badge/CSS-3-blue)
