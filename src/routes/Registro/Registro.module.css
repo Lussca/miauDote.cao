@@ -1,0 +1,66 @@
+.cadastroArea{
+    width: 30%;
+	height: auto;
+	background: rgba(255, 255, 255, 0.25);
+	border-radius: 16px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(3.7px);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.logo{
+    width: 150px;
+    height: auto;
+}
+
+.title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.subTitle{
+    display: flex;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.forms{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.formularioAjuste{
+    display: flex;
+    justify-content: center;
+}
+
+.formInputsPessoais{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.formDiv{
+    width: 40%;
+}
+
+.campos{
+    margin-top: 10px;
+}
+
+.btnDiv{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

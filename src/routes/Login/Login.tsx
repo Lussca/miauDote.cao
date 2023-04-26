@@ -1,10 +1,10 @@
 import styles from'./Login.module.css';
 import { useState } from 'react';
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import Alert, { AlertColor } from '@mui/material/Alert';
 
 function Login(this: any)  {
@@ -112,7 +112,7 @@ function Login(this: any)  {
 
         <div className={styles.Register}>
           <p className={styles.Link}>Ainda não tem uma conta? 
-            <Link href="http:127.0.0.1:5500/cadastro.html" underline="hover">
+            <Link to="/registrar">
               {'Clique aqui!'}
             </Link>
           </p>

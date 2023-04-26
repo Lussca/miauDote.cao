@@ -1,0 +1,25 @@
+.errorScreen {
+    width: 20%;
+	height: auto;
+    color: #ff0000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+	background: rgba(255, 255, 255, 0.25);
+	border-radius: 16px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(3.7px);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.errorScreen p {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.iframe{
+    margin-top: 10px;
+    border: none !important;
+}
