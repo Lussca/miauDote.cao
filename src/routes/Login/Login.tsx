@@ -1,10 +1,10 @@
-import styles from'./Login.module.css';
 import { useState } from 'react';
 import React, { useRef } from 'react';
+import styles from'./Login.module.css';
 import { Link } from 'react-router-dom';
 
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import Alert, { AlertColor } from '@mui/material/Alert';
 
 function Login(this: any)  {
@@ -77,7 +77,7 @@ function Login(this: any)  {
   return (
     <div className={styles.loginArea}>
       <div className={styles.alertArea}>
-        {showAlert && <Alert variant="filled" severity={alertSeverity}  onClose={() => {}}>
+        {showAlert && <Alert variant="filled" severity={alertSeverity}  onClose={() => {setShowAlert(false)}}>
           {msg}
         </Alert> }
       </div>
@@ -112,7 +112,7 @@ function Login(this: any)  {
 
         <div className={styles.Register}>
           <p className={styles.Link}>Ainda não tem uma conta? 
-            <Link to="/registrar">
+            <Link to="/registrar" className={styles.link}>
               {'Clique aqui!'}
             </Link>
           </p>

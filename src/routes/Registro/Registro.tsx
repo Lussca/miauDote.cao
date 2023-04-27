@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import React, { useRef } from 'react';
 import styles from'./Registro.module.css';
+import { Link } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
@@ -22,7 +23,7 @@ function Registro(this: any)  {
 
       <div className={styles.forms}>
         <div className={styles.subTitle}>
-          <h3>Dados de Acesso</h3>
+          <p>Dados de Acesso</p>
         </div>
         <div className={styles.campos}>
           <TextField
@@ -51,8 +52,10 @@ function Registro(this: any)  {
         </div>
       </div>
 
+      <hr />
+
       <div className={styles.subTitle}>
-        <h3>Dados Pessoais</h3>
+        <p>Dados Pessoais</p>
       </div>
       <div className={styles.formInputsPessoais}>
         <div className={styles.formDiv}>
@@ -114,6 +117,11 @@ function Registro(this: any)  {
         </div>
       </div>
       <div className={styles.btnDiv}>
+        <Link to="/" className={styles.link}>
+          <Button variant="contained">
+            VOLTAR
+          </Button>
+        </Link>
         <Button variant="contained" color="success">
           CADASTRAR
         </Button>

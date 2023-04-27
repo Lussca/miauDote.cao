@@ -4,7 +4,7 @@
 	background: rgba(255, 255, 255, 0.25);
 	border-radius: 16px;
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(15px);
+	backdrop-filter: blur(120px);
 	-webkit-backdrop-filter: blur(3.7px);
 	border: 1px solid rgba(255, 255, 255, 0.3);
 }
@@ -18,15 +18,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: #000;
 }
 
 .subTitle{
     display: flex;
     justify-content: center;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 900;
+    font-size: 25px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -62,5 +61,50 @@
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
+}
+
+hr{
+    width: 90%;
+}
+
+.link{
+    text-decoration: none
+}
+
+@media (max-width: 600px)
+{
+  .cadastroArea {
+	width: 95%;
+    margin-top: 4em;
+   }
+
+   .logo {
+	display: none;
+   }
+
+   .title{
+    font-size: 12px;
+    -webkit-text-stroke-width: 0;
+    -webkit-text-stroke-color: #ffffff;
+   }
+
+   .subTitle{
+    display: none;
+   }
+
+   .formInputsPessoais{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+   }
+
+   .formDiv{
+    width: 65%;
+   }
+
+   hr{
+    display: none;
+   }
 }

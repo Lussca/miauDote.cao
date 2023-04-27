@@ -49,6 +49,16 @@ body{
 }
 
 .alertArea{
-	display: flex;
-	justify-content: center;
+	position: absolute;
+}
+
+.link{
+    text-decoration: none
+}
+
+@media (max-width: 600px)
+{
+  .loginArea {
+	width: 95%;
+   }
 }
