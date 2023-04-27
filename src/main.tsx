@@ -1,9 +1,12 @@
+//imports padrão react
 import React, { Children } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 
+//imports de rotas
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
+//Rotas pags
 import Login from './routes/Login/Login'
 import Registro from './routes/Registro/Registro'
 import ErrorPage from './routes/ErrorPage/ErrorPage'

@@ -1,8 +1,9 @@
+//imports padrão react
 import './App.css';
 import React from 'react';
 import { useState } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
+//imports de rotas
 import { Outlet } from 'react-router-dom';
 
 function App() {
