@@ -1,5 +1,5 @@
 //imports padrão react
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import styles from'./Registro.module.css';
 
 //imports masks
@@ -18,10 +18,14 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-//TODO: API CEP
-//TODO: ABRIR E FECHAR ABA DA ONG
-//TODO: CADASTRAR USUÁRIO
-//TODO: RESPONSAVEL
+// import Api cep (axios)
+import axios from 'axios';
+
+//Api CEP consulta
+async function fetchAddress(cep: any) {
+  const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+  return response.data;
+}
 
 function Registro(this: any)  {
 
@@ -35,22 +39,68 @@ function Registro(this: any)  {
   const [city, setCity] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [cep, setCep] = useState('');
+  const [address, setAddress] = useState(null);
   const [ongName, setOngName] = useState('');
+
+  const handleChangeLogin = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setlogin(event.target.value);
+  };
+
+  const handleChangePassword = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setPassword(event.target.value);
+  };
+
+  const handleChangeName = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setName(event.target.value);
+  };
+
+  const handleChangeBirth = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setBirth(event.target.value);
+  };
+
+  const handleChangeCity = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setState(event.target.value);
+  };
+
+  const handleChangeNeighborhood = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setCity(event.target.value);
+  };
+
+  const handleChangeCep = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setNeighborhood(event.target.value);
+  };
+
+  const handleChangeOngName = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setOngName(event.target.value);
+  };
 
   const handleCheck = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
     setIsOng(event.target.checked);
   }
 
-  function showOngOptions() {
-    let formContainer = document.getElementsByName("formInputsPessoais");
-
-    if (isOng != true) {
-      //retira o display none
-    }else {
-      //coloca o display none
-      //limpa os campos
+  const toggleDisplay = () => {
+    const element = document.querySelector('.formInputsOng') as HTMLElement;
+    if(element){
+      element.style.display = isOng ? 'none' : 'block';
+      setIsOng(!isOng);
     }
-  }
+  };
+
+  //retira mascara do campo CEP
+  const cepValue = cep.replace(/\D/g, '');
+
+  //Faz o resuqest da consulta e preenvhe os campos
+  useEffect(() => {
+    if (cepValue.length === 8) {
+      const fetchData = async () => {
+        const addressData = await fetchAddress(cepValue);
+        setAddress(addressData);
+      };
+      fetchData();
+    } else {
+      setAddress(null);
+    }
+  }, [cep]);
 
   // function createAccount(event) {
 
@@ -84,27 +134,6 @@ function Registro(this: any)  {
   //     }      
   // }
 
-  // let data;
-  // //PREENCHIMENTO AUTOMATICO DE CAMPOS DE ENDEREÇO
-  // cep.addEventListener("input", function(){
-  //   let cepValue = cep.value;
-  //   let url = "https://api.postmon.com.br/v1/cep/"+cepValue;
-  //   let httpRequest = new XMLHttpRequest();
-  //   httpRequest.open("GET",url);
-  //   httpRequest.onload = () =>{
-  //     if(httpRequest.status === 200){
-  //         data = JSON.parse(httpRequest.responseText);
-  //       let state = document.getElementById("state");
-  //       let city = document.getElementById("city");
-  //       let neighborhood = document.getElementById("neighborhood");
-  //       state.value = data.estado_info.nome;
-  //       city.value = data.cidade;
-  //       neighborhood.value = data.bairro;
-  //     }
-  //   }
-  //   httpRequest.send();
-  // });
-
   return (
     <div className={styles.cadastroArea}>
       <div className={styles.title}>
@@ -121,7 +150,8 @@ function Registro(this: any)  {
             required
             id="login"
             name='login' 
-            label="Email" 
+            label="Email"
+            value={login}
           />
         </div>
         <div className={styles.campos}>
@@ -131,6 +161,7 @@ function Registro(this: any)  {
             name='password'
             label="Password"
             type="password"
+            value={password}
           />
         </div>
         <div className={styles.campos}>
@@ -139,8 +170,12 @@ function Registro(this: any)  {
             labelPlacement="end"
             control={<Checkbox
               checked={isOng}
-              onChange={handleCheck}
-              onClick={showOngOptions}
+              onChange={
+                () => {
+                    handleCheck;
+                    toggleDisplay;
+                  }
+                }
             />}
           />
         </div>
@@ -157,6 +192,7 @@ function Registro(this: any)  {
               id="name"
               name='name'
               label="Nome Completo"
+              value={name}
             />
           </div>
           <div className={styles.campos}>
@@ -196,6 +232,7 @@ function Registro(this: any)  {
               id="Estado"
               name='Estado'
               label="Estado"
+              value={state}
             />
           </div>
           <div className={styles.campos}>
@@ -204,6 +241,7 @@ function Registro(this: any)  {
               id="Cidade"
               name='Cidade'
               label="Cidade"
+              value={city}
             />
           </div>
           <div className={styles.campos}>
@@ -212,6 +250,7 @@ function Registro(this: any)  {
               id="Bairro"
               name='Bairro'
               label="Bairro"
+              value={neighborhood}
             />
           </div>
         </div>
@@ -228,6 +267,7 @@ function Registro(this: any)  {
                 id="id"
                 name='ongName'
                 label="Nome da ONG"
+                value={ongName}
               />
             </div>
           </div>
