@@ -78,4 +78,29 @@ public class PetRegisterServlet extends HttpServlet{
         return body;
     }
      
+    public List<String> getImageUrl(String json){
+        ArrayList<String> urls = new ArrayList<String>();
+    /*
+   StringBuilder jsonBuff = new StringBuilder();
+String line = null;
+try {
+    BufferedReader reader = req.getReader();
+    while ((line = reader.readLine()) != null)
+        jsonBuff.append(line);
+} catch (Exception e) { /*error }
+
+System.out.println("Request JSON string :" + jsonBuff.toString());
+write the response here by getting JSON from jasonBuff.toString()
+
+try {
+    JSONObject jsonObject = JSONObject.fromObject(jb.toString());
+
+    out.print(jsonObject.get("name"));//writing output as you did
+
+} catch (ParseException e) {
+    throw new IOException("Error parsing JSON ");
+}
+*/
+        return urls;
+    }
 }
