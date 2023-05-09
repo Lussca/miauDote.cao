@@ -15,6 +15,7 @@
 }
 
 .title{
+    height: 7em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,6 +26,10 @@
     justify-content: center;
     font-size: 25px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.rowOne{
+    display: flex;
 }
 
 .forms{
@@ -60,10 +65,6 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-}
-
-hr{
-    width: 90%;
 }
 
 .link{
@@ -110,45 +111,50 @@ fieldset{
 
 .formInputsOng{
     display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
 }
 
-@media (max-width: 600px)
-{
-  .cadastroArea {
-	width: 95%;
-    margin-top: 0.5em;
-   }
+@media only screen and (max-width:1024px) {
+    .cadastroArea {
+        width: 70%;
+        height: 90%;
+        overflow: auto;
+    }
+}
 
-   .logo {
-	display: none;
-   }
+@media only screen and (max-width:768px) {
+    .cadastroArea {
+        width: 95%;
+        margin-top: 0.5em;
+        overflow: auto;
+    }
+    
+    .title{
+        font-size: 12px;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        -webkit-text-stroke-width: 0;
+        -webkit-text-stroke-color: #ffffff;
+    }
+    
+    .formInputsPessoais{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+    }
+    
+    .formDiv{
+        width: 65%;
+    }
+    
+    .campos{
+        margin-top: 10px;
+    }
+}
 
-   .title{
-    font-size: 12px;
-    -webkit-text-stroke-width: 0;
-    -webkit-text-stroke-color: #ffffff;
-   }
+@media only screen and (max-width:480px) {
 
-   .subTitle{
-    display: none;
-   }
-
-   .formInputsPessoais{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-direction: column;
-   }
-
-   .formDiv{
-    width: 65%;
-   }
-
-   .campos{
-    margin-top: 4px;
-   }
-
-   hr{
-    display: none;
-   }
 }
