@@ -1,14 +1,23 @@
 package adoteCaoProjetoController;
 
-import adoteCaoProjetoController.JwtHandler;
-import adoteCaoProjetoController.RequestResponseHandler;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * Servlet implementation class PetRegisterServlet
  */
 
 public class PetRegisterServlet extends HttpServlet{
-    JwtHandler jwtH = new JwtHandler();
+	private static final long serialVersionUID = 1L;
+	JwtHandler jwtH = new JwtHandler();
     RequestResponseHandler rrh = new RequestResponseHandler();
     /**
      * @see HttpServlet#HttpServlet()
@@ -17,90 +26,33 @@ public class PetRegisterServlet extends HttpServlet{
      public PetRegisterServlet(){
         super();
      }
-
-     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException{
-
-     }
-     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException{
+     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         rrh.configureCors(response);
-        String jwtRequest = request.getParameter("jwt");
+        response.setHeader("Access-Control-Allow-Headers", "Authorizations, Content-Type");
+        String authorizationHeader = request.getHeader("Authorization");
+        if(authorizationHeader == null || authorizationHeader.startsWith("Bearer ")) {
+        	rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.INVALID_TOKEN);
+        	return;
+        }else {
+        String jwt = authorizationHeader.substring(7);
         String login = request.getParameter("login");
-        boolean isOng = request.getParameter("isOng");
-       
-   
-        if(jwtH.validateJWT(jwtRequest, login, isOng)){
-           String body = getBody(request);
-           JSONObject jObj = new JSONObject(body);
-
-           Iterator<String> it = jObj.keys();
-           while(it.hasNext()){
-            String key = it.next();
-            Object jwt = jObj.get(key);
-           }
-        }else{
-           rrh.sendErrorResponse(response, 401, Validations.SESSION_EXPIRED);
-        }
+        boolean isOng = Boolean.parseBoolean(request.getParameter("isOng"));
         
-     }
-
-     private static String getBody(HttpServletRequest request)  {
-
-        String body = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-    
         try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            } else {
-                stringBuilder.append("");
-            }
-        } catch (IOException ex) {
-            // throw ex;
-            return "";
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-    
-                }
-            }
-        }
-    
-        body = stringBuilder.toString();
-        return body;
-    }
-     
-    public List<String> getImageUrl(String json){
-        ArrayList<String> urls = new ArrayList<String>();
-    /*
-   StringBuilder jsonBuff = new StringBuilder();
-String line = null;
-try {
-    BufferedReader reader = req.getReader();
-    while ((line = reader.readLine()) != null)
-        jsonBuff.append(line);
-} catch (Exception e) { /*error }
-
-System.out.println("Request JSON string :" + jsonBuff.toString());
-write the response here by getting JSON from jasonBuff.toString()
-
-try {
-    JSONObject jsonObject = JSONObject.fromObject(jb.toString());
-
-    out.print(jsonObject.get("name"));//writing output as you did
-
-} catch (ParseException e) {
-    throw new IOException("Error parsing JSON ");
+			if(jwtH.validateJWT(jwt, login, isOng)) {
+				StringBuilder requestBody = new StringBuilder();
+				try(BufferedReader reader = request.getReader()){
+					String line;
+					while((line = reader.readLine()) != null){
+						requestBody.append(line);
+					}
+				}
+				String urlJson = requestBody.toString();
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.SERVER_ERROR);
+			e.printStackTrace();
+		}
+     }
 }
-*/
-        return urls;
-    }
-}
+     }
