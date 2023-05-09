@@ -31,6 +31,7 @@ public class Validations {
 	    public static final int DATABASE_ERROR = 14;
 	    public static final int WRONG_CREDENTIALS = 15;
 	    public static final int SERVER_ERROR = 16;
+		public static final int ESSION_EXPIRED = 17;
 	    public static final int NO_ERROR = 0;
 
 
