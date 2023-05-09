@@ -27,6 +27,13 @@ async function fetchAddress(cep: any) {
   return response.data;
 }
 
+// interface com as variaveis da localidade
+interface Endereco {
+  uf: string;
+  localidade: string;
+  bairro: string;
+}
+
 function Registro(this: any)  {
 
   const [login, setlogin] = useState('');
@@ -35,14 +42,15 @@ function Registro(this: any)  {
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [birth, setBirth] = useState('');
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
-  const [neighborhood, setNeighborhood] = useState('');
   const [cep, setCep] = useState('');
   const [ongName, setOngName] = useState('');
 
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [neighborhood, setNeighborhood] = useState('');
+
   //variavel da api do enderço
-  const [address, setAddress] = useState(null);
+  const [address, setAddress] = useState<Endereco | null>(null);
   
   const handleChangeLogin = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setlogin(event.target.value);
@@ -92,7 +100,7 @@ function Registro(this: any)  {
   const toggleDisplay = () => {
     const element = document.querySelector('#formInputsOng') as HTMLElement;
     if(element){
-      element.style.display = isOng ? 'none' : 'block';
+      element.style.display = isOng ? 'none' : 'flex';
       const inputElement = document.querySelector('#idOng') as HTMLInputElement;
       inputElement.value = '';
       setIsOng(!isOng);
@@ -147,65 +155,68 @@ function Registro(this: any)  {
 
   return (
     <div className={styles.cadastroArea}>
+      {/* titel */}
       <div className={styles.title}>
         <img src="./imgs/adote_Cao_Logo.png" className={styles.logo}></img>
         <h1>Cadastro MiauDote.Cão</h1>
       </div>
-      <div className={styles.forms}>
-        <div className={styles.subTitle}>
-          <p>Dados de Acesso</p>
+
+      {/* dados de acesso de dados da Ong */}
+      <div className={styles.rowOne}>
+        <div className={styles.forms}>
+          <div className={styles.subTitle}>
+            <p>Dados de Acesso</p>
+          </div>
+          <div className={styles.campos}>
+            <TextField
+              required
+              id="login"
+              name='login' 
+              label="Email"
+              value={login} 
+              onChange={handleChangeLogin}
+            />
+          </div>
+          <div className={styles.campos}>
+            <TextField
+              required
+              id="password"
+              name='password'
+              label="Password"
+              type="password"
+              value={password} 
+              onChange={handleChangePassword}
+            />
+          </div>
+          <div className={styles.campos}>
+            <FormControlLabel
+              label="Sou dono de uma ONG"
+              labelPlacement="end"
+              control={<Checkbox
+                checked={isOng}
+                onChange={toggleDisplay}
+              />}
+            />
+          </div>
         </div>
-        <div className={styles.campos}>
-          <TextField
-            required
-            id="login"
-            name='login' 
-            label="Email"
-            value={login} 
-            onChange={handleChangeLogin}
-          />
-        </div>
-        <div className={styles.campos}>
-          <TextField
-            required
-            id="password"
-            name='password'
-            label="Password"
-            type="password"
-            value={password} 
-            onChange={handleChangePassword}
-          />
-        </div>
-        <div className={styles.campos}>
-          <FormControlLabel
-            label="Sou dono de uma ONG"
-            labelPlacement="end"
-            control={<Checkbox
-              checked={isOng}
-              onChange={toggleDisplay}
-            />}
-          />
-        </div>
-      </div>
-      <div className={styles.formInputsOng} id='formInputsOng'>
-        <div className={styles.subTitle}>
-          <p>Dados da ONG</p>
-        </div>
-        <div className={styles.formInputsPessoais}>
-          <div className={styles.formDiv}>
-            <div className={styles.campos}>
-              <TextField 
-                required
-                id="idOng"
-                name='ongName'
-                label="Nome da ONG"
-                value={ongName}
-                onChange={handleChangeOngName}
-              />
-            </div>
+        <div className={styles.formInputsOng} id='formInputsOng'>
+          <div className={styles.subTitle}>
+            <p>Dados da ONG</p>
+          </div>
+          <div className={styles.campos}>
+            <TextField 
+              required
+              id="idOng"
+              name='ongName'
+              label="Nome da ONG"
+              value={ongName}
+              onChange={handleChangeOngName}
+            />
           </div>
         </div>
       </div>
+      
+      {/* Dados pessoais do usuário */}
       <div className={styles.subTitle}>
         <p>Dados Pessoais</p>
       </div>
@@ -255,6 +266,8 @@ function Registro(this: any)  {
             />
           </div>
         </div>
+
+        {address !== null && (
         <div className={styles.formDiv}>
           <div className={styles.campos}>
             <TextField
@@ -262,7 +275,7 @@ function Registro(this: any)  {
               id="Estado"
               name='Estado'
               label="Estado"
-              value={state}
+              value={address.uf}
               onChange={handleChangeState}
             />
           </div>
@@ -272,7 +285,7 @@ function Registro(this: any)  {
               id="Cidade"
               name='Cidade'
               label="Cidade"
-              value={city}
+              value={address.localidade}
               onChange={handleChangeCity}
             />
           </div>
@@ -282,12 +295,16 @@ function Registro(this: any)  {
               id="Bairro"
               name='Bairro'
               label="Bairro"
-              value={neighborhood}
+              value={address.bairro}
               onChange={handleChangeNeighborhood}
             />
           </div>
         </div>
+        )}
+
       </div>
+
+      {/* botoes */}
       <div className={styles.btnDiv}>
         <Link to="/" className={styles.link}>
           <Button variant="contained">
