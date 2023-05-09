@@ -79,6 +79,7 @@ function Registro(this: any)  {
   }
 
   const toggleDisplay = () => {
+    console.log("chegou aqui")
     const element = document.querySelector('.formInputsOng') as HTMLElement;
     if(element){
       element.style.display = isOng ? 'none' : 'block';
