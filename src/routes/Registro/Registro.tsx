@@ -1,6 +1,7 @@
 //imports padrão react
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import styles from'./Registro.module.css';
+import * as moment from "moment";
 
 //imports masks
 import formatCpf from '../../Masks/MaskCpf';
@@ -18,6 +19,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+
 // import Api cep (axios)
 import axios from 'axios';
 
@@ -32,6 +36,7 @@ interface Endereco {
   uf: string;
   localidade: string;
   bairro: string;
+  logradouro: string;
 }
 
 function Registro(this: any)  {
@@ -48,6 +53,8 @@ function Registro(this: any)  {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
+  const [street, setstreet] = useState('');
+  const [number, setNumber] = useState('');
 
   //variavel da api do enderço
   const [address, setAddress] = useState<Endereco | null>(null);
@@ -68,8 +75,9 @@ function Registro(this: any)  {
     setCpf(event.target.value);
   };
 
-  const handleChangeBirth = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setBirth(event.target.value);
+  const handleChangeBirth = (event:any) => {
+    let data = event.$d;
+    setBirth(data);
   };
 
   const handleChangeCep = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -90,6 +98,14 @@ function Registro(this: any)  {
 
   const handleChangeOngName = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setOngName(event.target.value);
+  };
+  
+  const handleChangeStreet = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setstreet(event.target.value);
+  };
+  
+  const handleChangeNumber = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setNumber(event.target.value);
   };
 
   const handleCheck = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
@@ -123,7 +139,7 @@ function Registro(this: any)  {
     }
   }, [cep]);
 
-  function createAccount(event) {
+  function createAccount() {
 
       let httpRequest = new XMLHttpRequest();
       const URL_SERVLET_REGISTER = "http://localhost:8080/adoteCaoProjeto/RegisterServlet";
@@ -144,12 +160,12 @@ function Registro(this: any)  {
 
       console.log(login, password, name, cpf, birth, state, neighborhood, cep, isOng, ongName);
       httpRequest.send("login="+login+"&password="+password+"&name="+name+"&cpf="+cpf+"&birth="+birth+"&isOng="+isOng+"&ongName="+ongName+
-      "&state="+state+"&city="+city+"&neighborhood="+neighborhood+"&cep="+cep);
+      "&state="+state+"&city="+city+"&neighborhood="+neighborhood+"&cep="+cep+"&street="+street+"&number="+number);
       
       }else if (isOng == false){
       console.log(login, password, name, cpf, birth, state, neighborhood, cep, isOng);
       httpRequest.send("login="+login+"&password="+password+"&name="+name+"&cpf="+cpf+"&birth="+birth+"&isOng="+isOng+
-      "&state="+state+"&city="+city+"&neighborhood="+neighborhood+"&cep="+cep);
+      "&state="+state+"&city="+city+"&neighborhood="+neighborhood+"&cep="+cep+"&street="+street+"&number="+number);
       }      
   }
 
@@ -247,8 +263,8 @@ function Registro(this: any)  {
             />
           </div>
           <div className={styles.campos}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker/>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+              <DatePicker  onChange={handleChangeBirth}/>
             </LocalizationProvider>
           </div>
           <div className={styles.campos}>
@@ -299,6 +315,26 @@ function Registro(this: any)  {
               onChange={handleChangeNeighborhood}
             />
           </div>
+          <div className={styles.campos}>
+            <TextField
+              required
+              id="Rua"
+              name='Rua'
+              label="Rua"
+              value={address.logradouro}
+              onChange={handleChangeStreet}
+            />
+          </div>
+          <div className={styles.campos}>
+            <TextField
+              required
+              id="Numero"
+              name='Numero'
+              label="Numero"
+              value={number}
+              onChange={handleChangeNumber}
+            />
+          </div>
         </div>
         )}
 
@@ -311,7 +347,7 @@ function Registro(this: any)  {
             VOLTAR
           </Button>
         </Link>
-        <Button variant="contained" color="success">
+        <Button variant="contained" color="success" onClick={createAccount}>
           CADASTRAR
         </Button>
       </div>

@@ -9,6 +9,15 @@
 	border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.cadastroArea::-webkit-scrollbar {
+    width: 6px;
+}
+  
+.cadastroArea::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.46);
+    border-radius: 12px;
+}
+
 .logo{
     width: 150px;
     height: auto;
@@ -116,6 +125,18 @@ fieldset{
     align-items: center;
 }
 
+@media only screen and (max-width:1380px) {
+    .cadastroArea {
+        width: 31%;
+        height: 90%;
+        overflow: auto;
+    }
+
+    .formDiv{
+        width: 56%;
+    }
+}
+
 @media only screen and (max-width:1024px) {
     .cadastroArea {
         width: 70%;
@@ -153,8 +174,4 @@ fieldset{
     .campos{
         margin-top: 10px;
     }
-}
-
-@media only screen and (max-width:480px) {
-
 }

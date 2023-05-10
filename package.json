@@ -19,6 +19,7 @@
     "css-loader": "^6.7.3",
     "dayjs": "^1.11.7",
     "firebase": "^9.19.1",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
@@ -27,6 +28,7 @@
     "styled-components": "^5.3.10"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@types/react-text-mask": "^5.4.11",

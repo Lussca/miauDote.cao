@@ -47,10 +47,13 @@ public class RegisterServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String cpf = request.getParameter("cpf");
 		String birth = request.getParameter("birth");
+		System.err.println(birth);
 		String state = request.getParameter("state");
 		String city = request.getParameter("city");
 		String neighborhood = request.getParameter("neighborhood");
 		String cep = request.getParameter("cep");
+		String street = request.getParameter("street");
+		String number = request.getParameter("number00");
 		String ongName;
 		int validate = 1;
 		if(isOng) {
@@ -121,6 +124,8 @@ public class RegisterServlet extends HttpServlet {
 				adress.setCity(city);
 				adress.setNeighborhood(neighborhood);
 				adress.setCep(cep);
+				adress.setStreet(street);
+				adress.setNumber(number);
 				
 				try {
 					

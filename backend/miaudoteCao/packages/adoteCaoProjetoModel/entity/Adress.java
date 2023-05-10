@@ -6,6 +6,8 @@ public class Adress {
 	String city;
 	String neighborhood;
 	String cep;
+	String street;
+	String number;
 	public String getState() {
 		return state;
 	}
@@ -30,6 +32,17 @@ public class Adress {
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
-	
+	public String getStreet() {
+		return street;
+	}
+	public void setStreet(String street) {
+		this.street = street;
+	}
+	public String getNumber() {
+		return state;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
 	
 }

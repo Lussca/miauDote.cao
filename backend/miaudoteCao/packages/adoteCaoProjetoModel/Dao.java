@@ -114,13 +114,15 @@ public class Dao {
 	    }
 
 	public int registerAdress(Adress adress) throws ClassNotFoundException, IOException {
-		String sql = "INSERT INTO adress (state, city, neighbor, cep) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO adress (state, city, neighbor, cep, rua, numero) VALUES (?, ?, ?, ?, ?, ?)";
 		try (Connection connection = this.connectDB();
 	             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			statement.setString(1, adress.getState());
 			statement.setString(2, adress.getCity());
 			statement.setString(3, adress.getNeighborhood());
 			statement.setString(4, adress.getCep());
+			statement.setString(5, adress.getStreet());
+			statement.setString(6, adress.getNumber());
 			int update = statement.executeUpdate();
 			ResultSet keys = statement.getGeneratedKeys();
 			if(keys.next()) {
