@@ -1,7 +1,6 @@
 //imports padrão react
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import styles from'./Registro.module.css';
-import * as moment from "moment";
 
 //imports masks
 import formatCpf from '../../Masks/MaskCpf';
@@ -12,14 +11,12 @@ import { Link } from 'react-router-dom';
 
 //imports mui
 import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
+import { Alert, AlertColor, TextField } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 
 // import Api cep (axios)
@@ -41,23 +38,36 @@ interface Endereco {
 
 function Registro(this: any)  {
 
+  //======================================= Dados =====================================//
+
+  //acesso usuário
   const [login, setlogin] = useState('');
   const [password, setPassword] = useState('');
+
+  //dados da ONG
   const [isOng, setIsOng] = useState(false);
-  const [name, setName] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [birth, setBirth] = useState('');
-  const [cep, setCep] = useState('');
   const [ongName, setOngName] = useState('');
 
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
-  const [neighborhood, setNeighborhood] = useState('');
-  const [street, setstreet] = useState('');
-  const [number, setNumber] = useState('');
+  //dados do usuário
+  const [name, setName] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [birth, setBirth] = useState(null);
+  const [birthFormated, setSelectedDateString] = useState('');
 
   //variavel da api do enderço
   const [address, setAddress] = useState<Endereco | null>(null);
+  
+  //dados do local do usuário
+  const [cep, setCep] = useState('');
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [neighborhood, setNeighborhood] = useState('');
+  const [street, setStreet] = useState('');
+  const [number, setNumber] = useState('');
+
+  //====================================================================================//
+  
+  //======================================= handleChangeValues =====================================//
   
   const handleChangeLogin = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setlogin(event.target.value);
@@ -74,43 +84,27 @@ function Registro(this: any)  {
   const handleChangeCpf = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setCpf(event.target.value);
   };
-
-  const handleChangeBirth = (event:any) => {
-    let data = event.$d;
-    setBirth(data);
-  };
-
-  const handleChangeCep = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setCep(event.target.value);
-  };
-
-  const handleChangeState = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setState(event.target.value);
-  };
-
-  const handleChangeCity = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setCity(event.target.value);
-  };
-
-  const handleChangeNeighborhood = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setNeighborhood(event.target.value);
-  };
-
+  
   const handleChangeOngName = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setOngName(event.target.value);
-  };
-  
-  const handleChangeStreet = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setstreet(event.target.value);
   };
   
   const handleChangeNumber = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setNumber(event.target.value);
   };
+  
+  //================================================================================================//
 
-  const handleCheck = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
-    setIsOng(event.target.checked);
-  }
+  //formata e monta a data
+  const handleDateChange = (date:any) => {
+    setBirth(date);
+    if (date !== null) {
+      const formattedDate = new Date(date).toLocaleDateString('pt-BR');
+      setSelectedDateString(formattedDate);
+    } else {
+      setSelectedDateString('');
+    }
+  };
 
   //add/remove display none e limpa os campos dos dados da ONG 
   const toggleDisplay = () => {
@@ -132,45 +126,125 @@ function Registro(this: any)  {
       const fetchData = async () => {
         const addressData = await fetchAddress(cepValue);
         setAddress(addressData);
+
+        if(addressData){
+          setState(addressData.uf);
+          setCity(addressData.localidade);
+          setNeighborhood(addressData.bairro);
+          setStreet(addressData.logradouro);
+        }
       };
       fetchData();
-    } else {
+    } else{
       setAddress(null);
     }
+
   }, [cep]);
+
+  const [severity, setSeverity] = useState('error');
+  const [msg, setMsg] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+
+  let alertSeverity: AlertColor | undefined;
+
+  switch (severity) {
+    case 'error':
+      alertSeverity = 'error';
+      break;
+    case 'warning':
+      alertSeverity = 'warning';
+      break;
+    case 'info':
+      alertSeverity = 'info';
+      break;
+    case 'success':
+      alertSeverity = 'success';
+      break;
+    default:
+      alertSeverity = undefined;
+  }
 
   function createAccount() {
 
-      let httpRequest = new XMLHttpRequest();
-      const URL_SERVLET_REGISTER = "http://localhost:8080/adoteCaoProjeto/RegisterServlet";
-      httpRequest.onreadystatechange=function(){
-        if(httpRequest.readyState === XMLHttpRequest.DONE){
-          if(httpRequest.status === 200){
-            window.alert("Conta Criada com sucesso!");
-            window.location.href = "http://127.0.0.1:5500/login.html";
-          }else if(httpRequest.status === 400 || httpRequest.status === 422 || httpRequest.status === 409 || httpRequest.status === 501){
-            window.alert(httpRequest.responseText);
-          }
+    let httpRequest = new XMLHttpRequest();
+    const URL_SERVLET_REGISTER = "http://localhost:8080/adoteCaoProjeto/RegisterServlet";
+
+    httpRequest.onreadystatechange=function(){
+      if(httpRequest.readyState === XMLHttpRequest.DONE){
+
+        // TODO: TERMINAR O ALERT 
+        // TODO: REALIZAR PRIMEIRO CADASTRO
+        // TODO: TESTAR CADASTRO COMO ONG
+        
+        // if(sessionData == 15){
+        //   setShowAlert(true);
+        //   setSeverity('warning');
+        //   setMsg('Atenção! email ou senha inválidos.');
+        // }
+
+        if(httpRequest.status === 200){
+
+          window.alert("Conta Criada com sucesso!");
+          window.location.href = "http://127.0.0.1:5500/login.html";
+
+        } else if(httpRequest.status === 400 || httpRequest.status === 422 || httpRequest.status === 409 || httpRequest.status === 501){
+
+          window.alert(httpRequest.responseText);
+
         }
       }
-      httpRequest.open("POST", URL_SERVLET_REGISTER, true);
-      httpRequest.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-      
-      if(isOng == true){
+    }
 
-      console.log(login, password, name, cpf, birth, state, neighborhood, cep, isOng, ongName);
-      httpRequest.send("login="+login+"&password="+password+"&name="+name+"&cpf="+cpf+"&birth="+birth+"&isOng="+isOng+"&ongName="+ongName+
-      "&state="+state+"&city="+city+"&neighborhood="+neighborhood+"&cep="+cep+"&street="+street+"&number="+number);
+    httpRequest.open("POST", URL_SERVLET_REGISTER, true);
+    httpRequest.setRequestHeader('Content-type','application/x-www-form-urlencoded');
       
-      }else if (isOng == false){
-      console.log(login, password, name, cpf, birth, state, neighborhood, cep, isOng);
-      httpRequest.send("login="+login+"&password="+password+"&name="+name+"&cpf="+cpf+"&birth="+birth+"&isOng="+isOng+
-      "&state="+state+"&city="+city+"&neighborhood="+neighborhood+"&cep="+cep+"&street="+street+"&number="+number);
-      }      
+    if(isOng == true){
+
+      httpRequest.send(
+        "login="+login+
+        "&password="+password+
+        "&name="+name+
+        "&cpf="+cpf+
+        "&birth="+birthFormated+
+        "&isOng="+isOng+
+        "&ongName="+ongName+
+        "&state="+state+
+        "&city="+city+
+        "&neighborhood="+neighborhood+
+        "&cep="+cep+
+        "&street="+street+
+        "&number="+number
+      );
+    
+    } else if (isOng == false){
+
+      httpRequest.send(
+        "login="+login+
+        "&password="+password+
+        "&name="+name+
+        "&cpf="+cpf+
+        "&birth="+birthFormated+
+        "&isOng="+isOng+
+        "&state="+state+
+        "&city="+city+
+        "&neighborhood="+neighborhood+
+        "&cep="+cep+
+        "&street="+street+
+        "&number="+number
+      );
+
+    }      
   }
 
   return (
     <div className={styles.cadastroArea}>
+      {/* alert */}
+      <div className={styles.alertArea}>
+        {showAlert && <Alert variant="filled" severity={alertSeverity}  onClose={() => {setShowAlert(false)}}>
+          {msg}
+        </Alert> }
+      </div>
+
       {/* titel */}
       <div className={styles.title}>
         <img src="./imgs/adote_Cao_Logo.png" className={styles.logo}></img>
@@ -264,9 +338,10 @@ function Registro(this: any)  {
           </div>
           <div className={styles.campos}>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
-              <DatePicker  onChange={handleChangeBirth}/>
+              <DatePicker  onChange={handleDateChange}/>
             </LocalizationProvider>
           </div>
+
           <div className={styles.campos}>
             <TextField
               required
@@ -287,42 +362,38 @@ function Registro(this: any)  {
         <div className={styles.formDiv}>
           <div className={styles.campos}>
             <TextField
-              required
               id="Estado"
               name='Estado'
               label="Estado"
               value={address.uf}
-              onChange={handleChangeState}
+              disabled
             />
           </div>
           <div className={styles.campos}>
             <TextField
-              required
               id="Cidade"
               name='Cidade'
               label="Cidade"
               value={address.localidade}
-              onChange={handleChangeCity}
+              disabled
             />
           </div>
           <div className={styles.campos}>
             <TextField
-              required
               id="Bairro"
               name='Bairro'
               label="Bairro"
               value={address.bairro}
-              onChange={handleChangeNeighborhood}
+              disabled
             />
           </div>
           <div className={styles.campos}>
             <TextField
-              required
               id="Rua"
               name='Rua'
               label="Rua"
               value={address.logradouro}
-              onChange={handleChangeStreet}
+              disabled
             />
           </div>
           <div className={styles.campos}>
@@ -337,7 +408,6 @@ function Registro(this: any)  {
           </div>
         </div>
         )}
-
       </div>
 
       {/* botoes */}
@@ -351,6 +421,7 @@ function Registro(this: any)  {
           CADASTRAR
         </Button>
       </div>
+
     </div>
   );
 }
