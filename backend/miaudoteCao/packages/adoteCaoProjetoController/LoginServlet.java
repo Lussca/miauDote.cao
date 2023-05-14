@@ -74,9 +74,9 @@ public class LoginServlet extends HttpServlet {
 		
 		String id = idGenerator();
 		String subject = login;
-		String jwt = jwtHandler.createJWT(id, subject, Encrypt.JWT_ISSUER, 3600000);
+		//String jwt = jwtHandler.createJWT(id, subject, Encrypt.JWT_ISSUER, 3600000);
 		try {
-			dao.insertAndUpdateJWT(jwt, isOng, login);
+			dao.insertAndUpdateJWT("PLACEHOLDER", isOng, login);
 		} catch (ClassNotFoundException | SQLException | IOException e1) {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
 			e1.printStackTrace();
@@ -85,7 +85,7 @@ public class LoginServlet extends HttpServlet {
 		Map<String, Object> sessionData = new HashMap<>();
 		sessionData.put("isLogged", session.getAttribute("isLogged"));
 		sessionData.put("isOng", session.getAttribute("isOng"));
-		sessionData.put("jwt", jwt);
+		sessionData.put("jwt", "PLACEHOLDER");
 		
 		Gson gson = new Gson();
 		String json = gson.toJson(sessionData);

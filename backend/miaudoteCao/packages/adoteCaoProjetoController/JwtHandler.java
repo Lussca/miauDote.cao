@@ -7,6 +7,7 @@ import java.security.Key;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -23,23 +24,27 @@ import adoteCaoProjetoModel.Dao;
 public class JwtHandler {
 	Dao dao = new Dao();
 	private static String getSecretKey(String key) throws IOException {
-    	File f = new File("/miaudoteCao/admin/secretKey.ini");
+    	File f = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\secretKey.ini");
     	FileInputStream fis = new FileInputStream(f);
-    	byte[] content  = new byte[fis.available()];
-    	fis.read();
-    	String fileContent = new String(content);
-    	String[] variables = fileContent.split("\r\n");
-    	for(String variable: variables) {
-    		int indexSeparator = variable.indexOf("=");
-    		String keyTemp = variable.substring(0, indexSeparator);
-    		if(keyTemp.equals(key)) {
-    			fis.close();
-    			return variable.substring(indexSeparator+1, variable.length());
-    		}
-    	}
-    	fis.close();
-		return null;
-    }
+    	 Properties prop = new Properties();
+    	 try {
+            
+             prop.load(fis);
+             return prop.getProperty("secretKey");
+         } catch (IOException ex) {
+             ex.printStackTrace();
+             return null;
+         } finally {
+             if (fis != null) {
+                 try {
+                     fis.close();
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+             }
+         }
+     }
+
 	public String createJWT(String id, String issuer, String subject, long ttlMillis){
     	SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     	

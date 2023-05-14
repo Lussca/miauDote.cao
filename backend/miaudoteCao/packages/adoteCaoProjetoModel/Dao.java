@@ -23,7 +23,11 @@ public class Dao {
     private static final Logger LOGGER = Logger.getLogger(Dao.class.getName());
 
     private String getConfigValueByKey(String key) throws IOException {
-        File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\config.ini");
+        /*File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\config.ini"); 
+         * Utilizar esta linha para se conectar ao postgreSQL
+         * 
+         * Sempre alterar o caminho para o arquivo dependendo em qual computador está rodando*/
+    	File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\configMySQL.ini"); //Utilizar esta linha para conectar ao MySQL
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -43,7 +47,10 @@ public class Dao {
         String url = getConfigValueByKey("url");
         String user = getConfigValueByKey("user");
         String password = getConfigValueByKey("password");
-        Class.forName("org.postgresql.Driver");
+        /*Class.forName("org.postgresql.Driver");  
+         * Utilizar esta linha para se conectar com o postgreSQL
+         * */
+        Class.forName("com.mysql.jdbc.Driver"); //Utilizar esta linha para conectar ao MySQL
 
         Connection connection = null;
         try {
@@ -114,7 +121,8 @@ public class Dao {
 	    }
 
 	public int registerAdress(Adress adress) throws ClassNotFoundException, IOException {
-		String sql = "INSERT INTO adress (state, city, neighbor, cep, rua, numero) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO adress (state, city, neighbor, cep, rua) VALUES (?,?,?,?,?)";
+		//Adicionar  CAST (? AS INTEGER) no numero do endereco caso esteja conectando ao postgreSQL
 		try (Connection connection = this.connectDB();
 	             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			statement.setString(1, adress.getState());
@@ -122,7 +130,7 @@ public class Dao {
 			statement.setString(3, adress.getNeighborhood());
 			statement.setString(4, adress.getCep());
 			statement.setString(5, adress.getStreet());
-			statement.setString(6, adress.getNumber());
+			//statement.setString(6, adress.getNumber());
 			int update = statement.executeUpdate();
 			ResultSet keys = statement.getGeneratedKeys();
 			if(keys.next()) {
