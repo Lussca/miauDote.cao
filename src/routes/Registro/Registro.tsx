@@ -184,14 +184,50 @@ function Registro(this: any)  {
           setShowAlert(true);
           setSeverity('warning');
           setMsg('Atenção! preencha todos os campos.');
-        } else if(sessionData == 3){
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! CEP inválido.');
         } else if(sessionData == 1){
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! CIDADE inválida.');
+        } else if(sessionData == 3){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! CEP inválido.');
+        } else if(sessionData == 4){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! LOGIN inválido.');
+        } else if(sessionData == 5){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! SENHA inválida.');
+        } else if(sessionData == 7){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! CPF inválido.');
+        } else if(sessionData == 8){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! DATA inválido.');
+        } else if(sessionData == 9){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! NOME DA ONG inválido.');
+        } else if(sessionData == 10){
+          setShowAlert(true);
+          setSeverity('warning');
+          setMsg('Atenção! este LOGIN já existe.');
+        } else if(sessionData == 11){
+          setShowAlert(true);
+          setSeverity('warning');
+          setMsg('Atenção! este CPF já está sendo usado.');
+        } else if(sessionData == 12){
+          setShowAlert(true);
+          setSeverity('warning');
+          setMsg('Atenção! este NOME DE ONG já está sendo usado.');
+        } else if(sessionData == 14 || sessionData == 16){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! ocorreu um erro durante a criação da ong, tente novamente mais tarde.');
         }
 
         if(httpRequest.status === 200){
