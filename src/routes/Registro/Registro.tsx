@@ -141,6 +141,7 @@ function Registro(this: any)  {
 
   }, [cep]);
 
+  // alertas config
   const [severity, setSeverity] = useState('error');
   const [msg, setMsg] = useState('');
   const [showAlert, setShowAlert] = useState(false);
@@ -164,6 +165,7 @@ function Registro(this: any)  {
       alertSeverity = undefined;
   }
 
+  // criacao de contas
   function createAccount() {
 
     let httpRequest = new XMLHttpRequest();
@@ -172,15 +174,25 @@ function Registro(this: any)  {
     httpRequest.onreadystatechange=function(){
       if(httpRequest.readyState === XMLHttpRequest.DONE){
 
+        let sessionData = JSON.parse(httpRequest.responseText);
+
         // TODO: TERMINAR O ALERT 
         // TODO: REALIZAR PRIMEIRO CADASTRO
         // TODO: TESTAR CADASTRO COMO ONG
         
-        // if(sessionData == 15){
-        //   setShowAlert(true);
-        //   setSeverity('warning');
-        //   setMsg('Atenção! email ou senha inválidos.');
-        // }
+        if(sessionData == 13){
+          setShowAlert(true);
+          setSeverity('warning');
+          setMsg('Atenção! preencha todos os campos.');
+        } else if(sessionData == 3){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! CEP inválido.');
+        } else if(sessionData == 1){
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! CIDADE inválida.');
+        }
 
         if(httpRequest.status === 200){
 
