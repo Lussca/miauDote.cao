@@ -56,7 +56,7 @@ public class RegisterServlet extends HttpServlet {
 		String street = request.getParameter("street");
 		String number = request.getParameter("number");
 		String ongName;
-		int validate = 1;
+		int validate = 0;
 		if(isOng) {
 			ongName = request.getParameter("ongName");
 		}else {
@@ -111,7 +111,12 @@ public class RegisterServlet extends HttpServlet {
 				}
 				ong.setUsername(name);
 				ong.setCpf(cpf);
-				ong.setBirth(Validations.dateFormat(birth));
+				try {
+					ong.setBirth(Validations.dateFormat(birth));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				ong.setOngName(ongName);
 				
 				List<String> keys = encrypt.generateKeys(password);
@@ -124,7 +129,7 @@ public class RegisterServlet extends HttpServlet {
 				adress.setState(state);
 				adress.setCity(city);
 				adress.setNeighborhood(neighborhood);
-				adress.setCep(cep);
+				adress.setCep(cep.replaceAll("-", ""));
 				adress.setStreet(street);
 				adress.setNumber(number);
 				
@@ -153,7 +158,12 @@ public class RegisterServlet extends HttpServlet {
 				}
 				adopter.setUsername(name);
 				adopter.setCpf(cpf);
-				adopter.setBirth(Validations.dateFormat(birth));
+				try {
+					adopter.setBirth(Validations.dateFormat(birth));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				List<String> keys = encrypt.generateKeys(password);
 				String publicKey = keys.get(0);

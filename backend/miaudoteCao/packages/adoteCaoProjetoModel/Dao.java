@@ -23,7 +23,7 @@ public class Dao {
     private static final Logger LOGGER = Logger.getLogger(Dao.class.getName());
 
     private String getConfigValueByKey(String key) throws IOException {
-        File file = new File("/miaudoteCao/admin/config.ini");
+        File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\config.ini");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {

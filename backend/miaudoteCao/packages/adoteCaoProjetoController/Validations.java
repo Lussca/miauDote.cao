@@ -42,7 +42,8 @@ public class Validations {
 
 	
 	public int validateInputs(String city, String neighborhood, String cep,
-			String login, String password, String name, String cpf, String birth, String ongName, String street, String number, boolean isOng) throws ClassNotFoundException, IOException, ParseException {
+			String login, String password, String name, String cpf, String birth, String ongName, String street, String number, boolean isOng)
+					throws ClassNotFoundException, IOException, ParseException {
 		 String[] inputs = {city, neighborhood, cep, login, password, name, cpf, birth, street, number};
 		int errorMessage = -1;
 		for(int i = 0; i < inputs.length; i++) {
@@ -165,8 +166,12 @@ public class Validations {
 	}
 	
 	private boolean validateCep(String cep) {
-		String cepPattern = "\\d{8}";
-	    return cep.matches(cepPattern);
+		String noMaskCep = cep.replaceAll("-", "");
+		if(noMaskCep.length() == 8) {
+	    return true;
+		}else {
+			return false;
+		}
 	}
 	private boolean validateLogin(String login) {
 		 String emailPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
@@ -240,10 +245,10 @@ public class Validations {
 		return result;
 	}
 	
-	public static String dateFormat(String birth) {
+	public static String dateFormat(String birth) throws ParseException {
 		    String newBirth = birth.replaceAll("/", "-");
 		    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-		return newBirth;
+		return  sdf2.format(sdf.parse(newBirth));
 	}
 }
