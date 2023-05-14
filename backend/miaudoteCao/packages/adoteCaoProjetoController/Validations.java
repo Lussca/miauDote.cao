@@ -9,6 +9,8 @@ import adoteCaoProjetoModel.Dao;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -34,13 +36,14 @@ public class Validations {
 		public static final int SESSION_EXPIRED = 17;
 		public static final int INVALID_TOKEN = 18;
 		public static final int JWT_EXPIRED = 19;
+		public static final int INVALID_DATE = 20;
 	    public static final int NO_ERROR = 0;
 
 
 	
 	public int validateInputs(String city, String neighborhood, String cep,
-			String login, String password, String name, String cpf, String birth, String ongName, boolean isOng) throws ClassNotFoundException, IOException {
-		 String[] inputs = {city, neighborhood, cep, login, password, name, cpf, birth};
+			String login, String password, String name, String cpf, String birth, String ongName, String street, String number, boolean isOng) throws ClassNotFoundException, IOException, ParseException {
+		 String[] inputs = {city, neighborhood, cep, login, password, name, cpf, birth, street, number};
 		int errorMessage = -1;
 		for(int i = 0; i < inputs.length; i++) {
 			if(inputs[i] == null || inputs[i].isEmpty()) {
@@ -206,9 +209,12 @@ public class Validations {
 	    }
 	}
 	
-	private boolean validateBirth(String birth){
+	private boolean validateBirth(String birth) throws ParseException{
 		try {
-            LocalDate date = LocalDate.parse(birth);
+			 
+			   
+			String formatedBirth = dateFormat(birth);
+            LocalDate date = LocalDate.parse(formatedBirth);
             LocalDate earliestValidDate = LocalDate.of(1900, 1, 1);
             LocalDate latestValidDate = LocalDate.now();
             return !date.isBefore(earliestValidDate) && !date.isAfter(latestValidDate);
@@ -232,5 +238,12 @@ public class Validations {
 		result.add(isOng);
 		result.add(confirmation);
 		return result;
+	}
+	
+	public static String dateFormat(String birth) {
+		    String newBirth = birth.replaceAll("/", "-");
+		    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+		return newBirth;
 	}
 }

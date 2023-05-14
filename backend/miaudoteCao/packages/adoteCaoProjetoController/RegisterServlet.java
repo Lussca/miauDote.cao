@@ -3,6 +3,7 @@ package adoteCaoProjetoController;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -53,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
 		String neighborhood = request.getParameter("neighborhood");
 		String cep = request.getParameter("cep");
 		String street = request.getParameter("street");
-		String number = request.getParameter("number00");
+		String number = request.getParameter("number");
 		String ongName;
 		int validate = 1;
 		if(isOng) {
@@ -63,8 +64,8 @@ public class RegisterServlet extends HttpServlet {
 		}
 		
 		try {
-			validate = validations.validateInputs(city, neighborhood, cep, login, password, name, cpf, birth, ongName, isOng);
-		} catch (ClassNotFoundException | IOException e2) {
+			validate = validations.validateInputs(city, neighborhood, cep, login, password, name, cpf, birth, ongName, street, number, isOng);
+		} catch (ClassNotFoundException | IOException | ParseException e2) {
 			e2.printStackTrace();
 		}	
 		switch(validate) {
@@ -110,7 +111,7 @@ public class RegisterServlet extends HttpServlet {
 				}
 				ong.setUsername(name);
 				ong.setCpf(cpf);
-				ong.setBirth(birth);
+				ong.setBirth(Validations.dateFormat(birth));
 				ong.setOngName(ongName);
 				
 				List<String> keys = encrypt.generateKeys(password);
@@ -152,7 +153,7 @@ public class RegisterServlet extends HttpServlet {
 				}
 				adopter.setUsername(name);
 				adopter.setCpf(cpf);
-				adopter.setBirth(birth);
+				adopter.setBirth(Validations.dateFormat(birth));
 				
 				List<String> keys = encrypt.generateKeys(password);
 				String publicKey = keys.get(0);
@@ -166,6 +167,8 @@ public class RegisterServlet extends HttpServlet {
 				adress.setCity(city);
 				adress.setNeighborhood(neighborhood);
 				adress.setCep(cep);
+				adress.setStreet(street);
+				adress.setNumber(number);
 				try {
 					int idAdress = dao.registerAdress(adress);
 					hasError = dao.registerUserAdopter(adopter, idAdress);
