@@ -138,7 +138,7 @@ public class RegisterServlet extends HttpServlet {
 					int id = dao.registerAdress(adress);
 					hasError = dao.registerUserOng(ong, id);
 					if(hasError) {
-						response.setStatus(HttpServletResponse.SC_OK);
+						rrh.sendResponse(response, HttpServletResponse.SC_OK, 0);
 					}
 					else {
 						rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
@@ -183,7 +183,7 @@ public class RegisterServlet extends HttpServlet {
 					int idAdress = dao.registerAdress(adress);
 					hasError = dao.registerUserAdopter(adopter, idAdress);
 					if(hasError) {
-					response.setStatus(HttpServletResponse.SC_OK);
+						rrh.sendResponse(response, HttpServletResponse.SC_OK, 0);
 					} else {
 						rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
 					}

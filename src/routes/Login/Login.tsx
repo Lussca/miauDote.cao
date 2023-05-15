@@ -65,11 +65,11 @@ function Login(this: any)  {
               window.sessionStorage.setItem("isLogged", sessionData.isLogged);
               window.sessionStorage.setItem("jwt", sessionData.jwt);
 
-              // if(sessionData.isOng){
-              //     window.location.href = "http://127.0.0.1:5500/ongMenu.html";
-              // }else{
-              //     window.location.href = "http://127.0.0.1:5500/adotanteMenu.html";
-              // }
+              if(sessionData.isOng){
+                  window.location.href = "/ongMenu";
+              }else{
+                  window.location.href = "/adotanteMenu";
+              }
           }
         }
     }

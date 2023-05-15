@@ -18,5 +18,11 @@ public class RequestResponseHandler {
 	    response.getWriter().flush();
 	    response.getWriter().close();
 	}
-	
+	public void sendResponse(HttpServletResponse response, int status, int message) throws IOException {
+	    response.setContentType("text/plain");
+	    response.setStatus(status);
+	    response.getWriter().println(message);
+	    response.getWriter().flush();
+	    response.getWriter().close();
+	}
 }

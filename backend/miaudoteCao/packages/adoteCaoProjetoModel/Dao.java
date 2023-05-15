@@ -27,7 +27,7 @@ public class Dao {
          * Utilizar esta linha para se conectar ao postgreSQL
          * 
          * Sempre alterar o caminho para o arquivo dependendo em qual computador está rodando*/
-    	File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\configMySQL.ini"); //Utilizar esta linha para conectar ao MySQL
+    	File file = new File("C:\\projetos\\miauDote.cao\\admin\\configMySQL.ini"); //Utilizar esta linha para conectar ao MySQL
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {

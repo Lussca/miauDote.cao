@@ -11,7 +11,8 @@ import { Link } from 'react-router-dom';
 
 //imports mui
 import Button from '@mui/material/Button';
-import { Alert, AlertColor, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
+import Alert, { AlertColor } from '@mui/material/Alert';
 import Checkbox from '@mui/material/Checkbox';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -175,11 +176,9 @@ function Registro(this: any)  {
       if(httpRequest.readyState === XMLHttpRequest.DONE){
 
         let sessionData = JSON.parse(httpRequest.responseText);
-
-        // TODO: TERMINAR O ALERT 
-        // TODO: REALIZAR PRIMEIRO CADASTRO
-        // TODO: TESTAR CADASTRO COMO ONG
+        console.log(sessionData)
         
+        // alertas de cadastro
         if(sessionData == 13){
           setShowAlert(true);
           setSeverity('warning');
@@ -232,12 +231,17 @@ function Registro(this: any)  {
 
         if(httpRequest.status === 200){
 
-          window.alert("Conta Criada com sucesso!");
-          window.location.href = "http://127.0.0.1:5500/login.html";
+          console.log('chegou aqui');
+          setShowAlert(true);
+          setSeverity('success');
+          setMsg('Sucesso! Conta Criada com sucesso!');
+          window.location.href = "/login";
 
         } else if(httpRequest.status === 400 || httpRequest.status === 422 || httpRequest.status === 409 || httpRequest.status === 501){
 
-          window.alert(httpRequest.responseText);
+          setShowAlert(true);
+          setSeverity('error');
+          setMsg('Erro! '+ httpRequest.responseText);
 
         }
       }
