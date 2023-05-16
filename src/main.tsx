@@ -9,6 +9,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 //Rotas pags
 import Login from './routes/Login/Login'
 import Registro from './routes/Registro/Registro'
+import OngMenu from './routes/ongMenu/ongMenu'
+import AdotanteMenu from './routes/adotanteMenu/adotanteMenu'
 import ErrorPage from './routes/ErrorPage/ErrorPage'
 
 const router = createBrowserRouter([
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
       {
         path: "registrar",
         element: <Registro />
+      },
+      {
+        path: "ongMenu",
+        element: <OngMenu />
+      },
+      {
+        path: "adotanteMenu",
+        element: <AdotanteMenu />
       },
     ]
   }

@@ -24,10 +24,10 @@
 }
 
 .title{
-    height: 7em;
+    height: 10em;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
 }
 
 .subTitle{
