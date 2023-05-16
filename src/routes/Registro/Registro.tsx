@@ -235,7 +235,7 @@ function Registro(this: any)  {
           setShowAlert(true);
           setSeverity('success');
           setMsg('Sucesso! Conta Criada com sucesso!');
-          window.location.href = "/login";
+          window.location.href = "/";
 
         } else if(httpRequest.status === 400 || httpRequest.status === 422 || httpRequest.status === 409 || httpRequest.status === 501){
 
