@@ -23,11 +23,17 @@ public class Dao {
     private static final Logger LOGGER = Logger.getLogger(Dao.class.getName());
 
     private String getConfigValueByKey(String key) throws IOException {
-        /*File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\config.ini"); 
-         * Utilizar esta linha para se conectar ao postgreSQL
+        /*File file = new File("C:\\projetos\\miauDote.cao\\admin\\config.ini");  Utilizar esta linha para se conectar ao postgreSQL
+         * 
+         * 
+         * UTILIZAR ESSES NO PC DO LUCAS
+         *
          * 
          * Sempre alterar o caminho para o arquivo dependendo em qual computador está rodando*/
-    	File file = new File("C:\\projetos\\miauDote.cao\\admin\\configMySQL.ini"); //Utilizar esta linha para conectar ao MySQL
+    	
+    	
+    	 //File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\configMySQL.ini");//Utilizar esta linha para conectar ao MySQL
+    	File file = new File("C:\\projetos\\miauDote.cao\\admin\\configMySQL.ini"); //Utilizar para o MySQL
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
