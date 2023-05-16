@@ -7,20 +7,31 @@ import styles from'./adotanteMenu.module.css';
 import { Link } from 'react-router-dom';
 
 //imports mui
-import DogAnimation from '../../dog/dogAnimation';
+import Alert, { AlertColor } from '@mui/material/Alert';
 
+//componentes
+import DogAnimation from '../../dog/dogAnimation';
+import { Button } from '@mui/material';
+
+// validação para verificar se o usuário está logado
 sessionStorage.setItem("isLoggedIn", "true");
 
 var isLoggedIn = sessionStorage.getItem("isLoggedIn");
-console.log(isLoggedIn)
 
 if (isLoggedIn === "true") {
-  // O usuário está logado, permita o acesso à página
-  console.log("caiu aqui")
 } else {
-  // O usuário não está logado, redirecione para a página de login ou exiba uma mensagem de erro
-  console.log("caiu aqui 2 ")
+    window.location.href = "/error";
 }
+
+// função para deslogar do sistema e remover as informações armazenadas no session storage
+const handleClick = () => {
+    // Remover as informações do session storage
+    sessionStorage.removeItem("isLoggedIn");
+
+    // Redirecionar para a página de login ou para outra página adequada após o logout
+    window.location.href = "pagina_de_login.html";
+};
+  
 
 function adotanteMenu(this: any)  {
 
@@ -33,6 +44,7 @@ function adotanteMenu(this: any)  {
                     <span className={styles.secondText}>Você acaba de entrar no sistema!</span>
                 </span>
             </div>
+            <Button id="signIn" variant="contained" color="error" onClick={handleClick}> SAIR </Button>
         </div>
     );
   
