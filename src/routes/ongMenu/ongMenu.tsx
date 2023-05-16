@@ -30,7 +30,7 @@ const handleClick = () => {
     sessionStorage.removeItem("isLoggedIn");
 
     // Redirecionar para a página de login ou para outra página adequada após o logout
-    window.location.href = "pagina_de_login.html";
+    window.location.href = "/";
 };
   
 
