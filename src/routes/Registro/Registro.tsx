@@ -10,15 +10,16 @@ import formatCep from '../../Masks/MaskCep';
 import { Link } from 'react-router-dom';
 
 //imports mui
+import 'dayjs/locale/pt-br';
 import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
-import Alert, { AlertColor } from '@mui/material/Alert';
 import Checkbox from '@mui/material/Checkbox';
+import Alert, { AlertColor } from '@mui/material/Alert';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import 'dayjs/locale/pt-br';
 
 // import Api cep (axios)
 import axios from 'axios';
@@ -38,6 +39,9 @@ interface Endereco {
 }
 
 function Registro(this: any)  {
+
+  // Loading da pagina
+  const [isLoading, setIsLoading] = useState(false);
 
   //======================================= Dados =====================================//
 
@@ -169,6 +173,9 @@ function Registro(this: any)  {
   // criacao de contas
   function createAccount() {
 
+    // inicia do Loading
+    setIsLoading(true);
+
     let httpRequest = new XMLHttpRequest();
     const URL_SERVLET_REGISTER = "http://localhost:8080/adoteCaoProjeto/RegisterServlet";
 
@@ -180,50 +187,62 @@ function Registro(this: any)  {
         
         // alertas de cadastro
         if(sessionData == 13){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('warning');
           setMsg('Atenção! preencha todos os campos.');
         } else if(sessionData == 1){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! CIDADE inválida.');
         } else if(sessionData == 3){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! CEP inválido.');
         } else if(sessionData == 4){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! LOGIN inválido.');
         } else if(sessionData == 5){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! SENHA inválida.');
         } else if(sessionData == 7){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! CPF inválido.');
         } else if(sessionData == 8){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! DATA inválido.');
         } else if(sessionData == 9){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! NOME DA ONG inválido.');
         } else if(sessionData == 10){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('warning');
           setMsg('Atenção! este LOGIN já existe.');
         } else if(sessionData == 11){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('warning');
           setMsg('Atenção! este CPF já está sendo usado.');
         } else if(sessionData == 12){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('warning');
           setMsg('Atenção! este NOME DE ONG já está sendo usado.');
         } else if(sessionData == 14 || sessionData == 16){
+          setIsLoading(false);
           setShowAlert(true);
           setSeverity('error');
           setMsg('Erro! ocorreu um erro durante a criação da ong, tente novamente mais tarde.');
@@ -231,11 +250,16 @@ function Registro(this: any)  {
 
         if(httpRequest.status === 200){
 
-          console.log('chegou aqui');
+          // finaliza o loading
+          setIsLoading(false);
+
           setShowAlert(true);
           setSeverity('success');
           setMsg('Sucesso! Conta Criada com sucesso!');
-          window.location.href = "/";
+
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 500);
 
         } else if(httpRequest.status === 400 || httpRequest.status === 422 || httpRequest.status === 409 || httpRequest.status === 501){
 
@@ -290,6 +314,9 @@ function Registro(this: any)  {
 
   return (
     <div className={styles.cadastroArea}>
+      {/* Loading de carregamento */}
+      {isLoading && <CircularProgress />}
+
       {/* alert */}
       <div className={styles.alertArea}>
         {showAlert && <Alert variant="filled" severity={alertSeverity}  onClose={() => {setShowAlert(false)}}>
