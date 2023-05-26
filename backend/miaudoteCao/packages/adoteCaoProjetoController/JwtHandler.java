@@ -53,7 +53,7 @@ public class JwtHandler {
     	
     	byte[] apiKeySecretBytes = null;
 		try {
-			apiKeySecretBytes = Base64.getDecoder().decode(getSecretKey("secretKey"));
+			apiKeySecretBytes = getSecretKey("secretKey").getBytes();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
