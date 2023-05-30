@@ -27,7 +27,7 @@ const handleClick = () => {
 
 export const Navbar = () =>{
     return(
-        <AppBar position='static' style={{ background: 'transparent' }}>
+        <AppBar position='fixed' style={{ background: 'transparent' }}>
             <Toolbar>
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
                     <IconButton size='large' edge='start' color='inherit' aria-label='Início'>

@@ -1,8 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@500&display=swap');
+
 html, body
 {
   padding: 0;
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Dosis';
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 115, 8);
+  border-radius: 12px;
 }
 
 .bodyAdotanteMenu {
@@ -18,12 +29,13 @@ html, body
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-x: hidden;
 } 
 
-#root {
+/* #root {
   height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-} 
+}  */

@@ -1,0 +1,88 @@
+.ContentOne{
+    width: 100vw;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+}
+
+.ContentTwo{
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-image: url('../imgs/background_contente_01.jpg');
+    background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.describe{
+    font-size: 22px;
+    text-justify: auto;
+}
+
+.areaContent{
+    margin-top: 5%;
+    width: 90%;
+    height: 75%;
+    color: #fff;
+    background: rgba(0, 25, 238, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 25, 238, 0.3);
+}
+
+.titleContenteTwo{
+    font-size: 25px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.subTitleContenteTwo{
+    font-size: 50px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.centralize{
+    margin-top: 12%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.layout{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.TitleFont{
+    font-size: 65px;
+    margin: 0;
+}
+
+.subTitleFont{
+    font-size: 25px;
+    margin: 0;
+}
+
+.laranja{
+    color: #ff7b00;
+}
+
+hr{
+    width: 50%;
+    border-color: #ff7b00;
+}
