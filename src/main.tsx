@@ -12,6 +12,7 @@ import Registro from './routes/Registro/Registro'
 import OngMenu from './routes/ongMenu/ongMenu'
 import AdotanteMenu from './routes/adotanteMenu/adotanteMenu'
 import ErrorPage from './routes/ErrorPage/ErrorPage'
+import QueroAdotar from './routes/QueroAdotar/QueroAdotar'
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "adotanteMenu",
         element: <AdotanteMenu />
+      },
+      {
+        path: "queroAdotar",
+        element: <QueroAdotar />
       },
     ]
   }

@@ -87,7 +87,7 @@ function Login(this: any)  {
       </div>
       
       <div className={styles.intro}>
-        <img src="./imgs/LogoSemFonte_Azul.svg" className={styles.logo}></img>
+        <img src="./imgs/logos/LogoSemFonte_Azul.svg" className={styles.logo}></img>
         <h1 className={styles.login}>Login MiauDote.Cão</h1>
       </div>
       
