@@ -39,6 +39,7 @@ public class AdoptionApplicationServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		rrh.configureCors(response);
 		try {
 		int animalId = Integer.parseInt(request.getParameter("animalId"));
 		int adopterId = Integer.parseInt(request.getParameter("adopterId"));

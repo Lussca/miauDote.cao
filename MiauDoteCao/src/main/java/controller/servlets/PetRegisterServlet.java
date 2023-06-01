@@ -47,6 +47,11 @@ public class PetRegisterServlet extends HttpServlet {
 					}
 				}
 				String urlJson = requestBody.toString();
+				String json = gson.toJson(urlJson);
+				//teste para extração de link das imagens de um animal
+				Type urlListType = new TypeToken<ArrayList<String>>(){}.getType();
+				ArrayList<String> urlArray = gson.fromJson(json, urlListType);
+
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.SERVER_ERROR);
