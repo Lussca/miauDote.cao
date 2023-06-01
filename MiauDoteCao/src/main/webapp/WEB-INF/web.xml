@@ -1,0 +1,48 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>RegisterServlet</servlet-name>
+  	<display-name>RegisterServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<display-name>LoginServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>PetRegisterServlet</servlet-name>
+  	<display-name>PetRegisterServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.PetRegisterServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>AdoptionApplicationServlet</servlet-name>
+  	<display-name>AdoptionApplicationServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.AdoptionApplicationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>RegisterServlet</servlet-name>
+  	<url-pattern>/RegisterServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>PetRegisterServlet</servlet-name>
+  	<url-pattern>/PetRegisterServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AdoptionApplicationServlet</servlet-name>
+  	<url-pattern>/AdoptionApplicationServlet</url-pattern>
+  </servlet-mapping>
+  
+</web-app>
