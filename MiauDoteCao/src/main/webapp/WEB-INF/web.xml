@@ -28,6 +28,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.AdoptionApplicationServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>GetOngNameServlet</servlet-name>
+  	<display-name>GetOngNameServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.GetOngNameServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -43,6 +49,10 @@
   <servlet-mapping>
   	<servlet-name>AdoptionApplicationServlet</servlet-name>
   	<url-pattern>/AdoptionApplicationServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>GetOngNameServlet</servlet-name>
+  	<url-pattern>/GetOngNameServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>
