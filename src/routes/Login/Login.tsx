@@ -120,6 +120,11 @@ function Login(this: any)  {
               {'Clique aqui!'}
             </Link>
           </p>
+          <p className={styles.Link}>Esqueceu a senha? 
+            <Link to="/registrar" className={styles.link}>
+              {'Clique aqui!'}
+            </Link>
+          </p>
         </div>
         
         <Button id="signIn" variant="contained" color="success" onClick={handleClick}> Entrar </Button>

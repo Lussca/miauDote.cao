@@ -2,6 +2,7 @@ import { AppBar, Toolbar, IconButton,Typography, Stack, ThemeProvider } from '@m
 import { createTheme } from '@mui/material/styles';
 import PetsIcon from '@mui/icons-material/Pets';
 import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const theme = createTheme({
     palette: {
@@ -27,7 +28,7 @@ const handleClick = () => {
 
 export const Navbar = () =>{
     return(
-        <AppBar position='fixed' style={{ background: 'transparent' }}>
+        <AppBar position='relative' style={{ background: 'transparent' }}>
             <Toolbar>
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
                     <IconButton size='large' edge='start' color='inherit' aria-label='Início'>
@@ -36,7 +37,9 @@ export const Navbar = () =>{
                 </Typography>
                 <Stack direction='row' spacing={1}>
                     <ThemeProvider theme={theme}>
-                        <Button variant="contained" color="primary"> Quero Adotar </Button> 
+                        <Link to="/queroAdotar" style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" color="primary"> Quero Adotar </Button> 
+                        </Link>
                         <Button variant="contained" color="secondary"> Formulário responsável </Button> 
                         <Button variant="contained" color="primary"> ONGS e Protetores </Button> 
                     </ThemeProvider>

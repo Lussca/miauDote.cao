@@ -5,7 +5,9 @@ import styles from'./QueroAdotar.module.css';
 import Alert, { AlertColor } from '@mui/material/Alert';
 
 //componentes
-import { Navbar } from './Navbar/Navbar';
+import { Navbar } from '../adotanteMenu/Navbar/Navbar';
+import Header from './Header/Header';
+import Adote from './Adote/Adote';
 
 // validação para verificar se o usuário está logado
 sessionStorage.setItem("isLoggedIn", "true");
@@ -22,7 +24,8 @@ function QueroAdotar(this: any)  {
     return (
         <div className={styles.menuArea}>
             <Navbar></Navbar>
-            {/* <Header></Header> */}
+            <Header></Header>
+            <Adote></Adote>
         </div>
     );
   
