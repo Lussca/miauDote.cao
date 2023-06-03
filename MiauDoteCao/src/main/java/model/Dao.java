@@ -311,16 +311,15 @@ public class Dao {
 	        }
 	    }
 
-	public String[] getOngName() {
-		String sql = "SELECT username FROM userOng";
+	public ArrayList<String> getOngName() throws SQLException, ClassNotFoundException, IOException {
+		String sql = "SELECT ongName FROM userOng";
 		ArrayList<String> ongs = new ArrayList<String>();
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
-				ongs.add(sql);
-				//PRECISA TERMINAR
+				ongs.add(rs.getString(1));
 			}
+			return ongs;
 		}
-		return null;
 	}
 }
