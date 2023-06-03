@@ -29,7 +29,6 @@ public class GetOngNameServlet extends HttpServlet {
      */
     public GetOngNameServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**

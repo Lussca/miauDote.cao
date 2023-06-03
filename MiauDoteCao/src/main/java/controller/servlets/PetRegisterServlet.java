@@ -29,6 +29,10 @@ public class PetRegisterServlet extends HttpServlet {
 
      public PetRegisterServlet(){
         super();
+       
+     }
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException{
+     	
      }
      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         rrh.configureCors(response);
