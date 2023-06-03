@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Button Request Example</title>
+    <title>Exibir nomes das Ongs</title>
     <script>
+        //Requisicao com fetch para a servlet responsável
         function sendRequest() {
             fetch('http://localhost:8080/MiauDoteCao/GetOngNameServlet')
                 .then(response => response.json())

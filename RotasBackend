@@ -1,0 +1,5 @@
+http://localhost:8080/MiauDoteCao/PetRegisterServlet
+http://localhost:8080/MiauDoteCao/LoginServlet
+http://localhost:8080/MiauDoteCao/RegisterServlet
+http://localhost:8080/MiauDoteCao/GetOngNameServlet
+http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet
