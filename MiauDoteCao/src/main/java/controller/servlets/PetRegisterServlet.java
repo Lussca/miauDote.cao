@@ -3,11 +3,16 @@ package controller.servlets;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import com.google.gson.Gson;
 import controller.Validations;
 import controller.handler.*;
 
@@ -24,6 +29,10 @@ public class PetRegisterServlet extends HttpServlet {
 
      public PetRegisterServlet(){
         super();
+       
+     }
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException{
+     	
      }
      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         rrh.configureCors(response);
@@ -46,6 +55,7 @@ public class PetRegisterServlet extends HttpServlet {
 						requestBody.append(line);
 					}
 				}
+				Gson gson = new Gson();
 				String urlJson = requestBody.toString();
 				String json = gson.toJson(urlJson);
 				//teste para extração de link das imagens de um animal

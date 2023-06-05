@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -309,4 +310,16 @@ public class Dao {
 	            return false;
 	        }
 	    }
+
+	public ArrayList<String> getOngName() throws SQLException, ClassNotFoundException, IOException {
+		String sql = "SELECT ongName FROM userOng";
+		ArrayList<String> ongs = new ArrayList<String>();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				ongs.add(rs.getString(1));
+			}
+			return ongs;
+		}
+	}
 }

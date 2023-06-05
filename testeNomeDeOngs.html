@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exibir nomes das Ongs</title>
+    <script>
+        //Requisicao com fetch para a servlet responsável
+        function sendRequest() {
+            fetch('http://localhost:8080/MiauDoteCao/GetOngNameServlet')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Response:", data);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</head>
+<body>
+    <button onclick="sendRequest()">Send Request</button>
+</body>
+</html>

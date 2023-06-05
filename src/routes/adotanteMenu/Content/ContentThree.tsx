@@ -11,11 +11,11 @@ export const ContentThree = () =>{
                     <h3>Ache seu pet</h3>
                     <p>Acesse nosso botão Quero adotar, assim conhecera nossos diversos Pets disponíveis para adoção, pertencentes a nossas ONGS/protetores parceiros, para criar a conexão perfeita entre adotante e Pet.</p>                   
                 </div>
-                <div className={styles.itens}>
+                {/* <div className={styles.itens}>
                     <img src="../imgs/icons/medical-report.png" className={styles.icons} />
                     <h3>Formulário de Interesse</h3>
                     <p>Preencha o formulário de interesse que disponibilizamos no botão Formulário responsável que a ONG/protetor entrará em contato com você em até 38h.</p>
-                </div>
+                </div> */}
                 <div className={styles.itens}>
                     <img src="../imgs/icons/registration.png" className={styles.icons} />
                     <h3>Avaliação da adoção</h3>
