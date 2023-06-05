@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.entity.Adress;
+import model.entity.Animal;
 import model.entity.UserAdopter;
 import model.entity.UserOng;
 
@@ -320,6 +321,29 @@ public class Dao {
 				ongs.add(rs.getString(1));
 			}
 			return ongs;
+		}
+	}
+
+	public ArrayList<Animal> selectAnimals(String filtro, String filtro2) throws SQLException {
+		String sql = "SELECT name, age, race, size, id FROM animal WHERE filtro = ? AND filtro2 = ?";
+		ArrayList<Animal> animals = new ArrayList<Animal>();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, filtro);
+			statement.setString(2, filtro2);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				Animal a = new Animal();
+					a.setName(rs.getString(1));
+					a.setAge(rs.getLong(2));
+					a.setRace(rs.getString(3));
+					a.setSize(rs.getLong(4));
+					a.setId(rs.getString(5));
+					animals.add(a);
+			}
+			return animals;
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

@@ -34,6 +34,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.GetOngNameServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>GetAnimalByFilter</servlet-name>
+  	<display-name>GetAnimalByFilter</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.GetAnimalByFilter</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -53,6 +59,10 @@
   <servlet-mapping>
   	<servlet-name>GetOngNameServlet</servlet-name>
   	<url-pattern>/GetOngNameServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>GetAnimalByFilter</servlet-name>
+  	<url-pattern>/GetAnimalByFilter</url-pattern>
   </servlet-mapping>
   
 </web-app>
