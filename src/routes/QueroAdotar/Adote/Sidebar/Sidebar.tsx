@@ -27,6 +27,36 @@ interface ONGs {
 function Sidebar(this: any)  {
 
     const [ongs, setOngs] = useState<ONGs[]>([]);
+    const [especie, setEspecie] = useState('');
+    const [pelagem, setPelagem] = useState('');
+    const [sexo, setSexo] = useState('');
+    const [caa, setCaa] = useState('');
+    const [cah, setCah] = useState('');
+    const [idade, setIdade] = useState('');
+
+    const handleChangeEspecie = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setEspecie(event.target.value);
+    };
+
+    const handleChangePelagem = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setPelagem(event.target.value);
+    };
+
+    const handleChangeSexo = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSexo(event.target.value);
+    };
+
+    const handleChangeCaa = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setCaa(event.target.value);
+    };
+
+    const handleChangeCah = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setCah(event.target.value);
+    };
+
+    const handleChangeIdade = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setIdade(event.target.value);
+    };
 
     //Requisicao com fetch para a servlet responsável
     function sendRequest() {
@@ -44,7 +74,7 @@ function Sidebar(this: any)  {
         <div className={styles.sidebar}>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
                 <InputLabel>Ongs</InputLabel>
-                <Select value={ongs}>
+                <Select value={ongs} >
                     <MenuItem value="">
                         <em>Selecione uma ONG</em>
                     </MenuItem>
@@ -55,47 +85,47 @@ function Sidebar(this: any)  {
             </FormControl>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
                 <InputLabel>Espécie</InputLabel>
-                <Select>
+                <Select value={especie} onChange={handleChangeEspecie}>
                     <MenuItem value={1}>Canino</MenuItem>
                     <MenuItem value={2}>Felino</MenuItem>
                 </Select>
             </FormControl>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
                 <InputLabel>Pelagem</InputLabel>
-                <Select>
+                <Select value={pelagem} onChange={handleChangePelagem}>
                     <MenuItem value={1}>Longo</MenuItem>
                     <MenuItem value={2}>Médio</MenuItem>
-                    <MenuItem value={2}>Curto</MenuItem>
+                    <MenuItem value={3}>Curto</MenuItem>
                 </Select>
             </FormControl>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
                 <InputLabel>Sexo</InputLabel>
-                <Select>
+                <Select value={sexo} onChange={handleChangeSexo}>
                     <MenuItem value={1}>Macho</MenuItem>
                     <MenuItem value={2}>Fêmea</MenuItem>
                 </Select>
             </FormControl>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
                 <InputLabel>Convivência animal para animal</InputLabel>
-                <Select>
+                <Select value={caa} onChange={handleChangeCaa}>
                     <MenuItem value={1}>manso</MenuItem>
                     <MenuItem value={2}>agressivo</MenuItem>
-                    <MenuItem value={2}>agitado</MenuItem>
-                    <MenuItem value={2}>amigável</MenuItem>
-                    <MenuItem value={2}>amedrontado</MenuItem>
+                    <MenuItem value={3}>agitado</MenuItem>
+                    <MenuItem value={4}>amigável</MenuItem>
+                    <MenuItem value={5}>amedrontado</MenuItem>
                 </Select>
             </FormControl>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
                 <InputLabel>Convivência animal e humano</InputLabel>
-                <Select>
+                <Select value={cah} onChange={handleChangeCah}>
                     <MenuItem value={1}>manso</MenuItem>
                     <MenuItem value={2}>agressivo</MenuItem>
-                    <MenuItem value={2}>agitado</MenuItem>
-                    <MenuItem value={2}>amigável</MenuItem>
-                    <MenuItem value={2}>amedrontado</MenuItem>
+                    <MenuItem value={3}>agitado</MenuItem>
+                    <MenuItem value={4}>amigável</MenuItem>
+                    <MenuItem value={5}>amedrontado</MenuItem>
                 </Select>
             </FormControl>
-            <TextField id="outlined-basic" label="Idade" variant="outlined" style={{ width: '100%', marginTop: '5%' }}/>
+            <TextField value={idade} onChange={handleChangeIdade} id="idade" label="Idade" variant="outlined" style={{ width: '100%', marginTop: '5%' }}/>
         </div>
     );
   

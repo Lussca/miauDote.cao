@@ -40,8 +40,8 @@ export const Navbar = () =>{
                         <Link to="/queroAdotar" style={{ textDecoration: 'none' }}>
                             <Button variant="contained" color="primary"> Quero Adotar </Button> 
                         </Link>
-                        <Button variant="contained" color="secondary"> Formulário responsável </Button> 
-                        <Button variant="contained" color="primary"> ONGS e Protetores </Button> 
+                        {/* <Button variant="contained" color="secondary"> Formulário responsável </Button>  */}
+                        <Button variant="contained" color="secondary"> ONGS e Protetores </Button> 
                     </ThemeProvider>
                 </Stack>
                 <Typography variant='h6' component='div' sx={{ ml: 10 }}>
