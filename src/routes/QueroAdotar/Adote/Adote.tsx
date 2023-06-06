@@ -13,7 +13,7 @@ function Adote(this: any)  {
     return (
         <div className={styles.adoteArea}>
             <Grid container spacing={2} margin={0}>
-                <Grid xs={2}>
+                <Grid xs={2} style={{ backgroundColor: "#fff" }}>
                     <Sidebar></Sidebar>
                 </Grid>
                 <Grid xs={10}>

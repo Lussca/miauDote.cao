@@ -177,7 +177,7 @@ function Registro(this: any)  {
     setIsLoading(true);
 
     let httpRequest = new XMLHttpRequest();
-    const URL_SERVLET_REGISTER = "http://localhost:8080/adoteCaoProjeto/RegisterServlet";
+    const URL_SERVLET_REGISTER = "http://localhost:8080/MiauDoteCao/RegisterServlet";
 
     httpRequest.onreadystatechange=function(){
       if(httpRequest.readyState === XMLHttpRequest.DONE){

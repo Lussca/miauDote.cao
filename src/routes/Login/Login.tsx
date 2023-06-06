@@ -49,7 +49,7 @@ function Login(this: any)  {
   const handleClick = () => {
 
     let httpRequest = new XMLHttpRequest();
-    const URL_SERVLET_LOGIN = "http://localhost:8080/adoteCaoProjeto/LoginServlet";
+    const URL_SERVLET_LOGIN = "http://localhost:8080/MiauDoteCao/LoginServlet";
     httpRequest.onreadystatechange=function(){
         if(httpRequest.readyState === XMLHttpRequest.DONE){
           let sessionData = JSON.parse(httpRequest.responseText);

@@ -5,11 +5,10 @@ import axios from 'axios';
 
 //imports MUI
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Autocomplete from '@mui/material/Autocomplete';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 
 interface Estado {
     id: string;
@@ -21,90 +20,82 @@ interface Cidade {
     nome: string;
 }
 
-const ONGs = [
-    { label: 'The Shawshank Redemption', year: 1994 },
-];
+interface ONGs {
+    nome: string;
+}
 
 function Sidebar(this: any)  {
 
-    const [estados, setEstados] = useState<Estado[]>([]);
-    const [cidades, setCidades] = useState<Cidade[]>([]);
-    const [selectedEstado, setSelectedEstado] = useState<string>('');
-    const [selectedCidade, setSelectedCidade] = useState<string>('');
-  
-    useEffect(() => {
-      const fetchEstados = async () => {
-        const response = await axios.get(
-          'https://servicodados.ibge.gov.br/api/v1/localidades/estados'
-        );
-        setEstados(response.data);
-      };
-  
-      fetchEstados();
-    }, []);
-  
-    const handleEstadoChange = async (event: { target: { value: any; }; }) => {
-      const estadoId = event.target.value;
-      setSelectedEstado(estadoId);
-  
-      if (estadoId) {
-        const response = await axios.get(
-          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`
-        );
-        setCidades(response.data);
-      } else {
-        setCidades([]);
+    const [ongs, setOngs] = useState<ONGs[]>([]);
+
+    //Requisicao com fetch para a servlet responsável
+    function sendRequest() {
+        fetch('http://localhost:8080/MiauDoteCao/GetOngNameServlet')
+          .then(response => response.json())
+          .then(data => {
+            setOngs(data); // Armazena a lista de menuItem no estado
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
       }
-  
-      setSelectedCidade('');
-    };
-  
-    const handleCidadeChange = (event: { target: { value: any; }; }) => {
-      const cidadeId = event.target.value;
-      setSelectedCidade(cidadeId);
-    };
 
     return (
         <div className={styles.sidebar}>
-            <FormControl style={{ width: '100%' }}>
-                <InputLabel>Estado</InputLabel>
-                <Select value={selectedEstado} onChange={handleEstadoChange}>
-                    <MenuItem value="">
-                        <em>Selecione um estado</em>
-                    </MenuItem>
-                    {estados.map((estado) => (
-                        <MenuItem key={estado.id} value={estado.id}>
-                        {estado.nome}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <FormControl style={{ width: '100%', marginTop: '5%' }}>
-                <InputLabel>Cidade</InputLabel>
-                <Select value={selectedCidade} onChange={handleCidadeChange}>
-                    <MenuItem value="">
-                        <em>Selecione uma cidade</em>
-                    </MenuItem>
-                    {cidades.map((cidade) => (
-                        <MenuItem key={cidade.id} value={cidade.id}>
-                        {cidade.nome}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
                 <InputLabel>Ongs</InputLabel>
-                {/* <Select value={selectedCidade} onChange={handleCidadeChange}>
+                <Select value={ongs}>
                     <MenuItem value="">
-                        <em>Selecione uma cidade</em>
+                        <em>Selecione uma ONG</em>
                     </MenuItem>
-                    {cidades.map((cidade) => (
-                        <MenuItem key={cidade.id} value={cidade.id}>
-                        {cidade.nome}
-                        </MenuItem>
+                    {ongs.map((ongs) => (
+                        <MenuItem key={ongs.nome} value={ongs.nome}>{ongs.nome}</MenuItem>
                     ))}
-                </Select> */}
+                </Select>
             </FormControl>
+            <FormControl style={{ width: '100%', marginTop: '5%' }}>
+                <InputLabel>Espécie</InputLabel>
+                <Select>
+                    <MenuItem value={1}>Canino</MenuItem>
+                    <MenuItem value={2}>Felino</MenuItem>
+                </Select>
+            </FormControl>
+            <FormControl style={{ width: '100%', marginTop: '5%' }}>
+                <InputLabel>Pelagem</InputLabel>
+                <Select>
+                    <MenuItem value={1}>Longo</MenuItem>
+                    <MenuItem value={2}>Médio</MenuItem>
+                    <MenuItem value={2}>Curto</MenuItem>
+                </Select>
+            </FormControl>
+            <FormControl style={{ width: '100%', marginTop: '5%' }}>
+                <InputLabel>Sexo</InputLabel>
+                <Select>
+                    <MenuItem value={1}>Macho</MenuItem>
+                    <MenuItem value={2}>Fêmea</MenuItem>
+                </Select>
+            </FormControl>
+            <FormControl style={{ width: '100%', marginTop: '5%' }}>
+                <InputLabel>Convivência animal para animal</InputLabel>
+                <Select>
+                    <MenuItem value={1}>manso</MenuItem>
+                    <MenuItem value={2}>agressivo</MenuItem>
+                    <MenuItem value={2}>agitado</MenuItem>
+                    <MenuItem value={2}>amigável</MenuItem>
+                    <MenuItem value={2}>amedrontado</MenuItem>
+                </Select>
+            </FormControl>
+            <FormControl style={{ width: '100%', marginTop: '5%' }}>
+                <InputLabel>Convivência animal e humano</InputLabel>
+                <Select>
+                    <MenuItem value={1}>manso</MenuItem>
+                    <MenuItem value={2}>agressivo</MenuItem>
+                    <MenuItem value={2}>agitado</MenuItem>
+                    <MenuItem value={2}>amigável</MenuItem>
+                    <MenuItem value={2}>amedrontado</MenuItem>
+                </Select>
+            </FormControl>
+            <TextField id="outlined-basic" label="Idade" variant="outlined" style={{ width: '100%', marginTop: '5%' }}/>
         </div>
     );
   
