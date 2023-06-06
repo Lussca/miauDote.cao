@@ -1,5 +1,39 @@
 http://localhost:8080/MiauDoteCao/PetRegisterServlet
+  Ainda não está pronta
+
 http://localhost:8080/MiauDoteCao/LoginServlet
+  Resultado esperado: Status 200, mensagem 0 / Usuário entra no sistema
+  Possíveis erros: 15(E-mail ou Senha incorretos) - Status 400 ou 401
+                   16(Erro no envio da responsta para o cliente) Status 501
+                   23(Erro na inserção do JWT na tabela de usuário) Status 501
+
 http://localhost:8080/MiauDoteCao/RegisterServlet
+  Resultado esperado: Status 200, mensagem 0 / Criação da conta
+  Possíveis erros: 1(Cidade inválida) Status 400
+                   3(Cep inválido) - Status 422
+                   4(Login inválido) - Status 422
+                   5(Senha inválida) - Status 422
+                   7(CPF inválido) - Status 422
+                   8(Data inválida) - Status 422
+                   10(E-mail já cadastrado) - Status 409
+                   11(CPF já cadastrado) - Status 409
+                   12(Nome da ONG já cadastrado) - Status 409
+                   13(Algum dos campos enviados está vazio) - Status 400 
+                   14(Erro na inserção do usuário no banco de dados) - Status 501
+                   -- Caso a mensagem que chegue seja -1 alguma coisa muito errada aconteceu e eu não faço ideia do que seja
+                   
+                   
 http://localhost:8080/MiauDoteCao/GetOngNameServlet
+  Resultado esperado: Status 200, mensagem 0 / JSON com o nome das ONGs
+  Possíveis erros: 14(Erro no banco de dados) - Status 500
+  
 http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet
+  Resultado esperado: Status 200, mensagem 0 / Candidatura registrada no banco de dados
+  Possíveis erros: 16(Erro no servidor) - Status 501
+  
+http://localhost:8080/MiauDoteCao/GetAnimalByFilter
+  Resultado esperado: Status 200, mensagem 0 / JSON com o cadastro de 10 animais
+  Possíveis erros: 21(Nenhum animal está de acordo com os filtros desejados) - Status 404
+                   14(Erro durante a busca no banco de dados) - Status 500
+                   22(Não lembro, mas pode acontecer :)) - Status 404
+  
