@@ -2,7 +2,7 @@
 O MiauDote.cão é um sistema desenvolvido para auxiliar ONGs a encontrar um lar para animais abandonados.
 
 # Contribuidores
-A equipe responsável pelo desenvolvimento do Adote.cão é composta por:
+A equipe responsável pelo desenvolvimento do MiauDote.cão é composta por:
 
 [João Gabriel](https://github.com/JoaoGabriel19)
 
