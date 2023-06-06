@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import controller.Validations;
 import controller.handler.RequestResponseHandler;
 import model.Dao;
+import model.entity.Adress;
 import model.entity.Animal;
 /**
  * Servlet implementation class GetAnimalByFilter
@@ -39,24 +40,37 @@ public class GetAnimalByFilter extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
-			String filtro = request.getParameter("filtro1");
+			String race = request.getParameter("race");
+			String size = request.getParameter("size");
+			String hairType = request.getParameter("hairType");
+			String animalToPerson = request.getParameter("animalToPerson");
+			String animalToAnimal = request.getParameter("animalToAnimal");
+			String sex = request.getParameter("sex");
+			String age = request.getParameter("age");
+			String userId = request.getParameter("userId");	
 			try {
-				ArrayList<Animal> animals = dao.selectAnimals(filtro, filtro);
+				Adress a = dao.getUserAdress(userId);
+				ArrayList<Animal> animals = dao.selectAnimals(race, size, hairType, animalToAnimal, animalToPerson, sex, age, userId, "a", "a");
 				if(!animals.isEmpty()) {
 					JsonArray jsonArray = new Gson().toJsonTree(animals).getAsJsonArray();
 					JsonObject jsonObject = new JsonObject();
 			        jsonObject.add("animals", jsonArray);
+			        response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
 			        PrintWriter out = response.getWriter();
 			        String jsonString = jsonObject.toString();
 					out.print(jsonString);
 			        out.flush();
 			        out.close();
-			        rrh.sendErrorResponse(response, HttpServletResponse.SC_ACCEPTED, Validations.NO_ERROR);
+			        rrh.sendResponse(response, HttpServletResponse.SC_ACCEPTED, Validations.NO_ERROR);
 				}else {
 					rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, Validations.NO_ANIMALS_MATCHING_FILTERS);
 				}
 			} catch (SQLException e) {
 				rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.DATABASE_ERROR);
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, Validations.DATA_NOT_FOUND);
 				e.printStackTrace();
 			}
 		}

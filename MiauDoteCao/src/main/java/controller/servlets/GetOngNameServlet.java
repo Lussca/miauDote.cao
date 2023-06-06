@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import model.Dao;
+import controller.Validations;
 import controller.handler.*;
 /**
  * Servlet implementation class GetOngNameServlet
@@ -37,19 +38,21 @@ public class GetOngNameServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			ArrayList<String> ongs = dao.getOngName();
-			JsonArray jsonArray = new Gson().toJsonTree(ongs).getAsJsonArray();
-			JsonObject jsonObject = new JsonObject();
-	        jsonObject.add("names", jsonArray);
-	        PrintWriter out = response.getWriter();
-	        String jsonString = jsonObject.toString();
-			out.print(jsonString);
-	        out.flush();
-	        out.close();
-	        response.setStatus(HttpServletResponse.SC_OK);
+				JsonArray jsonArray = new Gson().toJsonTree(ongs).getAsJsonArray();
+				JsonObject jsonObject = new JsonObject();
+		        jsonObject.add("names", jsonArray);
+		        PrintWriter out = response.getWriter();
+		        String jsonString = jsonObject.toString();
+				out.print(jsonString);
+		        out.flush();
+		        out.close();
+		        rrh.sendResponse(response, HttpServletResponse.SC_OK, Validations.NO_ERROR);     
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.DATABASE_ERROR);
 			}
 		}
 	}
