@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.entity.Adress;
+import model.entity.Animal;
 import model.entity.UserAdopter;
 import model.entity.UserOng;
 
@@ -320,6 +321,90 @@ public class Dao {
 				ongs.add(rs.getString(1));
 			}
 			return ongs;
+		}
+	}
+
+	public ArrayList<Animal> selectAnimals(String race, String size, String hairType, String animalToAnimal, String animalToPerson,
+			String sex, String age, String id, String city, String state) throws SQLException {
+		String sql = "SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, " +
+	             "a.sex, a.age, a.idOng, img.imageUrl " +
+	             "FROM animal AS a " +
+	             "JOIN userOng AS u ON a.idOng = u.idOng " +
+	             "JOIN adress AS ad ON u.idAdress = ad.idAdress " +
+	             "LEFT JOIN ( " +
+	             "    SELECT animalId, imageUrl " +
+	             "    FROM image " +
+	             "    GROUP BY animalId, imageUrl " +
+	             "    LIMIT 1 " +
+	             ") AS img ON a.idAnimal = img.animalId " +
+	             "WHERE ad.city = ? " +
+	             "  AND ad.state = ? " +
+	             "  AND a.race = ? " +
+	             "  AND a.size = ? " +
+	             "  AND a.hairType = ? " +
+	             "  AND a.animalToAnimal = ? " +
+	             "  AND a.animalToPerson = ? " +
+	             "  AND a.sex = ? " +
+	             "  AND a.age = ? " +
+	             "GROUP BY a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, " +
+	             "         a.sex, a.age, a.idOng, img.imageUrl " +
+	             "ORDER BY a.insertionDate ASC " +
+	             "LIMIT 10";
+		ArrayList<Animal> animals = new ArrayList<Animal>();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, city);
+			statement.setString(2, state);
+			statement.setString(3, race);
+			statement.setString(4, size);
+			statement.setString(5, hairType);
+			statement.setString(6, animalToAnimal);
+			statement.setString(7, animalToPerson);
+			statement.setString(8, sex);
+			statement.setString(9, age);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				Animal a = new Animal();
+					a.setId(rs.getString("idAnimal"));
+					a.setRace(rs.getString("race"));
+					a.setName(rs.getString("animalName"));
+					a.setSize(rs.getString("size"));
+					a.setHairType(rs.getString("hairType"));
+					a.setAnimalToAnimal(rs.getString("animalToAnimal"));
+					a.setAnimalToPerson(rs.getString("animalToPerson"));
+					a.setSex(rs.getString("sex"));
+					a.setAge(rs.getString("age"));
+					a.setIdOng(rs.getString("idOng"));
+					a.setImageUrl(rs.getString("imageUrl"));
+					animals.add(a);
+			}
+			return animals;
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Adress getUserAdress(String userId) throws ClassNotFoundException, IOException {
+		String sql = "SELECT ad.city, ad.state " +
+		        "FROM adress AS ad " +
+		        "JOIN userOng AS u ON ad.idAdress = u.idAdress " +
+		        "WHERE u.idOng = ?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, userId);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				String city = rs.getString("city");
+				String state = rs.getString("state");
+				Adress a = new Adress();
+				a.setCity(city);
+				a.setState(state);
+				return a;
+			}else {
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

@@ -1,8 +1,6 @@
 package controller.servlets;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
