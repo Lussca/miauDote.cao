@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
 		try {
 			dao.insertAndUpdateJWT(jwt, isOng, login);
 		} catch (ClassNotFoundException | SQLException | IOException e1) {
-			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.JWT_ERROR);
 			e1.printStackTrace();
 		}
 		

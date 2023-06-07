@@ -332,11 +332,11 @@ public class Dao {
 	             "JOIN userOng AS u ON a.idOng = u.idOng " +
 	             "JOIN adress AS ad ON u.idAdress = ad.idAdress " +
 	             "LEFT JOIN ( " +
-	             "    SELECT animalId, imageUrl " +
+	             "    SELECT idAnimal, imageUrl " +
 	             "    FROM image " +
-	             "    GROUP BY animalId, imageUrl " +
+	             "    GROUP BY idAnimal, imageUrl " +
 	             "    LIMIT 1 " +
-	             ") AS img ON a.idAnimal = img.animalId " +
+	             ") AS img ON a.idAnimal = img.idAnimal " +
 	             "WHERE ad.city = ? " +
 	             "  AND ad.state = ? " +
 	             "  AND a.race = ? " +

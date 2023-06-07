@@ -50,7 +50,7 @@ public class GetAnimalByFilter extends HttpServlet {
 			String userId = request.getParameter("userId");	
 			try {
 				Adress a = dao.getUserAdress(userId);
-				ArrayList<Animal> animals = dao.selectAnimals(race, size, hairType, animalToAnimal, animalToPerson, sex, age, userId, "a", "a");
+				ArrayList<Animal> animals = dao.selectAnimals(race, size, hairType, animalToAnimal, animalToPerson, sex, age, userId, a.getCity(), a.getState());
 				if(!animals.isEmpty()) {
 					JsonArray jsonArray = new Gson().toJsonTree(animals).getAsJsonArray();
 					JsonObject jsonObject = new JsonObject();
