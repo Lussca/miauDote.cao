@@ -326,64 +326,94 @@ public class Dao {
 	}
 
 	public ArrayList<Animal> selectAnimals(String race, String size, String hairType, String animalToAnimal, String animalToPerson,
-			String sex, String age, String id, String city, String state) throws SQLException {
-		String sql = "SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, " +
-	             "a.sex, a.age, a.idOng, img.imageUrl " +
-	             "FROM animal AS a " +
-	             "JOIN userOng AS u ON a.idOng = u.idOng " +
-	             "JOIN adress AS ad ON u.idAdress = ad.idAdress " +
-	             "LEFT JOIN ( " +
-	             "    SELECT idAnimal, imageUrl " +
-	             "    FROM image " +
-	             "    GROUP BY idAnimal, imageUrl " +
-	             "    LIMIT 1 " +
-	             ") AS img ON a.idAnimal = img.idAnimal " +
-	             "WHERE ad.city = ? " +
-	             "  AND ad.state = ? " +
-	             "  AND a.race = ? " +
-	             "  AND a.size = ? " +
-	             "  AND a.hairType = ? " +
-	             "  AND a.animalToAnimal = ? " +
-	             "  AND a.animalToPerson = ? " +
-	             "  AND a.sex = ? " +
-	             "  AND a.age = ? " +
-	             "GROUP BY a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, " +
-	             "         a.sex, a.age, a.idOng, img.imageUrl " +
-	             "ORDER BY a.insertionDate ASC " +
-	             "LIMIT 10";
-		ArrayList<Animal> animals = new ArrayList<Animal>();
-		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
-			statement.setString(1, city);
-			statement.setString(2, state);
-			statement.setString(3, race);
-			statement.setString(4, size);
-			statement.setString(5, hairType);
-			statement.setString(6, animalToAnimal);
-			statement.setString(7, animalToPerson);
-			statement.setString(8, sex);
-			statement.setString(9, age);
-			ResultSet rs = statement.executeQuery();
-			while(rs.next()) {
-				Animal a = new Animal();
-					a.setId(rs.getString("idAnimal"));
-					a.setRace(rs.getString("race"));
-					a.setName(rs.getString("animalName"));
-					a.setSize(rs.getString("size"));
-					a.setHairType(rs.getString("hairType"));
-					a.setAnimalToAnimal(rs.getString("animalToAnimal"));
-					a.setAnimalToPerson(rs.getString("animalToPerson"));
-					a.setSex(rs.getString("sex"));
-					a.setAge(rs.getString("age"));
-					a.setIdOng(rs.getString("idOng"));
-					a.setImageUrl(rs.getString("imageUrl"));
-					animals.add(a);
-			}
-			return animals;
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+	        String sex, String age, String id, String city, String state) throws SQLException {
+	    StringBuilder sqlBuilder = new StringBuilder();
+	    sqlBuilder.append("SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, ");
+	    sqlBuilder.append("a.sex, a.age, a.idOng, img.imageUrl ");
+	    sqlBuilder.append("FROM animal AS a ");
+	    sqlBuilder.append("JOIN userOng AS u ON a.idOng = u.idOng ");
+	    sqlBuilder.append("JOIN adress AS ad ON u.idAdress = ad.idAdress ");
+	    sqlBuilder.append("LEFT JOIN ( ");
+	    sqlBuilder.append("    SELECT idAnimal, imageUrl ");
+	    sqlBuilder.append("    FROM image ");
+	    sqlBuilder.append("    GROUP BY idAnimal, imageUrl ");
+	    sqlBuilder.append("    LIMIT 1 ");
+	    sqlBuilder.append(") AS img ON a.idAnimal = img.idAnimal ");
+	    sqlBuilder.append("WHERE ad.city = ? ");
+	    sqlBuilder.append("  AND ad.state = ? ");
+
+	    ArrayList<String> parameters = new ArrayList<>();
+	    parameters.add(city);
+	    parameters.add(state);
+
+	    if (race != null && !race.isEmpty() && !race.equals("0")) {
+	        sqlBuilder.append("  AND a.race = ? ");
+	        parameters.add(race);
+	    }
+	    if (size != null && !size.isEmpty() && !size.equals("0")) {
+	        sqlBuilder.append("  AND a.size = ? ");
+	        parameters.add(size);
+	    }
+	    if (hairType != null && !hairType.isEmpty() && !hairType.equals("0")) {
+	        sqlBuilder.append("  AND a.hairType = ? ");
+	        parameters.add(hairType);
+	    }
+	    if (animalToAnimal != null && !animalToAnimal.isEmpty() && !animalToAnimal.equals("0")) {
+	        sqlBuilder.append("  AND a.animalToAnimal = ? ");
+	        parameters.add(animalToAnimal);
+	    }
+	    if (animalToPerson != null && !animalToPerson.isEmpty() && !animalToPerson.equals("0")) {
+	        sqlBuilder.append("  AND a.animalToPerson = ? ");
+	        parameters.add(animalToPerson);
+	    }
+	    if (sex != null && !sex.isEmpty() && !sex.equals("0")) {
+	        sqlBuilder.append("  AND a.sex = ? ");
+	        parameters.add(sex);
+	    }
+	    if (age != null && !age.isEmpty() && !age.equals("0")) {
+	        sqlBuilder.append("  AND a.age = ? ");
+	        parameters.add(age);
+	    }
+
+	    sqlBuilder.append("GROUP BY a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, ");
+	    sqlBuilder.append("         a.sex, a.age, a.idOng, img.imageUrl ");
+	    sqlBuilder.append("ORDER BY a.insertionDate ASC ");
+
+	    String sql = sqlBuilder.toString();
+
+	    ArrayList<Animal> animals = new ArrayList<>();
+
+	    try (Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+	        int parameterIndex = 1;
+	        for (String parameter : parameters) {
+	            statement.setString(parameterIndex++, parameter);
+	        }
+
+	        ResultSet rs = statement.executeQuery();
+
+	        while (rs.next()) {
+	            Animal a = new Animal();
+	            a.setId(rs.getString("idAnimal"));
+	            a.setRace(rs.getString("race"));
+	            a.setName(rs.getString("animalName"));
+	            a.setSize(rs.getString("size"));
+	            a.setHairType(rs.getString("hairType"));
+	            a.setAnimalToAnimal(rs.getString("animalToAnimal"));
+	            a.setAnimalToPerson(rs.getString("animalToPerson"));
+	            a.setSex(rs.getString("sex"));
+	            a.setAge(rs.getString("age"));
+	            a.setIdOng(rs.getString("idOng"));
+	            a.setImageUrl(rs.getString("imageUrl"));
+	            animals.add(a);
+	        }
+
+	        return animals;
+	    } catch (ClassNotFoundException | IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
+
 
 	public Adress getUserAdress(String userId) throws ClassNotFoundException, IOException {
 		String sql = "SELECT ad.city, ad.state " +
@@ -454,4 +484,20 @@ public class Dao {
 			return -1;
 			}
 		}
+
+	public ArrayList<String> getAnimalImages(String idAnimal) throws ClassNotFoundException, IOException{
+		String sql = "SELECT imageUrl FROM image WHERE idAnimal=?";
+		ArrayList<String> imagens = new ArrayList<String>();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idAnimal);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				imagens.add(rs.getString(1));
+			}
+			return imagens;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

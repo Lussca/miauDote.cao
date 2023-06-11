@@ -23,9 +23,6 @@ import controller.Validations;
 import controller.Encrypt;
 import controller.handler.*;
 
-/**
- * Servlet implementation class LoginServlet
- */
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Validations validations = new Validations();
@@ -33,10 +30,7 @@ public class LoginServlet extends HttpServlet {
 	JwtHandler jwtHandler = new JwtHandler();
 	RequestResponseHandler rrh = new RequestResponseHandler();
 	Dao dao = new Dao();
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public LoginServlet() {
         super();
     }

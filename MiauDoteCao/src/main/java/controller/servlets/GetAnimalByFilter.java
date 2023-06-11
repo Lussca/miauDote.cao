@@ -27,17 +27,12 @@ public class GetAnimalByFilter extends HttpServlet {
 	RequestResponseHandler rrh = new RequestResponseHandler();
 	Dao dao = new Dao();
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public GetAnimalByFilter() {
         super();
-        // TODO Auto-generated constructor stub
+
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 			String race = request.getParameter("race");
@@ -62,7 +57,7 @@ public class GetAnimalByFilter extends HttpServlet {
 					out.print(jsonString);
 			        out.flush();
 			        out.close();
-			        rrh.sendResponse(response, HttpServletResponse.SC_ACCEPTED, Validations.NO_ERROR);
+			        rrh.sendOkResponse(response);
 				}else {
 					rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, Validations.NO_ANIMALS_MATCHING_FILTERS);
 				}

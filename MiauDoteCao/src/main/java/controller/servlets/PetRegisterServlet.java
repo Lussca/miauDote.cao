@@ -15,17 +15,12 @@ import controller.handler.*;
 import model.entity.Animal;
 import model.Dao;
 
-/**
- * Servlet implementation class PetRegisterServlet
- */
+
 public class PetRegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	JwtHandler jwtH = new JwtHandler();
     RequestResponseHandler rrh = new RequestResponseHandler();
     Dao dao = new Dao();
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
 
      public PetRegisterServlet(){
         super();
@@ -35,10 +30,7 @@ public class PetRegisterServlet extends HttpServlet {
      	
      }
      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-    	 response.setHeader("Access-Control-Allow-Origin", "*");
-         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-         System.out.println("CHEGOU AQUI");
+    	rrh.configureCors(response);
         StringBuilder requestBody = new StringBuilder();
         BufferedReader reader = request.getReader();
         	String line;

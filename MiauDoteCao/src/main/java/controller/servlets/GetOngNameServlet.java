@@ -16,25 +16,17 @@ import com.google.gson.JsonObject;
 import model.Dao;
 import controller.Validations;
 import controller.handler.*;
-/**
- * Servlet implementation class GetOngNameServlet
- */
+
 public class GetOngNameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Dao dao = new Dao();
 	Gson gson = new Gson();
 	RequestResponseHandler rrh = new RequestResponseHandler();
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public GetOngNameServlet() {
         super();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 		response.setContentType("application/json");
@@ -49,7 +41,7 @@ public class GetOngNameServlet extends HttpServlet {
 				out.print(jsonString);
 		        out.flush();
 		        out.close();
-		        rrh.sendResponse(response, HttpServletResponse.SC_OK, Validations.NO_ERROR);     
+		        rrh.sendOkResponse(response);   
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.DATABASE_ERROR);

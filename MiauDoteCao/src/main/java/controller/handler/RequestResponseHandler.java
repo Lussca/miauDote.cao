@@ -12,6 +12,7 @@ public class RequestResponseHandler {
 	    response.setHeader("Access-Control-Allow-Origin", "*");
 	    response.setHeader("Access-Control-Allow-Methods", "GET, POST");
 	    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+	    
 	}
 	public void sendErrorResponse(HttpServletResponse response, int status, int message) throws IOException {
 	    response.setContentType("text/plain");

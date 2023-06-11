@@ -41,6 +41,8 @@ public class Validations {
 		public static final int JWT_ERROR = 23;
 		public static final int INVALID_ANIMAL = 24;
 		public static final int ERROR_ON_IMAGE_INSERTION = 25;
+		public static final int BAD_REQUEST = 26;
+		public static final int NO_IMAGES_FOUND = 27;
 	    public static final int NO_ERROR = 0;
 		
 
