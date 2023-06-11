@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import controller.Validations;
+
 public class RequestResponseHandler {
 	public void configureCors(HttpServletResponse response) {
 		//Acesso permitido para qualquer origem por enquanto
@@ -22,6 +24,13 @@ public class RequestResponseHandler {
 	    response.setContentType("text/plain");
 	    response.setStatus(status);
 	    response.getWriter().println(message);
+	    response.getWriter().flush();
+	    response.getWriter().close();
+	}
+	public void sendOkResponse(HttpServletResponse response) throws IOException {
+		response.setContentType("text/plain");
+	    response.setStatus(HttpServletResponse.SC_OK);
+	    response.getWriter().println(Validations.NO_ERROR);
 	    response.getWriter().flush();
 	    response.getWriter().close();
 	}

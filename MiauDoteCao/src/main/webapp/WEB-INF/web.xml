@@ -40,6 +40,18 @@
   	<description></description>
   	<servlet-class>controller.servlets.GetAnimalByFilter</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>EmailValidationServlet</servlet-name>
+  	<display-name>EmailValidationServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.EmailValidationServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>TestServlet</servlet-name>
+  	<display-name>TestServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.TestServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -63,6 +75,14 @@
   <servlet-mapping>
   	<servlet-name>GetAnimalByFilter</servlet-name>
   	<url-pattern>/GetAnimalByFilter</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>EmailValidationServlet</servlet-name>
+  	<url-pattern>/EmailValidationServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>TestServlet</servlet-name>
+  	<url-pattern>/TestServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>

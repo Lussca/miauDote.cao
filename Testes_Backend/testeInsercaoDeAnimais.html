@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inserção de animais</title>
+</head>
+<body>
+    <button id="sendButton">Send Request</button>
+
+    <script>
+        const jsonBody = {
+            "Dog": {
+                "race": "dog",
+                "name": "dog01",
+                "size": 1,
+                "hairType": 2,
+                "animalToAnimal": 1,
+                "animalToPerson": 3,
+                "sex": 1,
+                "age": 5,
+                "idOng": 1,
+                "Links": {
+                    "link1": "LINK1",
+                    "link2": "LINK2",
+                    "link3": "LINK3"
+                }
+            }
+        };
+
+        const url = "http://localhost:8080/MiauDoteCao/PetRegisterServlet";
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        };
+
+        document.getElementById('sendButton').addEventListener('click', () => {
+            fetch(url, options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Response:", data);
+                    
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                   
+                });
+        });
+    </script>
+</body>
+</html>

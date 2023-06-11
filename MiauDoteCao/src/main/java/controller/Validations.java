@@ -39,7 +39,10 @@ public class Validations {
 		public static final int NO_ANIMALS_MATCHING_FILTERS = 21;
 		public static final int DATA_NOT_FOUND = 22;
 		public static final int JWT_ERROR = 23;
+		public static final int INVALID_ANIMAL = 24;
+		public static final int ERROR_ON_IMAGE_INSERTION = 25;
 	    public static final int NO_ERROR = 0;
+		
 
 
 	

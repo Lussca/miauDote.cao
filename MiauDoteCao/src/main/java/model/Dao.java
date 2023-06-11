@@ -59,8 +59,9 @@ public class Dao {
         String password = getConfigValueByKey("password");
         /*Class.forName("org.postgresql.Driver");  
          * Utilizar esta linha para se conectar com o postgreSQL
+         *Class.forName("com.mysql.jdbc.Driver"); MySQL antigo
          * */
-        Class.forName("com.mysql.jdbc.Driver"); //Utilizar esta linha para conectar ao MySQL
+        Class.forName("com.mysql.cj.jdbc.Driver"); //Utilizar esta linha para conectar ao MySQL
 
         Connection connection = null;
         try {
@@ -407,4 +408,50 @@ public class Dao {
 			return null;
 		}
 	}
+
+	public int insertAnimal(Animal animal) {
+		String sql = "INSERT INTO animal (race, animalName, size, hairType, animalToAnimal, animalToPerson, sex, age, idOng, insertionDate) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
+			statement.setString(1, animal.getRace());
+			statement.setString(2, animal.getName());
+			statement.setString(3, animal.getSize());
+			statement.setString(4, animal.getHairType());
+			statement.setString(5, animal.getAnimalToAnimal());
+			statement.setString(6, animal.getAnimalToPerson());
+			statement.setString(7, animal.getSex());
+			statement.setString(8, animal.getAge());
+			statement.setString(9, animal.getIdOng());
+			statement.setString(10, animal.getInsertionDate());
+			int update = statement.executeUpdate();
+			ResultSet keys = statement.getGeneratedKeys();
+			if(keys.next()) {
+				int id = keys.getInt(1);
+				return id;
+			}else {
+				throw new SQLException("Nenhuma chave primaria foi gerada.");
+			}
+		}catch(SQLException | ClassNotFoundException | IOException e) {
+			System.err.println("Erro durante o registro: "+e.getMessage());
+			return -1;
+			}
+		}
+
+	public int insertImages(Animal animal, int idAnimal, int i) {
+		String sql = "INSERT INTO image (idAnimal, imageUrl) VALUES (?,?)";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
+			statement.setInt(1, idAnimal);
+			statement.setString(2, animal.getLinks().get(i));
+			int update = statement.executeUpdate();
+			ResultSet keys = statement.getGeneratedKeys();
+			if(keys.next()) {
+				int id = keys.getInt(1);
+				return id;
+			}else {
+				throw new SQLException("Nenhuma chave primaria foi gerada.");
+			}
+		}catch(SQLException | ClassNotFoundException | IOException e) {
+			System.err.println("Erro durante o registro: "+e.getMessage());
+			return -1;
+			}
+		}
 }

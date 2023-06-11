@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Encrypt {
 	 final static String ALGORITHM = "RSA";
-	    public static final String JWT_ISSUER = "Adote.Cao";
+	    public static final String JWT_ISSUER = "MiauDote.Cao";
 
 	    public String toHash(String message) throws NoSuchAlgorithmException {
 	        MessageDigest md = MessageDigest.getInstance("SHA-256");
