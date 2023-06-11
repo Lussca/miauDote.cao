@@ -64,6 +64,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.TesteJWT</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>EmailTestServlet</servlet-name>
+  	<display-name>EmailTestServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.EmailTestServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -103,6 +109,10 @@
   <servlet-mapping>
   	<servlet-name>TesteJWT</servlet-name>
   	<url-pattern>/TesteJWT</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>EmailTestServlet</servlet-name>
+  	<url-pattern>/EmailTestServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>
