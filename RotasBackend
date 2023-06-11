@@ -1,5 +1,9 @@
 Rota: http://localhost:8080/MiauDoteCao/PetRegisterServlet
-  Ainda não está pronta
+  Resultad esperado: Status 200, mensagem 0 (Animal será cadastrado no bano de dados)
+  Possíveis erros:
+  14: Erro durante a inserção do animal no banco de dados (Status 500)
+  24: Erro durante a isnerção do animal ao banco, causado por erro nos dados do animal (Status 400)
+  25: Erro na inserção de 1 ou mais imagens no banco de dados (Status 500)
 
 Rota: http://localhost:8080/MiauDoteCao/LoginServlet
   Resultado esperado: Status 200, mensagem 0 (Usuário entra no sistema)
@@ -40,3 +44,10 @@ Rota: http://localhost:8080/MiauDoteCao/GetAnimalByFilter
   21: Nenhum animal está de acordo com os filtros desejados (Status 404)
   14: Erro durante a busca no banco de dados (Status 500)
   22: Não lembro, mas pode acontecer :) (Status 404)
+  
+Rota: http://localhost:8080/MiauDoteCao/GetAnimalImages
+  Resultado esperado: Status 200, mensagem 0 (JSON com todas as imagens de um determinado animal)
+  Possíveis erros:
+  26: Erro na parametrização do animal (ID provavelmente não é um número) (Status 400)
+  27: Nenhuma imagem encontrada (O animal pode ter sido cadastrado sem imagens ou o animal pode não existir no banco de dados) (Status 404)
+  
