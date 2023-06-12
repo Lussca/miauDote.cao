@@ -501,8 +501,42 @@ public class Dao {
 		}
 	}
 
-	public int updateAnimal(Animal animal) {
-		// CRIAR METODO DE ATUALIZACAO DE ANIMAIS
-		return 0;
+	public boolean updateAnimal(Animal animal) throws ClassNotFoundException, IOException {
+		String sql = "UPDATE animal SET race=?, name=?, size=?, hairType=?, animalToAnimal=?, animalToPerson=?, sex=?, age=? WHERE idAnimal=?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, animal.getRace());
+			statement.setString(2, animal.getName());
+			statement.setString(3, animal.getSize());
+			statement.setString(4, animal.getHairType());
+			statement.setString(5, animal.getAnimalToAnimal());
+			statement.setString(6, animal.getAnimalToPerson());
+			statement.setString(7, animal.getSex());
+			statement.setString(8, animal.getAge());
+			statement.setString(9, animal.getId());
+			int rowsUpdated = statement.executeUpdate();
+			if(rowsUpdated == 0) {
+				return false;
+			}else {
+				return true;
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	public boolean updateAnimalImages(Animal animal) {
+		String sql = "DELETE FROM image WHERE idAnimal=?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, animal.getId());
+			int rowsDeleted = statement.executeUpdate();
+			if(rowsDeleted == 0) {
+				return false;
+			}else {
+				return true;
+			}
+		} catch (SQLException | ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

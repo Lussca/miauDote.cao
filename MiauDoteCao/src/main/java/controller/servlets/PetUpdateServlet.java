@@ -31,10 +31,11 @@ public class PetUpdateServlet extends HttpServlet {
         	String jsonPayLoad = requestBody.toString();
         	try {
         	Animal animal = Animal.parseAnimalJson(jsonPayLoad, 1);
-        	int idAnimal = dao.updateAnimal(animal);
-        	if(idAnimal == -1) {
+        	boolean hasError = dao.updateAnimal(animal);
+        	if(!hasError) {
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.DATABASE_ERROR);
         		}else {
+        			//ALTERAR ESTÁ PARTE PARA ATUALIZAÇÃO DAS IMAGENS
         			for(int i = 0; i< animal.getLinks().size(); i++) {
     	        		int newImageId = dao.insertImages(animal, idAnimal, i);
     	        		if(newImageId == -1) {
