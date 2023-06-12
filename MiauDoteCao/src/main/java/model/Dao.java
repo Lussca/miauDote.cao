@@ -500,4 +500,9 @@ public class Dao {
 			return null;
 		}
 	}
+
+	public int updateAnimal(Animal animal) {
+		// CRIAR METODO DE ATUALIZACAO DE ANIMAIS
+		return 0;
+	}
 }
