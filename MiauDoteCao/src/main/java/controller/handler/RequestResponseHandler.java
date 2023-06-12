@@ -7,13 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 import controller.Validations;
 
 public class RequestResponseHandler {
-	public void configureCors(HttpServletResponse response) {
-		//Acesso permitido para qualquer origem por enquanto
-	    response.setHeader("Access-Control-Allow-Origin", "*");
-	    response.setHeader("Access-Control-Allow-Methods", "GET, POST");
-	    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-	    
-	}
+	public void configureCors(HttpServletResponse response){
+		response.addHeader("Access-Control-Allow-Origin","*");
+		response.addHeader("Access-Control-Allow-Methods","POST,GET,OPTIONS,PUT,DELETE,HEAD");
+		response.addHeader("Access-Control-Allow-Headers","X-PINGOTHER,Origin,X-Requested-With,Content-Type,Accept");
+		response.addHeader("Access-Control-Max-Age","1728000");
+		}
 	public void sendErrorResponse(HttpServletResponse response, int status, int message) throws IOException {
 	    response.setContentType("text/plain");
 	    response.setStatus(status);
