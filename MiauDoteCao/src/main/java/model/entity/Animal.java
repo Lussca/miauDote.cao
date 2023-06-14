@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class Animal {
@@ -117,6 +116,22 @@ public class Animal {
 		this.insertionDate = insertionDate;
 		this.links = links;
 	}
+	public Animal(String idAnimal, String race, String name, String size, String hairType, String animalToAnimal,
+			String animalToPerson, String sex, String age, String idOng,
+			List<String> links, int number) {
+		super();
+		this.id = idAnimal;
+		this.race = race;
+		this.name = name;
+		this.size = size;
+		this.hairType = hairType;
+		this.animalToAnimal = animalToAnimal;
+		this.animalToPerson = animalToPerson;
+		this.sex = sex;
+		this.age = age;
+		this.idOng = idOng;
+		this.links = links;
+	}
 	public Animal() {
 		super();
 	}
@@ -124,7 +139,7 @@ public class Animal {
 		Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(jsonPayLoad, JsonObject.class);
 
-        JsonObject animalObject = jsonObject.getAsJsonObject("Dog");
+        JsonObject animalObject = jsonObject.getAsJsonObject("Animal");
         
         try {
             String race = animalObject.get("race").getAsString();
@@ -151,5 +166,36 @@ public class Animal {
         	e.printStackTrace();
         	return null;
         }
+       
 	}
+	 public static Animal parseAnimalJson(String jsonPayLoad, int number) {
+		 Gson gson = new Gson();
+	        JsonObject jsonObject = gson.fromJson(jsonPayLoad, JsonObject.class);
+
+	        JsonObject animalObject = jsonObject.getAsJsonObject("Animal");
+	        
+	        try {
+	        	int idAnimal = animalObject.get("idAnimal").getAsInt();
+	            String race = animalObject.get("race").getAsString();
+	            String name = animalObject.get("name").getAsString();
+	            int size = animalObject.get("size").getAsInt();
+	            int hairType = animalObject.get("hairType").getAsInt();
+	            int animalToAnimal = animalObject.get("animalToAnimal").getAsInt();
+	            int animalToPerson = animalObject.get("animalToPerson").getAsInt();
+	            int sex = animalObject.get("sex").getAsInt();
+	            int age = animalObject.get("age").getAsInt();
+	            int idOng = animalObject.get("idOng").getAsInt();
+	            List<String> links = new ArrayList<>();
+	            JsonObject linksObject = animalObject.getAsJsonObject("Links");
+	            for (String key : linksObject.keySet()) {
+	                String link = linksObject.get(key).getAsString();
+	                links.add(link);
+	            }
+	            return new Animal(String.valueOf(idAnimal), race, name, String.valueOf(size), String.valueOf(hairType), String.valueOf(animalToAnimal),
+	                    String.valueOf(animalToPerson), String.valueOf(sex), String.valueOf(age), String.valueOf(idOng), links, number);
+	        	}catch(NumberFormatException e) {
+	        	e.printStackTrace();
+	        	return null;
+	        }
+     }
 }

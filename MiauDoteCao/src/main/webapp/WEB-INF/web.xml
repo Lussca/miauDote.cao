@@ -70,6 +70,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.EmailTestServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>PetUpdateServlet</servlet-name>
+  	<display-name>PetUpdateServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.PetUpdateServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -113,6 +119,10 @@
   <servlet-mapping>
   	<servlet-name>EmailTestServlet</servlet-name>
   	<url-pattern>/EmailTestServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>PetUpdateServlet</servlet-name>
+  	<url-pattern>/PetUpdateServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>

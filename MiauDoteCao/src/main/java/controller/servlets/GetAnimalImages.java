@@ -49,5 +49,4 @@ public class GetAnimalImages extends HttpServlet {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.BAD_REQUEST);
 		}
 	}
-
 }

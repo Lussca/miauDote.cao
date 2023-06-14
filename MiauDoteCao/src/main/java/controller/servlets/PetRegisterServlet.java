@@ -26,11 +26,16 @@ public class PetRegisterServlet extends HttpServlet {
         super();
        
      }
-     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException{
-     	
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    	 response.setContentType("text/plain");
+ 	    response.setStatus(200);
+ 	    response.getWriter().println("MENSAGEM");
+ 	    response.getWriter().flush();
+ 	    response.getWriter().close();
      }
      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
     	rrh.configureCors(response);
+    	System.out.println("CHEGOU AQUI");
         StringBuilder requestBody = new StringBuilder();
         BufferedReader reader = request.getReader();
         	String line;
@@ -58,6 +63,10 @@ public class PetRegisterServlet extends HttpServlet {
         		e.printStackTrace();
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_ANIMAL);
         	}
+     }
+     
+     protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
+    	 rrh.configureCors(response);
      }
 }
 /*String authorizationHeader = request.getHeader("Authorization");
