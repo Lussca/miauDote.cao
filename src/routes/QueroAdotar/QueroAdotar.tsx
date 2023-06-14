@@ -9,16 +9,6 @@ import { Navbar } from '../adotanteMenu/Navbar/Navbar';
 import Header from './Header/Header';
 import Adote from './Adote/Adote';
 
-// validação para verificar se o usuário está logado
-sessionStorage.setItem("isLoggedIn", "true");
-
-var isLoggedIn = sessionStorage.getItem("isLoggedIn");
-
-if (isLoggedIn === "true") {
-} else {
-    window.location.href = "/error";
-}
-
 function QueroAdotar(this: any)  {
 
     return (

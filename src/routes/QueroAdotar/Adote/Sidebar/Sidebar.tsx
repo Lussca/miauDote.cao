@@ -10,23 +10,10 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
-interface Estado {
-    id: string;
-    nome: string;
-}
-
-interface Cidade {
-    id: string;
-    nome: string;
-}
-
-interface ONGs {
-    nome: string;
-}
-
 function Sidebar(this: any)  {
 
-    const [ongs, setOngs] = useState<ONGs[]>([]);
+    const [ongs, setOngs] = useState([]); 
+    const [selectedValue, setSelectedValue] = useState('');
     const [especie, setEspecie] = useState('');
     const [pelagem, setPelagem] = useState('');
     const [sexo, setSexo] = useState('');
@@ -58,29 +45,39 @@ function Sidebar(this: any)  {
         setIdade(event.target.value);
     };
 
-    //Requisicao com fetch para a servlet responsável
+    const handleSelectChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSelectedValue(event.target.value);
+      };
+
+    useEffect(() => {
+        sendRequest();
+    }, []);
+
     function sendRequest() {
-        fetch('http://localhost:8080/MiauDoteCao/GetOngNameServlet')
-          .then(response => response.json())
-          .then(data => {
-            setOngs(data); // Armazena a lista de menuItem no estado
+        axios
+          .get('http://localhost:8080/MiauDoteCao/GetOngNameServlet')
+          .then(response => {
+            setOngs(response.data.names);
           })
           .catch(error => {
-            console.error("Error:", error);
+            console.error('Erro:', error);
           });
-      }
+    }
 
     return (
         <div className={styles.sidebar}>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
                 <InputLabel>Ongs</InputLabel>
-                <Select value={ongs} >
-                    <MenuItem value="">
-                        <em>Selecione uma ONG</em>
-                    </MenuItem>
-                    {ongs.map((ongs) => (
-                        <MenuItem key={ongs.nome} value={ongs.nome}>{ongs.nome}</MenuItem>
-                    ))}
+                <Select value={selectedValue} onChange={handleSelectChange}>
+                    {(ongs ?? []).length > 0 ? (
+                        ongs.map(ong => (
+                        <MenuItem key={ong} value={ong}>
+                            {ong}
+                        </MenuItem>
+                        ))
+                    ) : (
+                        <MenuItem value="">Nenhuma ONG encontrada</MenuItem>
+                    )}
                 </Select>
             </FormControl>
             <FormControl style={{ width: '100%', marginTop: '5%' }}>
