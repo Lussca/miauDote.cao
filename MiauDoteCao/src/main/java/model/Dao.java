@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -341,7 +342,6 @@ public class Dao {
 	    sqlBuilder.append(") AS img ON a.idAnimal = img.idAnimal ");
 	    sqlBuilder.append("WHERE ad.city = ? ");
 	    sqlBuilder.append("  AND ad.state = ? ");
-
 	    ArrayList<String> parameters = new ArrayList<>();
 	    parameters.add(city);
 	    parameters.add(state);
@@ -501,42 +501,193 @@ public class Dao {
 		}
 	}
 
-	public boolean updateAnimal(Animal animal) throws ClassNotFoundException, IOException {
-		String sql = "UPDATE animal SET race=?, name=?, size=?, hairType=?, animalToAnimal=?, animalToPerson=?, sex=?, age=? WHERE idAnimal=?";
-		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
-			statement.setString(1, animal.getRace());
-			statement.setString(2, animal.getName());
-			statement.setString(3, animal.getSize());
-			statement.setString(4, animal.getHairType());
-			statement.setString(5, animal.getAnimalToAnimal());
-			statement.setString(6, animal.getAnimalToPerson());
-			statement.setString(7, animal.getSex());
-			statement.setString(8, animal.getAge());
-			statement.setString(9, animal.getId());
-			int rowsUpdated = statement.executeUpdate();
-			if(rowsUpdated == 0) {
-				return false;
-			}else {
-				return true;
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
+	public int updateAnimal(Animal newAnimal) throws SQLException, ClassNotFoundException, IOException {
+	    StringBuilder sqlBuilder = new StringBuilder();
+	    Animal oldAnimal = getAnimalToCompare(newAnimal);
+	    sqlBuilder.append("UPDATE animal SET ");
+
+	    ArrayList<String> parameters = new ArrayList<>();
+
+	    if (!oldAnimal.getRace().equals(newAnimal.getRace())) {
+	        sqlBuilder.append("race = ?, ");
+	        parameters.add(newAnimal.getRace());
+	    }
+
+	    if (!oldAnimal.getName().equals(newAnimal.getName())) {
+	        sqlBuilder.append("animalName = ?, ");
+	        parameters.add(newAnimal.getName());
+	    }
+
+	    if (!oldAnimal.getSize().equals(newAnimal.getSize())) {
+	        sqlBuilder.append("size = ?, ");
+	        parameters.add(newAnimal.getSize());
+	    }
+
+	    if (!oldAnimal.getHairType().equals(newAnimal.getHairType())) {
+	        sqlBuilder.append("hairType = ?, ");
+	        parameters.add(newAnimal.getHairType());
+	    }
+
+	    if (!oldAnimal.getAnimalToAnimal().equals(newAnimal.getAnimalToAnimal())) {
+	        sqlBuilder.append("animalToAnimal = ?, ");
+	        parameters.add(newAnimal.getAnimalToAnimal());
+	    }
+
+	    if (!oldAnimal.getAnimalToPerson().equals(newAnimal.getAnimalToPerson())) {
+	        sqlBuilder.append("animalToPerson = ?, ");
+	        parameters.add(newAnimal.getAnimalToPerson());
+	    }
+
+	    if (!oldAnimal.getSex().equals(newAnimal.getSex())) {
+	        sqlBuilder.append("sex = ?, ");
+	        parameters.add(newAnimal.getSex());
+	    }
+
+	    if (!oldAnimal.getAge().equals(newAnimal.getAge())) {
+	        sqlBuilder.append("age = ?, ");
+	        parameters.add(newAnimal.getAge());
+	    }
+	    sqlBuilder.setLength(sqlBuilder.length() - 2);
+	    sqlBuilder.append(" WHERE idAnimal = ?");
+	    if(!parameters.isEmpty()) {
+	    parameters.add(oldAnimal.getId());
+
+	    String sql = sqlBuilder.toString();
+
+	    try (Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+	        int parameterIndex = 1;
+	        for (String parameter : parameters) {
+	            statement.setString(parameterIndex++, parameter);
+	        }
+	        int result = statement.executeUpdate();
+	        return result;
+	    } catch (ClassNotFoundException | IOException e) {
+	        e.printStackTrace();
+	        return 0;
+	    	}
+	    }else {
+	    	return 0;
+	    }
 	}
-	public boolean updateAnimalImages(Animal animal) {
-		String sql = "DELETE FROM image WHERE idAnimal=?";
+
+
+	private Animal getAnimalToCompare(Animal animal) throws IOException, ClassNotFoundException {
+		String sql = "SELECT * FROM animal WHERE idAnimal=?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
 			statement.setString(1, animal.getId());
-			int rowsDeleted = statement.executeUpdate();
-			if(rowsDeleted == 0) {
-				return false;
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				Animal oldData = new Animal();
+				oldData.setName(rs.getString("animalName"));
+				oldData.setRace(rs.getString("race"));
+				oldData.setSize(rs.getString("size"));
+				oldData.setHairType(rs.getString("hairType"));
+				oldData.setAnimalToAnimal(rs.getString("animalToAnimal"));
+				oldData.setAnimalToPerson(rs.getString("animalToPerson"));
+				oldData.setSex(rs.getString("sex"));
+				oldData.setAge(rs.getString("age"));
+				oldData.setId(rs.getString("idAnimal"));
+				return oldData;
 			}else {
-				return true;
+				return null;
 			}
-		} catch (SQLException | ClassNotFoundException | IOException e) {
+		}catch(SQLException e) {
+			return null;
+		}
+	}
+
+	public int updateAnimalImages(Animal animal) throws ClassNotFoundException, IOException {
+	    ArrayList<String> oldImages = getAnimalImages(animal.getId());
+	    Animal animal2 = getAnimalToCompare(animal);
+	    List<String> newImages = animal.getLinks();
+
+	    List<String> imagesToAdd = new ArrayList<>(newImages);
+
+	    imagesToAdd.removeAll(oldImages);
+
+	    List<String> imagesToRemove = new ArrayList<>(oldImages);
+
+	    imagesToRemove.retainAll(newImages);
+
+	    StringBuilder sqlBuilder = new StringBuilder();
+	    sqlBuilder.append("INSERT INTO image (idAnimal, imageUrl) VALUES ");
+	    for (int i = 0; i < imagesToAdd.size(); i++) {
+	        sqlBuilder.append("(?, ?), ");
+	    }
+	    sqlBuilder.setLength(sqlBuilder.length() - 2);
+	    String insertSql = sqlBuilder.toString();
+
+	    sqlBuilder = new StringBuilder();
+	    sqlBuilder.append("DELETE FROM image WHERE idAnimal = ? AND imageUrl IN (");
+	    for (int i = 0; i < imagesToRemove.size(); i++) {
+	        sqlBuilder.append("?, ");
+	    }
+	    sqlBuilder.setLength(sqlBuilder.length() - 2);
+	    sqlBuilder.append(")");
+	    String deleteSql = sqlBuilder.toString();
+
+	    try (Connection conn = this.connectDB();
+	         PreparedStatement insertStatement = conn.prepareStatement(insertSql);
+	         PreparedStatement deleteStatement = conn.prepareStatement(deleteSql)) {
+	    	int insertResult = 0;
+	    	int deleteResult = 0;
+	        int parameterIndex = 1;
+	        for (String imageUrl : imagesToAdd) {
+	            insertStatement.setString(parameterIndex++, animal.getId());
+	            insertStatement.setString(parameterIndex++, imageUrl);
+	        }
+
+	        deleteStatement.setString(1, animal.getId());
+	        for (int i = 0; i < imagesToRemove.size(); i++) {
+	            deleteStatement.setString(i + 2, imagesToRemove.get(i));
+	        }
+
+	        if (!imagesToAdd.isEmpty()) {
+	             insertResult = insertStatement.executeUpdate();
+	        }
+	        if (!imagesToRemove.isEmpty()) {
+	             deleteResult = deleteStatement.executeUpdate();
+	        }
+	        if(insertResult > 0 && deleteResult > 0) {
+	        	return 1;
+	        }else {
+	        	return 0;
+	        }
+	    } catch (ClassNotFoundException | IOException | SQLException e) {
+	        e.printStackTrace();
+	        return 0;
+	    }
+	}
+
+	public ArrayList<Animal> getAllAnimais() throws ClassNotFoundException, IOException {
+		String sql = "SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, a.sex, a.age, a.idOng, a.insertionDate, MAX(i.imageUrl) AS imageUrl "
+	             + "FROM animal a "
+	             + "LEFT JOIN image i "
+	             + "ON a.idAnimal = i.idAnimal "
+	             + "GROUP BY a.idAnimal";
+		ArrayList<Animal> animals = new ArrayList<Animal>();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				Animal a = new Animal();
+				a.setRace(rs.getString("race"));
+				a.setName(rs.getString("animalName"));
+				a.setSize(rs.getString("size"));
+				a.setHairType(rs.getString("hairType"));
+				a.setAnimalToAnimal(rs.getString("animalToAnimal"));
+				a.setAnimalToPerson(rs.getString("animalToPerson"));
+				a.setSex(rs.getString("sex"));
+				a.setAge(rs.getString("age"));
+				a.setIdOng(rs.getString("idOng"));
+				a.setInsertionDate(rs.getString("insertionDate"));
+				a.setImageUrl(rs.getString("imageUrl"));
+				a.setId(rs.getString("idAnimal"));
+				animals.add(a);
+			}
+			return animals;
+		}catch(SQLException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 }

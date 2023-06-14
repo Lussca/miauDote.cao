@@ -76,6 +76,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.PetUpdateServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>GetAllAnimals</servlet-name>
+  	<display-name>GetAllAnimals</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.GetAllAnimals</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -123,6 +129,10 @@
   <servlet-mapping>
   	<servlet-name>PetUpdateServlet</servlet-name>
   	<url-pattern>/PetUpdateServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>GetAllAnimals</servlet-name>
+  	<url-pattern>/GetAllAnimals</url-pattern>
   </servlet-mapping>
   
 </web-app>

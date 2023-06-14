@@ -12,6 +12,7 @@ public class RequestResponseHandler {
 		response.addHeader("Access-Control-Allow-Methods","POST,GET,OPTIONS,PUT,DELETE,HEAD");
 		response.addHeader("Access-Control-Allow-Headers","X-PINGOTHER,Origin,X-Requested-With,Content-Type,Accept");
 		response.addHeader("Access-Control-Max-Age","1728000");
+		response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 		}
 	public void sendErrorResponse(HttpServletResponse response, int status, int message) throws IOException {
 	    response.setContentType("text/plain");

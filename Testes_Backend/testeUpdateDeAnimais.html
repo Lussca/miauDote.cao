@@ -9,9 +9,10 @@
     <script>
         const jsonBody = {
             "Animal": {
-                "race": "dog",
-                "name": "dog01",
-                "size": 1,
+                "idAnimal": "129",
+                "race": "1",
+                "name": "Cachorrinho333",
+                "size": 2,
                 "hairType": 2,
                 "animalToAnimal": 1,
                 "animalToPerson": 3,
@@ -21,14 +22,14 @@
                 "Links": {
                     "link1": "LINK1",
                     "link2": "LINK2",
-                    "link3": "LINK3"
+                    "link3": "LINK322222"
                 }
             }
         };
 
-        const url = "http://localhost:8080/MiauDoteCao/PetRegisterServlet";
+        const url = "http://localhost:8080/MiauDoteCao/PetUpdateServlet";
         const options = {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
