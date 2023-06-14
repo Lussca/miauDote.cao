@@ -24,7 +24,8 @@ import model.Dao;
 public class JwtHandler {
 Dao dao = new Dao();
 private static String getSecretKey(String key) throws IOException {
-	File f = new File("C:\\Users\\Joao Gabriel\\Desktop\\backend\\MiauDoteCao\\admin\\secretKey.ini");
+	//File f = new File("C:\\Users\\Joao Gabriel\\Desktop\\backend\\MiauDoteCao\\admin\\secretKey.ini"); //pc do João
+	File f = new File("C:\\Projetos\\miauDote.cao\\admin\\secretKey.ini"); //pc do Lucas
 	FileInputStream fis = new FileInputStream(f);
 	 Properties prop = new Properties();
 	 try {

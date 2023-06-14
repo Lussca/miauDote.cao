@@ -1,17 +1,19 @@
 //imports padrão react
 import './App.css';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import verificacaoLogin from './verification/Authentication';
 
 //imports de rotas
 import { Outlet } from 'react-router-dom';
 import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
 
-function App() {
+function App(this: any) {
 
   const location = useLocation();
 
   useEffect(() => {
+    // verificacaoLogin();
+
     const body = document.querySelector('body');
     if (body) {
       if (location.pathname === '/adotanteMenu') {

@@ -1,8 +1,8 @@
 import { AppBar, Toolbar, IconButton,Typography, Stack, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
-import PetsIcon from '@mui/icons-material/Pets';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Logout } from '../../../Logout/logout';
 
 const theme = createTheme({
     palette: {
@@ -20,7 +20,8 @@ const theme = createTheme({
 // função para deslogar do sistema e remover as informações armazenadas no session storage
 const handleClick = () => {
     // Remover as informações do session storage
-    sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.setItem("isLoggedIn", "false");
+    sessionStorage.setItem("isLogged", "false");
 
     // Redirecionar para a página de login ou para outra página adequada após o logout
     window.location.href = "/";
@@ -44,9 +45,7 @@ export const Navbar = () =>{
                         <Button variant="contained" color="secondary"> ONGS e Protetores </Button> 
                     </ThemeProvider>
                 </Stack>
-                <Typography variant='h6' component='div' sx={{ ml: 10 }}>
-                    <Button id="signIn" variant="contained" color="error" onClick={handleClick}> sair </Button> 
-                </Typography>
+                <Logout></Logout>
             </Toolbar>
         </AppBar>
     )

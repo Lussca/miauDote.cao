@@ -11,16 +11,6 @@ import { ContentOne } from './Content/ContentOne';
 import { ContentTwo } from './Content/ContentTwo';
 import { ContentThree } from './Content/ContentThree';
 
-// validação para verificar se o usuário está logado
-sessionStorage.setItem("isLoggedIn", "true");
-
-var isLoggedIn = sessionStorage.getItem("isLoggedIn");
-
-if (isLoggedIn === "true") {
-} else {
-    window.location.href = "/error";
-}
-
 function adotanteMenu(this: any)  {
 
     return (

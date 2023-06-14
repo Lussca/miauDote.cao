@@ -183,70 +183,6 @@ function Registro(this: any)  {
       if(httpRequest.readyState === XMLHttpRequest.DONE){
 
         let sessionData = JSON.parse(httpRequest.responseText);
-        console.log(sessionData)
-        
-        // alertas de cadastro
-        if(sessionData == 13){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('warning');
-          setMsg('Atenção! preencha todos os campos.');
-        } else if(sessionData == 1){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! CIDADE inválida.');
-        } else if(sessionData == 3){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! CEP inválido.');
-        } else if(sessionData == 4){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! LOGIN inválido.');
-        } else if(sessionData == 5){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! SENHA inválida.');
-        } else if(sessionData == 7){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! CPF inválido.');
-        } else if(sessionData == 8){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! DATA inválido.');
-        } else if(sessionData == 9){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! NOME DA ONG inválido.');
-        } else if(sessionData == 10){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('warning');
-          setMsg('Atenção! este LOGIN já existe.');
-        } else if(sessionData == 11){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('warning');
-          setMsg('Atenção! este CPF já está sendo usado.');
-        } else if(sessionData == 12){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('warning');
-          setMsg('Atenção! este NOME DE ONG já está sendo usado.');
-        } else if(sessionData == 14 || sessionData == 16){
-          setIsLoading(false);
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! ocorreu um erro durante a criação da ong, tente novamente mais tarde.');
-        }
 
         if(httpRequest.status === 200){
 
@@ -263,10 +199,68 @@ function Registro(this: any)  {
 
         } else if(httpRequest.status === 400 || httpRequest.status === 422 || httpRequest.status === 409 || httpRequest.status === 501){
 
-          setShowAlert(true);
-          setSeverity('error');
-          setMsg('Erro! '+ httpRequest.responseText);
-
+          // alertas de cadastro
+          if(sessionData == 13){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('warning');
+            setMsg('Atenção! preencha todos os campos.');
+          } else if(sessionData == 1){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Erro! CIDADE inválida.');
+          } else if(sessionData == 3){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Erro! CEP inválido.');
+          } else if(sessionData == 4){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Erro! LOGIN inválido.');
+          } else if(sessionData == 5){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Erro! SENHA inválida.');
+          } else if(sessionData == 7){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Erro! CPF inválido.');
+          } else if(sessionData == 8){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Erro! DATA inválido.');
+          } else if(sessionData == 9){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Erro! NOME DA ONG inválido.');
+          } else if(sessionData == 10){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('warning');
+            setMsg('Atenção! este LOGIN já existe.');
+          } else if(sessionData == 11){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('warning');
+            setMsg('Atenção! este CPF já está sendo usado.');
+          } else if(sessionData == 12){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('warning');
+            setMsg('Atenção! este NOME DE ONG já está sendo usado.');
+          } else if(sessionData == 14 || sessionData == 16){
+            setIsLoading(false);
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Erro! ocorreu um erro durante a criação da ong, tente novamente mais tarde.');
+          }
         }
       }
     }
@@ -315,7 +309,9 @@ function Registro(this: any)  {
   return (
     <div className={styles.cadastroArea}>
       {/* Loading de carregamento */}
-      {isLoading && <CircularProgress />}
+      {isLoading && <div className={styles.progress}>
+         <CircularProgress />
+      </div>}
 
       {/* alert */}
       <div className={styles.alertArea}>
