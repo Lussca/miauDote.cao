@@ -2,7 +2,7 @@ import { AppBar, Toolbar, IconButton,Typography, Stack, ThemeProvider } from '@m
 import { createTheme } from '@mui/material/styles';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Logout } from '../../../Logout/logout';
+import { Logout } from '../../../Components/Logout/logout';
 
 const theme = createTheme({
     palette: {

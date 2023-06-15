@@ -1,6 +1,6 @@
 import styles from'./Header.module.css';
 
-import DogAnimation from '../../../dog/dogAnimation';
+import DogAnimation from '../../../Components/dog/dogAnimation';
 import Welcome from '../Welcome/welcome';
 
 export const Header = () =>{

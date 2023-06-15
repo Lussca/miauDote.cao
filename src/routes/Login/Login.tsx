@@ -1,10 +1,11 @@
 //imports padrão react
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React, { useRef } from 'react';
 import styles from'./Login.module.css';
 
 //import rotas
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { userService } from '../../service/userService';
 
 //imports mui
 import Button from '@mui/material/Button';
@@ -18,6 +19,12 @@ function Login(this: any)  {
   const [severity, setSeverity] = useState('error');
   const [msg, setMsg] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    userService.verificationUserLogged(false, navigate);
+  },[])
 
   let alertSeverity: AlertColor | undefined;
 

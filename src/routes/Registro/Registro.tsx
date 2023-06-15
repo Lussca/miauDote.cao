@@ -3,11 +3,11 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import styles from'./Registro.module.css';
 
 //imports masks
-import formatCpf from '../../Masks/MaskCpf';
-import formatCep from '../../Masks/MaskCep';
+import formatCpf from '../../Components/Masks/MaskCpf';
+import formatCep from '../../Components/Masks/MaskCep';
 
 //import de rotas
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 //imports mui
 import 'dayjs/locale/pt-br';
@@ -23,6 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 // import Api cep (axios)
 import axios from 'axios';
+import { userService } from '../../service/userService';
 
 //Api CEP consulta
 async function fetchAddress(cep: any) {
@@ -69,6 +70,13 @@ function Registro(this: any)  {
   const [neighborhood, setNeighborhood] = useState('');
   const [street, setStreet] = useState('');
   const [number, setNumber] = useState('');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    userService.verificationUserLogged(false, navigate);
+  },[])
+
 
   //====================================================================================//
   

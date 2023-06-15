@@ -16,17 +16,21 @@ import QueroAdotar from './routes/QueroAdotar/QueroAdotar'
 
 const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <Login />
+  },
+  {
+    path: "/registrar",
+    element: <Registro />
+  },
+  {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
-        element: <Login />
-      },
-      {
-        path: "registrar",
-        element: <Registro />
+        path: "",
+        element: <AdotanteMenu />
       },
       {
         path: "ongMenu",

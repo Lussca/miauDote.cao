@@ -9,6 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 function Sidebar(this: any)  {
 
@@ -62,6 +63,14 @@ function Sidebar(this: any)  {
           .catch(error => {
             console.error('Erro:', error);
           });
+    }
+
+    function handleClickFilters() {
+
+    }
+
+    function handleClickRemoveFilters() {
+
     }
 
     return (
@@ -123,6 +132,11 @@ function Sidebar(this: any)  {
                 </Select>
             </FormControl>
             <TextField value={idade} onChange={handleChangeIdade} id="idade" label="Idade" variant="outlined" style={{ width: '100%', marginTop: '5%' }}/>
+
+            <div className={styles.buttons}>
+                <Button style={{ marginRight: '1%'}} variant="contained" color="error" onChange={handleClickRemoveFilters}>Remover</Button>
+                <Button variant="contained" color="success" onChange={handleClickFilters}>Aplicar</Button>
+            </div>
         </div>
     );
   

@@ -3,6 +3,7 @@ import styles from'./Adote.module.css';
 
 //import Componentes
 import Sidebar from './Sidebar/Sidebar';
+import Animals from './Animals/Animals';
 
 //imports MUI
 import Grid from '@mui/material/Grid';
@@ -17,7 +18,7 @@ function Adote(this: any)  {
                     <Sidebar></Sidebar>
                 </Grid>
                 <Grid item xs={10}>
-
+                    <Animals></Animals>
                 </Grid>
             </Grid>
         </div>
