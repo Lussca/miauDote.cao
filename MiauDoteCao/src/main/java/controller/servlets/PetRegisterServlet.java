@@ -7,7 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 
 import controller.Validations;
@@ -35,6 +38,38 @@ public class PetRegisterServlet extends HttpServlet {
      }
      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
     	rrh.configureCors(response);
+    	 String authorizationHeader = request.getHeader("Authorization");
+    	 System.out.println("PEGOU O TOKEN");
+    	 if(authorizationHeader == null || authorizationHeader.startsWith("Bearer ")) {
+    	 	rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.INVALID_TOKEN);
+    	 	return;
+    	 }else {
+    	 String jwt = authorizationHeader.substring(7);
+    	 String login = request.getParameter("login");
+    	 boolean isOng = Boolean.parseBoolean(request.getParameter("isOng"));
+
+    	 try {
+    	 	if(jwtH.validateJWT(jwt, login, isOng)) {
+    	 		StringBuilder requestBody = new StringBuilder();
+    	 		try(BufferedReader reader = request.getReader()){
+    	 			String line;
+    	 			while((line = reader.readLine()) != null){
+    	 				requestBody.append(line);
+    	 			}
+    	 		}
+    	 		Gson gson = new Gson();
+    	 		String urlJson = requestBody.toString();
+    	 		String json = gson.toJson(urlJson);
+    	 		//teste para extração de link das imagens de um animal
+    	 		Type urlListType = new TypeToken<ArrayList<String>>(){}.getType();
+    	 		ArrayList<String> urlArray = gson.fromJson(json, urlListType);
+
+    	 	}
+    	 	}catch(Exception e) {
+    	 		
+    	 	}
+    	 
+     
     	System.out.println("CHEGOU AQUI");
         StringBuilder requestBody = new StringBuilder();
         BufferedReader reader = request.getReader();
@@ -62,6 +97,7 @@ public class PetRegisterServlet extends HttpServlet {
         	}catch(NumberFormatException e) {
         		e.printStackTrace();
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_ANIMAL);
+        	}
         	}
      }
      

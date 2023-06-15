@@ -2,6 +2,8 @@ package controller.servlets;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,24 +33,19 @@ public class PetUpdateServlet extends HttpServlet {
         	String jsonPayLoad = requestBody.toString();
         	try {
         	Animal animal = Animal.parseAnimalJson(jsonPayLoad, 1);
-        	boolean hasError = dao.updateAnimal(animal);
-        	if(!hasError) {
+        	int hasErrorAnimal = dao.updateAnimal(animal);
+        	int hasErrorImage = dao.updateAnimalImages(animal);
+        	if(hasErrorAnimal == 0 && hasErrorImage == 0) {
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.DATABASE_ERROR);
         		}else {
-        			//ALTERAR ESTÁ PARTE PARA ATUALIZAÇÃO DAS IMAGENS
-        			for(int i = 0; i< animal.getLinks().size(); i++) {
-    	        		int newImageId = dao.insertImages(animal, idAnimal, i);
-    	        		if(newImageId == -1) {
-    	        			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.ERROR_ON_IMAGE_INSERTION);
-    	        			break;
-    	        		}else {
-    	        			rrh.sendOkResponse(response);
-    	        		}
-        			}
+        			rrh.sendOkResponse(response);
         		}
-        	}catch(NumberFormatException e) {
+        	}catch(NumberFormatException | ClassNotFoundException | SQLException e) {
         		e.printStackTrace();
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_ANIMAL);
         	}
-	}
+		}
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
+   	 rrh.configureCors(response);
+    }
 }

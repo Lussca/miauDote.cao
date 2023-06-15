@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send POST Request</title>
+    <script>
+        function sendRequest() {
+            var token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIzNjMxNTA3NTkyMjQ5NDYiLCJpYXQiOjE2ODY3Nzg1OTcsInN1YiI6Ik1pYXVEb3RlLkNhbyIsImlzcyI6ImdhYnJpZWxzaWx2YTc5QGxpdmUuY29tIiwiZXhwIjoxNjg2NzgyMTk3fQ.9WawJ0u0x3PgHnhEAC9mfpWO5sAnLX6ujx_akMTVLCs";
+            var login = "gabrielsilva79@live.com";
+            var isOng = true; // or false
+
+            var url = "http://localhost:8080/MiauDoteCao/PetRegisterServlet";
+            var body = JSON.stringify({ login: login, isOng: isOng });
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: body
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error("HTTP error, status = " + response.status);
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                // Handle the response data
+                console.log(data);
+            })
+            .catch(function(error) {
+                // Handle any errors
+                console.error(error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <button onclick="sendRequest()">Send POST Request</button>
+</body>
+</html>
