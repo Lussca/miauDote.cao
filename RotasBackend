@@ -50,4 +50,9 @@ Rota: http://localhost:8080/MiauDoteCao/GetAnimalImages
   Possíveis erros:
   26: Erro na parametrização do animal (ID provavelmente não é um número) (Status 400)
   27: Nenhuma imagem encontrada (O animal pode ter sido cadastrado sem imagens ou o animal pode não existir no banco de dados) (Status 404)
-  
+
+Rota: http://localhost:8080/MiauDoteCao/GetAllAnimals
+
+Rota: http://localhost:8080/MiauDoteCao/PetUpdateServlet
+
+Rota: http://localhost:8080/MiauDoteCao/...
