@@ -37,6 +37,9 @@ public class GetAllAnimals extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		rrh.configureCors(response);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			ArrayList<Animal> animals = dao.getAllAnimais();
 			if(!animals.isEmpty()) {
@@ -59,7 +62,4 @@ public class GetAllAnimals extends HttpServlet {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_GATEWAY, Validations.DATABASE_ERROR);
 		}
 	}
-	protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
-	   	 rrh.configureCors(response);
-	    }
 }
