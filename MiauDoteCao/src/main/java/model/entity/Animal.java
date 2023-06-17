@@ -20,6 +20,8 @@ public class Animal {
     String age;
     String idOng;
     String insertionDate;
+    String color;
+    String animalDescription;
     String imageUrl;
     List<String> links;
 	public String getId() {
@@ -99,6 +101,18 @@ public class Animal {
 	}
 	public void setLinks(List<String> links) {
 		this.links = links;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public String getAnimalDescription() {
+		return animalDescription;
+	}
+	public void setAnimalDescription(String animalDescription) {
+		this.animalDescription = animalDescription;
 	}
 	public Animal(String race, String name, String size, String hairType, String animalToAnimal,
 			String animalToPerson, String sex, String age, String idOng, String insertionDate,

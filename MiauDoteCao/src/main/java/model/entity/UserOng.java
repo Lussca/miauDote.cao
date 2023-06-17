@@ -1,7 +1,7 @@
 package model.entity;
 
 public class UserOng {
-	int idOng;
+	String idOng;
 	String login;
 	String pw;
 	String username;
@@ -11,11 +11,11 @@ public class UserOng {
 	String publicKey;
 	String privateKey;
 	int idAdress;
-	public int getIdOng() {
+	public String getIdOng() {
 		return idOng;
 	}
-	public void setIdOng(int idOng) {
-		this.idOng = idOng;
+	public void setIdOng(String string) {
+		this.idOng = string;
 	}
 	public String getLogin() {
 		return login;

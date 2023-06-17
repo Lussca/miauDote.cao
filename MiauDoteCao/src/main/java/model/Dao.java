@@ -28,17 +28,10 @@ public class Dao {
     private static final Logger LOGGER = Logger.getLogger(Dao.class.getName());
 
     private String getConfigValueByKey(String key) throws IOException {
-        File file = new File("C:\\Projetos\\miauDote.cao\\admin\\configMySQL.ini");  /*Utilizar esta linha para se conectar ao postgreSQL
-         * 
-         * 
-         * UTILIZAR ESSES NO PC DO LUCAS
-         *
-         * 
-         * Sempre alterar o caminho para o arquivo dependendo em qual computador está rodando*/
-    	
-    	
-    	 //File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miaudote\\miauDote.cao\\admin\\configMySQL.ini");//Utilizar esta linha para conectar ao MySQL
-    	//File file = new File("C:\\Users\\Joao Gabriel\\Desktop\\backend\\MiauDoteCao\\admin\\configMySQL.ini"); //Utilizar para o MySQL
+    	File file = new File("C:\\Projetos\\miauDote.cao\\admin\\configMySQL.ini");
+    	if(!file.exists()) {
+    		file = new File("C:\\Users\\Joao Gabriel\\Desktop\\backend\\MiauDoteCao\\admin\\configMySQL.ini");
+    	}
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -314,15 +307,22 @@ public class Dao {
 	        }
 	    }
 
-	public ArrayList<String> getOngName() throws SQLException, ClassNotFoundException, IOException {
-		String sql = "SELECT ongName FROM userOng";
-		ArrayList<String> ongs = new ArrayList<String>();
+	public ArrayList<UserOng> getOngName() throws SQLException, ClassNotFoundException, IOException {
+		String sql = "SELECT ongName, idOng FROM userOng";
+		ArrayList<UserOng> ongs = new ArrayList<UserOng>();
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
-				ongs.add(rs.getString(1));
+				UserOng ong = new UserOng();
+				ong.setOngName(rs.getString("ongName"));
+				ong.setIdOng(rs.getString("idOng"));
+				ongs.add(ong);
 			}
+			if(ongs.isEmpty()) {
+				return null;
+			}else {
 			return ongs;
+			}
 		}
 	}
 
@@ -330,7 +330,7 @@ public class Dao {
 	        String sex, String age, String id, String city, String state) throws SQLException {
 	    StringBuilder sqlBuilder = new StringBuilder();
 	    sqlBuilder.append("SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, ");
-	    sqlBuilder.append("a.sex, a.age, a.idOng, img.imageUrl ");
+	    sqlBuilder.append("a.sex, a.age, a.idOng, a.color, a.animalDescription, img.imageUrl ");
 	    sqlBuilder.append("FROM animal AS a ");
 	    sqlBuilder.append("JOIN userOng AS u ON a.idOng = u.idOng ");
 	    sqlBuilder.append("JOIN adress AS ad ON u.idAdress = ad.idAdress ");
@@ -376,7 +376,7 @@ public class Dao {
 	    }
 
 	    sqlBuilder.append("GROUP BY a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, ");
-	    sqlBuilder.append("         a.sex, a.age, a.idOng, img.imageUrl ");
+	    sqlBuilder.append("         a.sex, a.age, a.idOng, a.color, a.animalDescription, img.imageUrl ");
 	    sqlBuilder.append("ORDER BY a.insertionDate ASC ");
 
 	    String sql = sqlBuilder.toString();
@@ -403,6 +403,8 @@ public class Dao {
 	            a.setSex(rs.getString("sex"));
 	            a.setAge(rs.getString("age"));
 	            a.setIdOng(rs.getString("idOng"));
+	            a.setColor(rs.getString("color"));
+	            a.setAnimalDescription(rs.getString("animalDescription"));
 	            a.setImageUrl(rs.getString("imageUrl"));
 	            animals.add(a);
 	        }
@@ -413,6 +415,7 @@ public class Dao {
 	        return null;
 	    }
 	}
+
 
 
 	public Adress getUserAdress(String userId) throws ClassNotFoundException, IOException {
@@ -440,7 +443,7 @@ public class Dao {
 	}
 
 	public int insertAnimal(Animal animal) {
-		String sql = "INSERT INTO animal (race, animalName, size, hairType, animalToAnimal, animalToPerson, sex, age, idOng, insertionDate) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO animal (race, animalName, size, hairType, animalToAnimal, animalToPerson, sex, age, idOng, insertionDate, color, animalDescription) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 			statement.setString(1, animal.getRace());
 			statement.setString(2, animal.getName());
@@ -452,6 +455,8 @@ public class Dao {
 			statement.setString(8, animal.getAge());
 			statement.setString(9, animal.getIdOng());
 			statement.setString(10, animal.getInsertionDate());
+			statement.setString(11, animal.getColor());
+			statement.setString(12, animal.getAnimalDescription());
 			int update = statement.executeUpdate();
 			ResultSet keys = statement.getGeneratedKeys();
 			if(keys.next()) {
@@ -503,7 +508,7 @@ public class Dao {
 
 	public int updateAnimal(Animal newAnimal) throws SQLException, ClassNotFoundException, IOException {
 	    StringBuilder sqlBuilder = new StringBuilder();
-	    Animal oldAnimal = getAnimalToCompare(newAnimal);
+	    Animal oldAnimal = getAnimalData(newAnimal);
 	    sqlBuilder.append("UPDATE animal SET ");
 
 	    ArrayList<String> parameters = new ArrayList<>();
@@ -547,6 +552,16 @@ public class Dao {
 	        sqlBuilder.append("age = ?, ");
 	        parameters.add(newAnimal.getAge());
 	    }
+	    
+	    if(!oldAnimal.getColor().equals(newAnimal.getColor())) {
+	    	sqlBuilder.append("color = ?, ");
+	    	parameters.add(newAnimal.getColor());
+	    }
+	    
+	    if(!oldAnimal.getAnimalDescription().equals(newAnimal.getAnimalDescription())) {
+	    	sqlBuilder.append("animalDescription = ?, ");
+	    	parameters.add(newAnimal.getAnimalDescription());
+	    }
 	    sqlBuilder.setLength(sqlBuilder.length() - 2);
 	    sqlBuilder.append(" WHERE idAnimal = ?");
 	    if(!parameters.isEmpty()) {
@@ -571,23 +586,25 @@ public class Dao {
 	}
 
 
-	private Animal getAnimalToCompare(Animal animal) throws IOException, ClassNotFoundException {
+	private Animal getAnimalData(Animal animal) throws IOException, ClassNotFoundException {
 		String sql = "SELECT * FROM animal WHERE idAnimal=?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
 			statement.setString(1, animal.getId());
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
-				Animal oldData = new Animal();
-				oldData.setName(rs.getString("animalName"));
-				oldData.setRace(rs.getString("race"));
-				oldData.setSize(rs.getString("size"));
-				oldData.setHairType(rs.getString("hairType"));
-				oldData.setAnimalToAnimal(rs.getString("animalToAnimal"));
-				oldData.setAnimalToPerson(rs.getString("animalToPerson"));
-				oldData.setSex(rs.getString("sex"));
-				oldData.setAge(rs.getString("age"));
-				oldData.setId(rs.getString("idAnimal"));
-				return oldData;
+				Animal a = new Animal();
+				a.setName(rs.getString("animalName"));
+				a.setRace(rs.getString("race"));
+				a.setSize(rs.getString("size"));
+				a.setHairType(rs.getString("hairType"));
+				a.setAnimalToAnimal(rs.getString("animalToAnimal"));
+				a.setAnimalToPerson(rs.getString("animalToPerson"));
+				a.setSex(rs.getString("sex"));
+				a.setAge(rs.getString("age"));
+				a.setId(rs.getString("idAnimal"));
+				a.setColor(rs.getString("color"));
+				a.setAnimalDescription(rs.getString("animalDescription"));
+				return a;
 			}else {
 				return null;
 			}
@@ -598,7 +615,7 @@ public class Dao {
 
 	public int updateAnimalImages(Animal animal) throws ClassNotFoundException, IOException {
 	    ArrayList<String> oldImages = getAnimalImages(animal.getId());
-	    Animal animal2 = getAnimalToCompare(animal);
+	    Animal animal2 = getAnimalData(animal);
 	    List<String> newImages = animal.getLinks();
 
 	    List<String> imagesToAdd = new ArrayList<>(newImages);
@@ -660,34 +677,36 @@ public class Dao {
 	}
 
 	public ArrayList<Animal> getAllAnimais() throws ClassNotFoundException, IOException {
-		String sql = "SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, a.sex, a.age, a.idOng, a.insertionDate, MAX(i.imageUrl) AS imageUrl "
+		String sql = "SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, a.sex, a.age, a.idOng, a.insertionDate, a.color, a.description, MAX(i.imageUrl) AS imageUrl "
 	             + "FROM animal a "
 	             + "LEFT JOIN image i "
 	             + "ON a.idAnimal = i.idAnimal "
 	             + "GROUP BY a.idAnimal";
-		ArrayList<Animal> animals = new ArrayList<Animal>();
-		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
-			ResultSet rs = statement.executeQuery();
-			while(rs.next()) {
-				Animal a = new Animal();
-				a.setRace(rs.getString("race"));
-				a.setName(rs.getString("animalName"));
-				a.setSize(rs.getString("size"));
-				a.setHairType(rs.getString("hairType"));
-				a.setAnimalToAnimal(rs.getString("animalToAnimal"));
-				a.setAnimalToPerson(rs.getString("animalToPerson"));
-				a.setSex(rs.getString("sex"));
-				a.setAge(rs.getString("age"));
-				a.setIdOng(rs.getString("idOng"));
-				a.setInsertionDate(rs.getString("insertionDate"));
-				a.setImageUrl(rs.getString("imageUrl"));
-				a.setId(rs.getString("idAnimal"));
-				animals.add(a);
-			}
-			return animals;
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return null;
+	ArrayList<Animal> animals = new ArrayList<Animal>();
+	try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+	    ResultSet rs = statement.executeQuery();
+	    while(rs.next()) {
+	        Animal a = new Animal();
+	        a.setRace(rs.getString("race"));
+	        a.setName(rs.getString("animalName"));
+	        a.setSize(rs.getString("size"));
+	        a.setHairType(rs.getString("hairType"));
+	        a.setAnimalToAnimal(rs.getString("animalToAnimal"));
+	        a.setAnimalToPerson(rs.getString("animalToPerson"));
+	        a.setSex(rs.getString("sex"));
+	        a.setAge(rs.getString("age"));
+	        a.setIdOng(rs.getString("idOng"));
+	        a.setInsertionDate(rs.getString("insertionDate"));
+	        a.setImageUrl(rs.getString("imageUrl"));
+	        a.setId(rs.getString("idAnimal"));
+	        a.setColor(rs.getString("color"));
+	        a.setAnimalDescription(rs.getString("animalDescription"));
+	        animals.add(a);
+	    }
+	    return animals;
+	}catch(SQLException e) {
+	    e.printStackTrace();
+	    return null;
 		}
 	}
 }

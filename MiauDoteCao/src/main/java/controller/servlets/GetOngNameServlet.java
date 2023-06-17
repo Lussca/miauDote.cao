@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import model.Dao;
+import model.entity.UserOng;
 import controller.Validations;
 import controller.handler.*;
 
@@ -32,7 +33,7 @@ public class GetOngNameServlet extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		try {
-			ArrayList<String> ongs = dao.getOngName();
+			ArrayList<UserOng> ongs = dao.getOngName();
 				JsonArray jsonArray = new Gson().toJsonTree(ongs).getAsJsonArray();
 				JsonObject jsonObject = new JsonObject();
 		        jsonObject.add("names", jsonArray);
