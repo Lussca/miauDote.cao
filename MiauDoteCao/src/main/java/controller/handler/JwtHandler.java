@@ -23,30 +23,30 @@ import model.Dao;
 
 public class JwtHandler {
 Dao dao = new Dao();
-private static String getSecretKey(String key) throws IOException {
-	File f = new File("C:\\Projetos\\miauDote.cao\\admin\\secretKey.ini");
-	if(!f.exists()){
-		 f = new File("C:\\Users\\Joao Gabriel\\Desktop\\backend\\MiauDoteCao\\admin\\secretKey.ini");
-	}
-	FileInputStream fis = new FileInputStream(f);
-	 Properties prop = new Properties();
-	 try {
-        
-         prop.load(fis);
-         return prop.getProperty("secretKey");
-     } catch (IOException ex) {
-         ex.printStackTrace();
-         return null;
-     } finally {
-         if (fis != null) {
-             try {
-                 fis.close();
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-         }
-     }
- }
+	private static String getSecretKey(String key) throws IOException {
+		File f = new File("C:\\Projetos\\miauDote.cao\\admin\\secretKey.ini");
+		if(!f.exists()){
+			 f = new File("C:\\Users\\Joao Gabriel\\Desktop\\backend\\MiauDoteCao\\admin\\secretKey.ini");
+		}
+		FileInputStream fis = new FileInputStream(f);
+		 Properties prop = new Properties();
+		 try {
+	        
+	         prop.load(fis);
+	         return prop.getProperty("secretKey");
+	     } catch (IOException ex) {
+	         ex.printStackTrace();
+	         return null;
+	     } finally {
+	         if (fis != null) {
+	             try {
+	                 fis.close();
+	             } catch (IOException e) {
+	                 e.printStackTrace();
+	             }
+	         }
+	     }
+	 }
 
 public String createJWT(String id, String issuer, String subject, long ttlMillis){
 	SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;

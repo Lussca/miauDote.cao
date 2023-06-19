@@ -17,7 +17,7 @@
       event.preventDefault();
       const email = document.getElementById("email").value;
 
-      fetch(`http://localhost:8080/MiauDoteCao/EmailValidationServlet?email=${encodeURIComponent(email)}`, {
+      fetch(`http://localhost:8080/MiauDoteCao/EmailTest?email=${encodeURIComponent(email)}`, {
         method: "POST"
       })
       .then(response => {

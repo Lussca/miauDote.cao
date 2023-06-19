@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +45,9 @@ public class Validations {
 		public static final int BAD_REQUEST = 26;
 		public static final int NO_IMAGES_FOUND = 27;
 		public static final int NO_ANIMALS_FOUND = 28;
+		public static final int EMAIL_NOT_SENT = 29;
 	    public static final int NO_ERROR = 0;
+
 		
 
 
@@ -258,5 +261,10 @@ public class Validations {
 		    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 		return  sdf2.format(sdf.parse(newBirth));
+	}
+
+	public static int randomNumber(int min, int max) {
+		int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
+		return randomNum;
 	}
 }

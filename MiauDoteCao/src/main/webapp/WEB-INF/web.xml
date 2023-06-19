@@ -41,35 +41,11 @@
   	<servlet-class>controller.servlets.GetAnimalByFilter</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>EmailValidationServlet</servlet-name>
-  	<display-name>EmailValidationServlet</display-name>
-  	<description></description>
-  	<servlet-class>controller.servlets.EmailValidationServlet</servlet-class>
-  </servlet>
-  <servlet>
-  	<servlet-name>TestServlet</servlet-name>
-  	<display-name>TestServlet</display-name>
-  	<description></description>
-  	<servlet-class>controller.servlets.TestServlet</servlet-class>
-  </servlet>
-  <servlet>
   	<servlet-name>GetAnimalImages</servlet-name>
   	<display-name>GetAnimalImages</display-name>
   	<description></description>
   	<servlet-class>controller.servlets.GetAnimalImages</servlet-class>
-  </servlet>
-  <servlet>
-  	<servlet-name>TesteJWT</servlet-name>
-  	<display-name>TesteJWT</display-name>
-  	<description></description>
-  	<servlet-class>controller.servlets.TesteJWT</servlet-class>
-  </servlet>
-  <servlet>
-  	<servlet-name>EmailTestServlet</servlet-name>
-  	<display-name>EmailTestServlet</display-name>
-  	<description></description>
-  	<servlet-class>controller.servlets.EmailTestServlet</servlet-class>
-  </servlet>
+  </servlet> 
   <servlet>
   	<servlet-name>PetUpdateServlet</servlet-name>
   	<display-name>PetUpdateServlet</display-name>
@@ -81,6 +57,12 @@
   	<display-name>GetAllAnimals</display-name>
   	<description></description>
   	<servlet-class>controller.servlets.GetAllAnimals</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ChangePasswordServlet</servlet-name>
+  	<display-name>ChangePasswordServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.ChangePasswordServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
@@ -107,24 +89,8 @@
   	<url-pattern>/GetAnimalByFilter</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>EmailValidationServlet</servlet-name>
-  	<url-pattern>/EmailValidationServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>TestServlet</servlet-name>
-  	<url-pattern>/TestServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
   	<servlet-name>GetAnimalImages</servlet-name>
   	<url-pattern>/GetAnimalImages</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>TesteJWT</servlet-name>
-  	<url-pattern>/TesteJWT</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>EmailTestServlet</servlet-name>
-  	<url-pattern>/EmailTestServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>PetUpdateServlet</servlet-name>
@@ -133,6 +99,10 @@
   <servlet-mapping>
   	<servlet-name>GetAllAnimals</servlet-name>
   	<url-pattern>/GetAllAnimals</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ChangePasswordServlet</servlet-name>
+  	<url-pattern>/ChangePasswordServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>
