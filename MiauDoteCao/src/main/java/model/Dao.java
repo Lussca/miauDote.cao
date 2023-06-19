@@ -733,19 +733,52 @@ public class Dao {
 			}
 		}
 
-	public boolean compareValidationCode(String validationCode) {
-		return false;
+	public boolean compareValidationCode(String typedCode, boolean isOng, String idOng) throws NoSuchAlgorithmException {
+		String sql;
+		if(isOng) {
+			 sql = "SELECT validationCode FROM userOng WHERE idOng=?";
+		}else {
+			 sql = "SELECT validationCode FROM userAdopter WHERE idAdopter=?";
+		}
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, idOng);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				String dbCode = rs.getString(1);
+				String hashCode = new Encrypt().toHash(typedCode);
+				if(hashCode.equals(dbCode)){
+					return true;
+				}else {
+					return false;
+				}
+			}else {
+				return false;
+			}
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
-	public String getUserId(String email) throws SQLException {
+	public ArrayList<String> getUserId(String email) throws SQLException {
+		ArrayList<String> result = new ArrayList<String>();
 		String sql = "SELECT idOng FROM userOng WHERE login=?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
 			statement.setString(1, email);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
-				return rs.getString(1);
+				result.add(rs.getString(1));
+				result.add("true");
+				return result;
 			}else {
-				//TODO criar query para email de adotante
+				sql = "SELECT idAdopter FROM userAdopter WHERE login=?";
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ResultSet rs2 = ps.executeQuery();
+				if(rs2.next()) {
+					result.add(rs.getString(1));
+					result.add("false");
+					return result;
+				}
 				return null;
 			}
 			
