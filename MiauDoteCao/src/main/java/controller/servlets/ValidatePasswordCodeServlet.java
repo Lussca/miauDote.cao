@@ -40,8 +40,6 @@ public class ValidatePasswordCodeServlet extends HttpServlet {
 				e.printStackTrace();
 				rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.SERVER_ERROR);
 			}
-			
-
 	}
 
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
