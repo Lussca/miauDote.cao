@@ -1,39 +1,31 @@
 package controller.servlets;
 
 import java.io.IOException;
-
-import controller.Validations;
-import controller.handler.RequestResponseHandler;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import controller.handler.email.*;
 
-/**
- * Servlet implementation class EmailTest
- */
-public class ChangePasswordServlet extends HttpServlet {
+import controller.handler.RequestResponseHandler;
+import model.Dao;
+
+public class ValidateNumberServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	RequestResponseHandler rrh = new RequestResponseHandler();
+	Dao dao = new Dao();
 
-    public ChangePasswordServlet() {
+    public ValidateNumberServlet() {
         super();
+
     }
-    //ESTÁ COM PROBLEMA DE CORS
-    //ALTERAR O MÉTODO DE ENVIO DE EMAIL
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
-		String email = request.getParameter("email");
-		ChangePassword cp = new ChangePassword();
-		if(cp.send(email)) {
-			rrh.sendOkResponse(response);
-		}else {
-			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.EMAIL_NOT_SENT);
-		}
+		String validationCode = request.getParameter("validationCode");
+		boolean validate = dao.compareValidationCode(validationCode);
 	}
+
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 	}
+
 }

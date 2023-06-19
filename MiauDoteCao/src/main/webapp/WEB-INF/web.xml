@@ -64,6 +64,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.ChangePasswordServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>ValidateNumberServlet</servlet-name>
+  	<display-name>ValidateNumberServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.ValidateNumberServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -103,6 +109,10 @@
   <servlet-mapping>
   	<servlet-name>ChangePasswordServlet</servlet-name>
   	<url-pattern>/ChangePasswordServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ValidateNumberServlet</servlet-name>
+  	<url-pattern>/ValidateNumberServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>

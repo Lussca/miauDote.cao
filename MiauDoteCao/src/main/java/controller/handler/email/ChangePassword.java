@@ -13,8 +13,12 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
+import model.Dao;
+
 public class ChangePassword {
 
+	Dao dao = new Dao();
+	
 	private Properties getEmailAndPassword() {
 		Properties properties = new Properties();
 		File f = new File("C:\\Projetos\\miauDote.cao\\admin\\emailConfig.ini");
@@ -51,13 +55,15 @@ public class ChangePassword {
 	    message.setFrom(new InternetAddress(from));
 	    message.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
 	    message.setSubject("Código de verificação");
-	    message.setText("Aqui está seu código de verificação: "+Validations.randomNumber(1111, 9999));
+	    int validationNumber = Validations.randomNumber(1111, 9999);
+	    dao.getUserId();
+	    //TODO terminar de arrumar metodos na Dao e aqui
+	    dao.insertValidationNumber(validationNumber, isOng, userId);
+	    message.setText("Aqui está seu código de verificação: "+ validationNumber);
 	    Transport.send(message);
 	    return true;
 	      } catch (Exception e) {
 	    	  return false;	        
-	      }
-	      
+	      } 
 	   }
-	
 }
