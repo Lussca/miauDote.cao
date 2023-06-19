@@ -677,7 +677,7 @@ public class Dao {
 	}
 
 	public ArrayList<Animal> getAllAnimais() throws ClassNotFoundException, IOException {
-		String sql = "SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, a.sex, a.age, a.idOng, a.insertionDate, a.color, a.description, MAX(i.imageUrl) AS imageUrl "
+		String sql = "SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, a.sex, a.age, a.idOng, a.insertionDate, a.color, a.animalDescription, MAX(i.imageUrl) AS imageUrl "
 	             + "FROM animal a "
 	             + "LEFT JOIN image i "
 	             + "ON a.idAnimal = i.idAnimal "
