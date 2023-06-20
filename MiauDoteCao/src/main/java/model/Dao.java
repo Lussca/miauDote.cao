@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import controller.Encrypt;
 import model.entity.Adress;
 import model.entity.Animal;
 import model.entity.UserAdopter;
@@ -709,4 +711,81 @@ public class Dao {
 	    return null;
 		}
 	}
+
+	public boolean insertValidationNumber(int validationNumber, boolean isOng, String userId) throws NoSuchAlgorithmException {	
+		String sql;
+		if(isOng) {
+			sql = "UPDATE userOng SET validationNumber=? WHERE idOng=?";
+		}else {
+			sql = "UPDATE userAdopter SET validationNumber=? WHERE idAdopter=?";
+		}try (Connection connection = this.connectDB(); PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setString(1, new Encrypt().toHash(String.valueOf(validationNumber)));
+			statement.setString(2, userId);
+			int update = statement.executeUpdate();
+			if(update > 0) {
+				return true;
+				}else {
+					return false;
+				}
+			} catch (ClassNotFoundException | SQLException | IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+	public boolean compareValidationCode(String typedCode, boolean isOng, String idOng) throws NoSuchAlgorithmException {
+		String sql;
+		if(isOng) {
+			 sql = "SELECT validationCode FROM userOng WHERE idOng=?";
+		}else {
+			 sql = "SELECT validationCode FROM userAdopter WHERE idAdopter=?";
+		}
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, idOng);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				String dbCode = rs.getString(1);
+				String hashCode = new Encrypt().toHash(typedCode);
+				if(hashCode.equals(dbCode)){
+					return true;
+				}else {
+					return false;
+				}
+			}else {
+				return false;
+			}
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public ArrayList<String> getUserId(String email) throws SQLException {
+		ArrayList<String> result = new ArrayList<String>();
+		String sql = "SELECT idOng FROM userOng WHERE login=?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, email);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				result.add(rs.getString(1));
+				result.add("true");
+				return result;
+			}else {
+				sql = "SELECT idAdopter FROM userAdopter WHERE login=?";
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ResultSet rs2 = ps.executeQuery();
+				if(rs2.next()) {
+					result.add(rs.getString(1));
+					result.add("false");
+					return result;
+				}
+				return null;
+			}
+			
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }

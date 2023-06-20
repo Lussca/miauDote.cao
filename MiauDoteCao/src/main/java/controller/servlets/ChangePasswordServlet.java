@@ -22,7 +22,8 @@ public class ChangePasswordServlet extends HttpServlet {
         super();
     }
     //ESTÁ COM PROBLEMA DE CORS
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    //ALTERAR O MÉTODO DE ENVIO DE EMAIL
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 		String email = request.getParameter("email");
 		ChangePassword cp = new ChangePassword();
@@ -32,8 +33,7 @@ public class ChangePasswordServlet extends HttpServlet {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.EMAIL_NOT_SENT);
 		}
 	}
-	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 	}
-
 }

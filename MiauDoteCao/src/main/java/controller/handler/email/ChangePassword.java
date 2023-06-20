@@ -1,5 +1,6 @@
 package controller.handler.email;
 
+import java.util.ArrayList;
 import java.util.Properties;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +14,12 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
+import model.Dao;
+
 public class ChangePassword {
 
+	Dao dao = new Dao();
+	
 	private Properties getEmailAndPassword() {
 		Properties properties = new Properties();
 		File f = new File("C:\\Projetos\\miauDote.cao\\admin\\emailConfig.ini");
@@ -51,13 +56,15 @@ public class ChangePassword {
 	    message.setFrom(new InternetAddress(from));
 	    message.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
 	    message.setSubject("Código de verificação");
-	    message.setText("Aqui está seu código de verificação: "+Validations.randomNumber(1111, 9999));
+	    int validationNumber = Validations.randomNumber(1111, 9999);
+	    ArrayList<String> data = dao.getUserId(emailTo);
+	    //TODO terminar de arrumar metodos na Dao e aqui
+	    boolean b = dao.insertValidationNumber(validationNumber, Boolean.parseBoolean(data.get(1)), data.get(0));
+	    message.setText("Aqui está seu código de verificação: "+ validationNumber);
 	    Transport.send(message);
 	    return true;
 	      } catch (Exception e) {
 	    	  return false;	        
-	      }
-	      
+	      } 
 	   }
-	
 }
