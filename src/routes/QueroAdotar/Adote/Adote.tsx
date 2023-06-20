@@ -17,7 +17,7 @@ function Adote(this: any)  {
                 <Grid item xs={2} style={{ backgroundColor: "#fff" }}>
                     <Sidebar></Sidebar>
                 </Grid>
-                <Grid item xs={10} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+                <Grid item xs={10} style={{ display: 'flex', flexWrap: 'wrap', columnGap: '21px' }}>
                     <Animals></Animals>
                 </Grid>
             </Grid>
