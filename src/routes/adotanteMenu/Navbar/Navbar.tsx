@@ -32,9 +32,11 @@ export const Navbar = () =>{
         <AppBar position='relative' style={{ background: 'transparent' }}>
             <Toolbar>
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-                    <IconButton size='large' edge='start' color='inherit' aria-label='Início'>
-                        <img src="./imgs/logos/LogoSemFonte_Azul.svg" style={{ width: 60 }}></img>
-                    </IconButton>
+                    <Link to="/adotanteMenu">
+                        <IconButton size='large' edge='start' color='inherit' aria-label='Início'>
+                            <img src="./imgs/logos/LogoSemFonte_Azul.svg" style={{ width: 60 }}></img>
+                        </IconButton>
+                    </Link>
                 </Typography>
                 <Stack direction='row' spacing={1}>
                     <ThemeProvider theme={theme}>

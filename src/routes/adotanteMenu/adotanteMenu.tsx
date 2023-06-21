@@ -1,9 +1,6 @@
 //imports padrão react
 import styles from'./adotanteMenu.module.css';
 
-//imports mui
-import Alert, { AlertColor } from '@mui/material/Alert';
-
 //componentes
 import { Navbar } from './Navbar/Navbar';
 import { Header } from './Header/Header';

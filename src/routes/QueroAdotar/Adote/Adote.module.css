@@ -4,3 +4,13 @@
     max-height: 745px;
     display: flex;
 }
+
+.sidebar{
+    margin: 5%;
+}
+
+.buttons{
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-evenly;
+}
