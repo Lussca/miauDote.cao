@@ -38,8 +38,6 @@ public class GetAllAnimals extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
 		try {
 			ArrayList<Animal> animals = dao.getAllAnimais();
 			if(!animals.isEmpty()) {

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        function makeRequest() {
+            var xhr = new XMLHttpRequest();
+            var url = 'http://localhost:8080/MiauDoteCao/GetAnimalByFilter';
+            var params = 'race=0&size=1&hairType=1&animalToPerson=0&animalToAnimal=0&sex=1&age=3&userId=1';
+
+            xhr.open('GET', url + '?' + params, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = xhr.responseText;
+                    // Handle the response here
+                    console.log(response);
+                } else if (xhr.readyState === 4) {
+                    // Handle the error here
+                    console.log('Error:', xhr.status);
+                }
+            };
+
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <button onclick="makeRequest()">Make Request</button>
+</body>
+</html>

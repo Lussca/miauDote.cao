@@ -35,12 +35,14 @@ public class GetAnimalByFilter extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
+		System.out.println("entrou na servlet");
 			String race = request.getParameter("race");
 			String size = request.getParameter("size");
 			String hairType = request.getParameter("hairType");
 			String animalToPerson = request.getParameter("animalToPerson");
 			String animalToAnimal = request.getParameter("animalToAnimal");
 			String sex = request.getParameter("sex");
+			System.out.println(race);
 			String age = request.getParameter("age");
 			String userId = request.getParameter("userId");	
 			try {
@@ -60,6 +62,8 @@ public class GetAnimalByFilter extends HttpServlet {
 			        rrh.sendOkResponse(response);
 				}else {
 					rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, Validations.NO_ANIMALS_MATCHING_FILTERS);
+					System.out.println("debug");
+					System.out.println("deu erro");
 				}
 			} catch (SQLException e) {
 				rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.DATABASE_ERROR);
@@ -69,4 +73,7 @@ public class GetAnimalByFilter extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
+	   	 rrh.configureCors(response);
+	    }
 	}

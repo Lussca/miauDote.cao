@@ -9,6 +9,22 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class Animal {
+	
+	public static int SEXO_MACHO = 1;
+	public static int SEXO_FEMEA = 2;
+	public static int RACA_CACHORRO = 1;
+	public static int RACA_GATO = 2;
+	public static int PELO_PEQUENO = 1;
+	public static int PELO_MEDIO = 2;
+	public static int PELO_LONGO = 3;
+	public static int CONVIVENCIA_MANSO = 1;
+	public static int CONVIVENCIA_AGRESSIVO = 2;
+	public static int CONVICENCIA_AGITADO = 3;
+	public static int CONVIVENCIA_AMIGAVEL = 4;
+	public static int CONVICENCIA_AMEDRONDATO = 5;
+	
+	//TODO finalizar a conversão dos valores na requisicao de animais com filtro
+	
 	String id;
 	String race;
     String name;
