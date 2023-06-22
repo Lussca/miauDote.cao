@@ -679,7 +679,7 @@ public class Dao {
 	}
 
 	public ArrayList<Animal> getAllAnimais() throws ClassNotFoundException, IOException {
-		String sql = "SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, a.sex, a.age, a.idOng, a.insertionDate, a.color, a.animalDescription, MAX(i.imageUrl) AS imageUrl "
+		String sql = "SELECT a.idAnimal, a.idRace, a.animalName, a.idAnimalSize, a.idAnimalFurType, a.idAnimalToAnimal, a.idAnimalToPerson, a.sex, a.age, a.idOng, a.insertionDate, a.idColor, a.descricao, MAX(i.imageUrl) AS imageUrl "
 	             + "FROM animal a "
 	             + "LEFT JOIN image i "
 	             + "ON a.idAnimal = i.idAnimal "
@@ -689,20 +689,20 @@ public class Dao {
 	    ResultSet rs = statement.executeQuery();
 	    while(rs.next()) {
 	        Animal a = new Animal();
-	        a.setRace(rs.getString("race"));
+	        a.setRace(rs.getString("idRace"));
 	        a.setName(rs.getString("animalName"));
-	        a.setSize(rs.getString("size"));
-	        a.setHairType(rs.getString("hairType"));
-	        a.setAnimalToAnimal(rs.getString("animalToAnimal"));
-	        a.setAnimalToPerson(rs.getString("animalToPerson"));
+	        a.setSize(rs.getString("idAnimalSize"));
+	        a.setHairType(rs.getString("idAnimalFurType"));
+	        a.setAnimalToAnimal(rs.getString("idAnimalToAnimal"));
+	        a.setAnimalToPerson(rs.getString("idAnimalToPerson"));
 	        a.setSex(rs.getString("sex"));
 	        a.setAge(rs.getString("age"));
 	        a.setIdOng(rs.getString("idOng"));
 	        a.setInsertionDate(rs.getString("insertionDate"));
 	        a.setImageUrl(rs.getString("imageUrl"));
 	        a.setId(rs.getString("idAnimal"));
-	        a.setColor(rs.getString("color"));
-	        a.setAnimalDescription(rs.getString("animalDescription"));
+	        a.setColor(rs.getString("idColor"));
+	        a.setAnimalDescription(rs.getString("descricao"));
 	        animals.add(a);
 	    }
 	    return animals;
