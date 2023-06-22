@@ -26,7 +26,7 @@ Dao dao = new Dao();
 	private static String getSecretKey(String key) throws IOException {
 		File f = new File("C:\\Projetos\\miauDote.cao\\admin\\secretKey.ini");
 		if(!f.exists()){
-			 f = new File("C:\\Users\\Joao Gabriel\\Desktop\\backend\\MiauDoteCao\\admin\\secretKey.ini");
+			 f = new File("C:\\Users\\Joao Gabriel\\Desktop\\miauDote.cao\\admin\\secretKey.ini");
 		}
 		FileInputStream fis = new FileInputStream(f);
 		 Properties prop = new Properties();

@@ -14,6 +14,9 @@ public class Animal {
 	public static int SEXO_FEMEA = 2;
 	public static int RACA_CACHORRO = 1;
 	public static int RACA_GATO = 2;
+	public static int TAMANHO_PEQUENO = 1;
+	public static int TAMANHO_MEDIO = 2;
+	public static int TAMANHO_GRANDE =3;
 	public static int PELO_PEQUENO = 1;
 	public static int PELO_MEDIO = 2;
 	public static int PELO_LONGO = 3;
@@ -21,8 +24,17 @@ public class Animal {
 	public static int CONVIVENCIA_AGRESSIVO = 2;
 	public static int CONVICENCIA_AGITADO = 3;
 	public static int CONVIVENCIA_AMIGAVEL = 4;
-	public static int CONVICENCIA_AMEDRONDATO = 5;
-	
+	public static int CONVICENCIA_AMEDRONTADO = 5;
+	public static int COR_MARROM = 1;
+	public static int COR_BRANCO = 2;
+	public static int COR_PRETO = 3;
+	public static int COR_DOURADO = 4;
+	public static int COR_BEGE = 5;
+	public static int COR_LARANJA = 6;
+	public static int COR_RAJADO = 7;
+	public static int COR_CINZA = 8;
+	public static int COR_BICOLOR = 9;
+	public static int COR_TRICOLOR = 10;
 	//TODO finalizar a conversão dos valores na requisicao de animais com filtro
 	
 	String id;
@@ -131,7 +143,7 @@ public class Animal {
 		this.animalDescription = animalDescription;
 	}
 	public Animal(String race, String name, String size, String hairType, String animalToAnimal,
-			String animalToPerson, String sex, String age, String idOng, String insertionDate,
+			String animalToPerson, String sex, String age, String idOng, String insertionDate, String color, String animalDescription,
 			List<String> links) {
 		super();
 		this.race = race;
@@ -144,10 +156,12 @@ public class Animal {
 		this.age = age;
 		this.idOng = idOng;
 		this.insertionDate = insertionDate;
+		this.color = color;
+		this.animalDescription = animalDescription;
 		this.links = links;
 	}
 	public Animal(String idAnimal, String race, String name, String size, String hairType, String animalToAnimal,
-			String animalToPerson, String sex, String age, String idOng,
+			String animalToPerson, String sex, String age, String idOng, String color, String animalDescription,
 			List<String> links, int number) {
 		super();
 		this.id = idAnimal;
@@ -160,6 +174,8 @@ public class Animal {
 		this.sex = sex;
 		this.age = age;
 		this.idOng = idOng;
+		this.color = color;
+		this.animalDescription = animalDescription;
 		this.links = links;
 	}
 	public Animal() {
@@ -172,7 +188,7 @@ public class Animal {
         JsonObject animalObject = jsonObject.getAsJsonObject("Animal");
         
         try {
-            String race = animalObject.get("race").getAsString();
+            int race = animalObject.get("race").getAsInt();
             String name = animalObject.get("name").getAsString();
             int size = animalObject.get("size").getAsInt();
             int hairType = animalObject.get("hairType").getAsInt();
@@ -181,6 +197,8 @@ public class Animal {
             int sex = animalObject.get("sex").getAsInt();
             int age = animalObject.get("age").getAsInt();
             int idOng = animalObject.get("idOng").getAsInt();
+            int color = animalObject.get("color").getAsInt();
+            String description = animalObject.get("description").getAsString();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDateTime ldt = LocalDateTime.now();
             String insertionDate = ldt.format(formatter);
@@ -190,8 +208,8 @@ public class Animal {
                 String link = linksObject.get(key).getAsString();
                 links.add(link);
             }
-            return new Animal(race, name, String.valueOf(size), String.valueOf(hairType), String.valueOf(animalToAnimal),
-                    String.valueOf(animalToPerson), String.valueOf(sex), String.valueOf(age), String.valueOf(idOng), insertionDate, links);
+            return new Animal(String.valueOf(race), name, String.valueOf(size), String.valueOf(hairType), String.valueOf(animalToAnimal),
+                    String.valueOf(animalToPerson), String.valueOf(sex), String.valueOf(age), String.valueOf(idOng), insertionDate, String.valueOf(color), description, links);
         	}catch(NumberFormatException e) {
         	e.printStackTrace();
         	return null;
@@ -215,6 +233,8 @@ public class Animal {
 	            int sex = animalObject.get("sex").getAsInt();
 	            int age = animalObject.get("age").getAsInt();
 	            int idOng = animalObject.get("idOng").getAsInt();
+	            int color = animalObject.get("color").getAsInt();
+	            String description = animalObject.get("description").getAsString();
 	            List<String> links = new ArrayList<>();
 	            JsonObject linksObject = animalObject.getAsJsonObject("Links");
 	            for (String key : linksObject.keySet()) {
@@ -222,7 +242,7 @@ public class Animal {
 	                links.add(link);
 	            }
 	            return new Animal(String.valueOf(idAnimal), race, name, String.valueOf(size), String.valueOf(hairType), String.valueOf(animalToAnimal),
-	                    String.valueOf(animalToPerson), String.valueOf(sex), String.valueOf(age), String.valueOf(idOng), links, number);
+	                    String.valueOf(animalToPerson), String.valueOf(sex), String.valueOf(age), String.valueOf(idOng), String.valueOf(color), description, links, number);
 	        	}catch(NumberFormatException e) {
 	        	e.printStackTrace();
 	        	return null;

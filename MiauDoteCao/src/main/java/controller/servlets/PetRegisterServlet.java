@@ -30,7 +30,7 @@ public class PetRegisterServlet extends HttpServlet {
        
      }
      protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-    	 response.setContentType("text/plain");
+    	response.setContentType("text/plain");
  	    response.setStatus(200);
  	    response.getWriter().println("MENSAGEM");
  	    response.getWriter().flush();
@@ -38,7 +38,7 @@ public class PetRegisterServlet extends HttpServlet {
      }
      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
     	rrh.configureCors(response);
-    	 String authorizationHeader = request.getHeader("Authorization");
+    	 /*String authorizationHeader = request.getHeader("Authorization");
     	 System.out.println("PEGOU O TOKEN");
     	 if(authorizationHeader == null || authorizationHeader.startsWith("Bearer ")) {
     	 	rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.INVALID_TOKEN);
@@ -67,7 +67,7 @@ public class PetRegisterServlet extends HttpServlet {
     	 	}
     	 	}catch(Exception e) {
     	 		
-    	 	}
+    	 	}*/
     	 
      
     	System.out.println("CHEGOU AQUI");
@@ -97,9 +97,9 @@ public class PetRegisterServlet extends HttpServlet {
         	}catch(NumberFormatException e) {
         		e.printStackTrace();
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_ANIMAL);
+        		}
         	}
-        	}
-     }
+     
      
      protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
     	 rrh.configureCors(response);

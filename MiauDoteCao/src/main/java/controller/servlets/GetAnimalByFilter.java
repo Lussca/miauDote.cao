@@ -42,7 +42,6 @@ public class GetAnimalByFilter extends HttpServlet {
 			String animalToPerson = request.getParameter("animalToPerson");
 			String animalToAnimal = request.getParameter("animalToAnimal");
 			String sex = request.getParameter("sex");
-			System.out.println(race);
 			String age = request.getParameter("age");
 			String userId = request.getParameter("userId");	
 			try {

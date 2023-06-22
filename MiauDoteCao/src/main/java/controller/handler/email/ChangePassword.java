@@ -64,6 +64,7 @@ public class ChangePassword {
 	    Transport.send(message);
 	    return true;
 	      } catch (Exception e) {
+	    	  e.printStackTrace();
 	    	  return false;	        
 	      } 
 	   }

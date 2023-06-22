@@ -39,6 +39,7 @@ CREATE TABLE animal (
   age INT,
   idOng INT,
   insertionDate DATE,
+  color INT,
   FOREIGN KEY (idOng) REFERENCES userOng(idOng) ON DELETE CASCADE
 );
 

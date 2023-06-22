@@ -32,7 +32,7 @@ public class Dao {
     private String getConfigValueByKey(String key) throws IOException {
     	File file = new File("C:\\Projetos\\miauDote.cao\\admin\\configMySQL.ini");
     	if(!file.exists()) {
-    		file = new File("C:\\Users\\Joao Gabriel\\Desktop\\backend\\MiauDoteCao\\admin\\configMySQL.ini");
+    		file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miauDote.cao\\admin\\configMySQL.ini");
     	}
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
@@ -71,7 +71,7 @@ public class Dao {
     
     public boolean registerUserOng(UserOng user, int idAdress) throws SQLException, ClassNotFoundException, IOException {
 		// se precisar colocar public.userOng (em todas as tabelas que fazem transação)
-        String sql = "INSERT INTO userOng (login, pw, username, cpf, birth, ongName, publicKey, privateKey, idAdress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO userOng (email, pw, username, cpf, birth, ongName, publicKey, privateKey, idAdress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = this.connectDB();
              PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getLogin());
@@ -100,7 +100,7 @@ public class Dao {
     }
 
 	public boolean registerUserAdopter(UserAdopter user, int idAdress) throws SQLException, ClassNotFoundException, IOException {
-		 String sql = "INSERT INTO userAdopter (login, pw, username, cpf, birth, publicKey, privateKey, idAdress) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		 String sql = "INSERT INTO userAdopter (email, pw, username, cpf, birth, publicKey, privateKey, idAdress) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 	        try (Connection connection = this.connectDB();
 	             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 	            statement.setString(1, user.getLogin());
@@ -128,7 +128,7 @@ public class Dao {
 	    }
 
 	public int registerAdress(Adress adress) throws ClassNotFoundException, IOException {
-		String sql = "INSERT INTO adress (state, city, neighbor, cep, rua) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO adress (state, city, neighbor, cep, street) VALUES (?,?,?,?,?)";
 		//Adicionar  CAST (? AS INTEGER) no numero do endereco caso esteja conectando ao postgreSQL
 		try (Connection connection = this.connectDB();
 	             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -154,7 +154,7 @@ public class Dao {
 	}
 
 	public boolean checkForDuplicityOngEmail(String login) throws ClassNotFoundException, IOException {
-		String sql = "SELECT * FROM userOng WHERE login = ?";
+		String sql = "SELECT * FROM userOng WHERE email = ?";
 		try (Connection conn = this.connectDB();
 		         PreparedStatement statement = conn.prepareStatement(sql)) {
 		        statement.setString(1, login);
@@ -193,11 +193,11 @@ public class Dao {
 		        return false;
 		    }
 	}
-	public boolean checkForDuplicityAdopterEmail(String login) throws ClassNotFoundException, IOException {
-		String sql = "SELECT * FROM userAdopter WHERE login = ?";
+	public boolean checkForDuplicityAdopterEmail(String email) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM userAdopter WHERE email = ?";
 		try (Connection conn = this.connectDB();
 		         PreparedStatement statement = conn.prepareStatement(sql)) {
-		        statement.setString(1, login);
+		        statement.setString(1, email);
 		        ResultSet rs = statement.executeQuery();
 		        return rs.next();
 		    } catch (SQLException e) {
@@ -222,11 +222,11 @@ public class Dao {
 		    }
 	}
 
-	public boolean validateLoginOng(String hashPassword, String login) throws ClassNotFoundException, IOException {
-		String sql = "SELECT * FROM userOng WHERE login =? AND pw =?";
+	public boolean validateLoginOng(String hashPassword, String email) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM userOng WHERE email =? AND pw =?";
 		try(Connection conn = this.connectDB();
 				PreparedStatement statement = conn.prepareStatement(sql)){
-					statement.setString(1, login);
+					statement.setString(1, email);
 					statement.setString(2, hashPassword);
 					ResultSet rs = statement.executeQuery();
 					return rs.next();
@@ -235,11 +235,11 @@ public class Dao {
 				}
 		return false;
 	}
-	public boolean validateLoginAdopter(String hashPassword, String login) throws ClassNotFoundException, IOException {
-		String sql = "SELECT * FROM userAdopter WHERE login =? AND pw =?";
+	public boolean validateLoginAdopter(String hashPassword, String email) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM userAdopter WHERE email =? AND pw =?";
 		try(Connection conn = this.connectDB();
 				PreparedStatement statement = conn.prepareStatement(sql)){
-					statement.setString(1, login);
+					statement.setString(1, email);
 					statement.setString(2, hashPassword);
 					ResultSet rs = statement.executeQuery();
 					return rs.next();
@@ -249,17 +249,17 @@ public class Dao {
 		return false;
 	}
 
-	public boolean insertAndUpdateJWT(String jwt, boolean isOng, String login) throws ClassNotFoundException, SQLException, IOException {
+	public boolean insertAndUpdateJWT(String jwt, boolean isOng, String email) throws ClassNotFoundException, SQLException, IOException {
 		String sql;
 		if(isOng) {
-			sql = "UPDATE userOng set jwt=? WHERE login=?";
+			sql = "UPDATE userOng set jwt=? WHERE email=?";
 		}else {
 			sql = "UPDATE userAdopter set jwt=? WHERE login=?";
 		}
 		try(Connection conn = this.connectDB();
 				PreparedStatement statement = conn.prepareStatement(sql)){
 			statement.setString(1, jwt);
-			statement.setString(2, login);
+			statement.setString(2, email);
 			int rowsUpdated = statement.executeUpdate();
 			if(rowsUpdated == 0) {
 				return false;
@@ -271,15 +271,15 @@ public class Dao {
 			return false;
 		}
 	}
-	public String getJWT(String login, boolean isOng) throws ClassNotFoundException, IOException {
+	public String getJWT(String email, boolean isOng) throws ClassNotFoundException, IOException {
 	    String sql;
 	    if (isOng) {
-	        sql = "SELECT jwt FROM userOng WHERE login=?";
+	        sql = "SELECT jwt FROM userOng WHERE email=?";
 	    } else {
-	        sql = "SELECT jwt FROM userAdopter WHERE login=?";
+	        sql = "SELECT jwt FROM userAdopter WHERE email=?";
 	    }
 	    try (Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
-	        statement.setString(1, login);
+	        statement.setString(1, email);
 	        ResultSet rs = statement.executeQuery();
 	        if (rs.next()) {
 	            return rs.getString("jwt");
@@ -331,8 +331,8 @@ public class Dao {
 	public ArrayList<Animal> selectAnimals(String race, String size, String hairType, String animalToAnimal, String animalToPerson,
 	        String sex, String age, String id, String city, String state) throws SQLException {
 	    StringBuilder sqlBuilder = new StringBuilder();
-	    sqlBuilder.append("SELECT a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, ");
-	    sqlBuilder.append("a.sex, a.age, a.idOng, a.color, a.animalDescription, img.imageUrl ");
+	    sqlBuilder.append("SELECT a.idAnimal, a.idRace, a.animalName, a.idAnimalSize, a.idAnimalFurType, a.idAnimalToAnimal, a.idAnimalToPerson, ");
+	    sqlBuilder.append("a.sex, a.age, a.idOng, a.idColor, a.descricao, img.imageUrl ");
 	    sqlBuilder.append("FROM animal AS a ");
 	    sqlBuilder.append("JOIN userOng AS u ON a.idOng = u.idOng ");
 	    sqlBuilder.append("JOIN adress AS ad ON u.idAdress = ad.idAdress ");
@@ -349,23 +349,23 @@ public class Dao {
 	    parameters.add(state);
 
 	    if (race != null && !race.isEmpty() && !race.equals("0")) {
-	        sqlBuilder.append("  AND a.race = ? ");
+	        sqlBuilder.append("  AND a.idRace = ? ");
 	        parameters.add(race);
 	    }
 	    if (size != null && !size.isEmpty() && !size.equals("0")) {
-	        sqlBuilder.append("  AND a.size = ? ");
+	        sqlBuilder.append("  AND a.idAnimalSize = ? ");
 	        parameters.add(size);
 	    }
 	    if (hairType != null && !hairType.isEmpty() && !hairType.equals("0")) {
-	        sqlBuilder.append("  AND a.hairType = ? ");
+	        sqlBuilder.append("  AND a.idAnimalFurType = ? ");
 	        parameters.add(hairType);
 	    }
 	    if (animalToAnimal != null && !animalToAnimal.isEmpty() && !animalToAnimal.equals("0")) {
-	        sqlBuilder.append("  AND a.animalToAnimal = ? ");
+	        sqlBuilder.append("  AND a.idAnimalToAnimal = ? ");
 	        parameters.add(animalToAnimal);
 	    }
 	    if (animalToPerson != null && !animalToPerson.isEmpty() && !animalToPerson.equals("0")) {
-	        sqlBuilder.append("  AND a.animalToPerson = ? ");
+	        sqlBuilder.append("  AND a.idAnimalToPerson = ? ");
 	        parameters.add(animalToPerson);
 	    }
 	    if (sex != null && !sex.isEmpty() && !sex.equals("0")) {
@@ -377,8 +377,8 @@ public class Dao {
 	        parameters.add(age);
 	    }
 
-	    sqlBuilder.append("GROUP BY a.idAnimal, a.race, a.animalName, a.size, a.hairType, a.animalToAnimal, a.animalToPerson, ");
-	    sqlBuilder.append("         a.sex, a.age, a.idOng, a.color, a.animalDescription, img.imageUrl ");
+	    sqlBuilder.append("GROUP BY a.idAnimal, a.idRace, a.animalName, a.idAnimalSize, a.idAnimalFurType, a.idAnimalToAnimal, a.idAnimalToPerson, ");
+	    sqlBuilder.append("         a.sex, a.age, a.idOng, a.idColor, a.descricao, img.imageUrl ");
 	    sqlBuilder.append("ORDER BY a.insertionDate ASC ");
 
 	    String sql = sqlBuilder.toString();
@@ -396,17 +396,17 @@ public class Dao {
 	        while (rs.next()) {
 	            Animal a = new Animal();
 	            a.setId(rs.getString("idAnimal"));
-	            a.setRace(rs.getString("race"));
+	            a.setRace(rs.getString("idRace"));
 	            a.setName(rs.getString("animalName"));
-	            a.setSize(rs.getString("size"));
-	            a.setHairType(rs.getString("hairType"));
-	            a.setAnimalToAnimal(rs.getString("animalToAnimal"));
-	            a.setAnimalToPerson(rs.getString("animalToPerson"));
+	            a.setSize(rs.getString("idAnimalSize"));
+	            a.setHairType(rs.getString("idAnimalFurType"));
+	            a.setAnimalToAnimal(rs.getString("idAnimalToAnimal"));
+	            a.setAnimalToPerson(rs.getString("idAnimalToPerson"));
 	            a.setSex(rs.getString("sex"));
 	            a.setAge(rs.getString("age"));
 	            a.setIdOng(rs.getString("idOng"));
-	            a.setColor(rs.getString("color"));
-	            a.setAnimalDescription(rs.getString("animalDescription"));
+	            a.setColor(rs.getString("idColor"));
+	            a.setAnimalDescription(rs.getString("descricao"));
 	            a.setImageUrl(rs.getString("imageUrl"));
 	            animals.add(a);
 	        }
@@ -445,20 +445,20 @@ public class Dao {
 	}
 
 	public int insertAnimal(Animal animal) {
-		String sql = "INSERT INTO animal (race, animalName, size, hairType, animalToAnimal, animalToPerson, sex, age, idOng, insertionDate, color, animalDescription) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO animal (animalName, age, sex, insertionDate, descricao, idOng, idAnimalSize, idAnimalFurType, idAnimalToAnimal, idAnimalToPerson, idColor, idRace) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
-			statement.setString(1, animal.getRace());
-			statement.setString(2, animal.getName());
-			statement.setString(3, animal.getSize());
-			statement.setString(4, animal.getHairType());
-			statement.setString(5, animal.getAnimalToAnimal());
-			statement.setString(6, animal.getAnimalToPerson());
-			statement.setString(7, animal.getSex());
-			statement.setString(8, animal.getAge());
-			statement.setString(9, animal.getIdOng());
-			statement.setString(10, animal.getInsertionDate());
+			statement.setString(1, animal.getName());
+			statement.setString(2, animal.getAge());
+			statement.setString(3, animal.getSex());
+			statement.setString(4, animal.getInsertionDate());
+			statement.setString(5, animal.getAnimalDescription());
+			statement.setString(6, animal.getIdOng());
+			statement.setString(7, animal.getSize());
+			statement.setString(8, animal.getHairType());
+			statement.setString(9, animal.getAnimalToAnimal());
+			statement.setString(10, animal.getAnimalToPerson());
 			statement.setString(11, animal.getColor());
-			statement.setString(12, animal.getAnimalDescription());
+			statement.setString(12, animal.getRace());
 			int update = statement.executeUpdate();
 			ResultSet keys = statement.getGeneratedKeys();
 			if(keys.next()) {
@@ -762,7 +762,7 @@ public class Dao {
 
 	public ArrayList<String> getUserId(String email) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
-		String sql = "SELECT idOng FROM userOng WHERE login=?";
+		String sql = "SELECT idOng FROM userOng WHERE email=?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
 			statement.setString(1, email);
 			ResultSet rs = statement.executeQuery();
@@ -771,7 +771,7 @@ public class Dao {
 				result.add("true");
 				return result;
 			}else {
-				sql = "SELECT idAdopter FROM userAdopter WHERE login=?";
+				sql = "SELECT idAdopter FROM userAdopter WHERE email=?";
 				PreparedStatement ps = conn.prepareStatement(sql);
 				ResultSet rs2 = ps.executeQuery();
 				if(rs2.next()) {
