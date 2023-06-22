@@ -18,3 +18,14 @@ VALUES
   ('Oliver', '5', '1', '2023-06-21', 'Oliver é um cão de médio porte, com pelos brancos e manchas marrons. Ele é muito leal e adora acompanhar seus donos.', 3, 3, 3, 5, 5, 5, 1),
   ('Luna', '2', '2', '2023-06-21', 'Luna é uma gatinha de pelagem tigrada e olhos verdes. Ela é brincalhona e adora se divertir com bolinhas.', 1, 1, 1, 1, 1, 6, 2);
 
+  -- Cachorros
+INSERT INTO image (idAnimal, imageUrl)
+SELECT idAnimal, 'https://i0.wp.com/www.portaldodog.com.br/cachorros/wp-content/uploads/2019/01/boo.jpg?resize=600%2C954&ssl=1'
+FROM animal
+WHERE idRace = 1;
+
+-- Gatos
+INSERT INTO image (idAnimal, imageUrl)
+SELECT idAnimal, 'https://i.pinimg.com/236x/f5/dd/c6/f5ddc690ab0783246299f9045bb2dec4.jpg'
+FROM animal
+WHERE idRace = 2;
