@@ -1,0 +1,6 @@
+Roteiro para utilizar as querys
+
+Crie as tabelas com o arquivo NovoScriptTemporario.sql
+Adicione os filtros com o arquivo InsercaoDosFiltros.sql
+Adicione 3 contas de ONG com o arquivo InsercaoDeOng.sql
+Adicione os animais com o arquivo InsercaoDeAnimais.sql
