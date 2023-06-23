@@ -10,7 +10,9 @@ function Candidaturas(this: any)  {
     return (
         <div className={styles.menuArea}>
             <Navbar></Navbar>
-            <TableList></TableList>
+            <div className={styles.tab}>
+                <TableList></TableList>
+            </div>
         </div>
     );
   
