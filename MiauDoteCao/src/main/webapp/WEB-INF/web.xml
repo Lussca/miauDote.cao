@@ -70,6 +70,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.ValidateNumberServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>AnimalFilterServlet</servlet-name>
+  	<display-name>AnimalFilterServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.AnimalFilterServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -113,6 +119,10 @@
   <servlet-mapping>
   	<servlet-name>ValidatePasswordCodeServlet</servlet-name>
   	<url-pattern>/ValidatePasswordCodeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AnimalFilterServlet</servlet-name>
+  	<url-pattern>/AnimalFilterServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>

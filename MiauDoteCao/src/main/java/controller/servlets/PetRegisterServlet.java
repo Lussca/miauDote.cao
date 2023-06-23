@@ -29,6 +29,7 @@ public class PetRegisterServlet extends HttpServlet {
         super();
        
      }
+     @Override
      protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
     	response.setContentType("text/plain");
  	    response.setStatus(200);
@@ -36,6 +37,7 @@ public class PetRegisterServlet extends HttpServlet {
  	    response.getWriter().flush();
  	    response.getWriter().close();
      }
+     @Override
      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
     	rrh.configureCors(response);
     	 /*String authorizationHeader = request.getHeader("Authorization");
@@ -100,7 +102,7 @@ public class PetRegisterServlet extends HttpServlet {
         		}
         	}
      
-     
+     @Override
      protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
     	 rrh.configureCors(response);
      }
