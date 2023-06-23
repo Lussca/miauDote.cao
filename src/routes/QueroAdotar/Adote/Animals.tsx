@@ -24,12 +24,11 @@ interface AnimalsProps {
 
 const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedAnimal, setSelectedAnimal] = useState<{ id:String, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string} | null>(null);
-  const [animalData, setAnimalData] = useState<{ id:String, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string}[]>([]);
+  const [selectedAnimal, setSelectedAnimal] = useState<{ id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string} | null>(null);
+  const [animalData, setAnimalData] = useState<{ id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string}[]>([]);
 
   useEffect(() => {
     if(filterApplied){
-      console.log("consulta 1")
     // com filtros
     axios
     .post('http://localhost:8080/MiauDoteCao/GetAnimalByFilter', filters)
@@ -41,7 +40,6 @@ const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
     });
 
     } else{
-      console.log("consulta 2")
       // todos os animais
       axios
       .get('http://localhost:8080/MiauDoteCao/GetAllAnimals')
@@ -55,7 +53,7 @@ const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
     }
   }, [filterApplied, filters]);
 
-  const openAnimalModal = (animal: { id:String, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string}) => {
+  const openAnimalModal = (animal: { id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string}) => {
     setSelectedAnimal(animal);
     setOpenModal(true);
   };
@@ -76,7 +74,7 @@ const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
                 {animal.name}
               </Typography>
               <Typography variant="body2" color={animal.sex === 'Fêmea' ? 'pink' : 'blue'}>
-                {animal.sex} || {animal.age} ano
+                {animal.sex} || {animal.age} anos
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {animal.animalDescription}

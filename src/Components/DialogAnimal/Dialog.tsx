@@ -1,13 +1,14 @@
-import React from 'react';
+import { useState } from 'react';
+import axios from 'axios';
+
 import Dialog from '@mui/material/Dialog';
-import Typography from '@mui/material/Typography';
 import { Button, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 interface AnimalModalProps {
   open: boolean;
   onClose: () => void;
   animal: { 
-    id:String, 
+    id:string, 
     name: string, 
     age: string, 
     imageUrl: string, 
@@ -19,8 +20,20 @@ interface AnimalModalProps {
     animalDescription: string} | null;
 }
 
-function handleButtonClick(){
+function handleButtonClick(idAnimal: string) {
+  const userId = 1;
 
+  axios
+    .post('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet', {
+      userId: userId,
+      idAnimal: idAnimal
+    })
+    .then(response => {
+      console.log("deu certo!")
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+    });
 }
 
 const AnimalModal = ({ open, onClose, animal }: AnimalModalProps) => {
@@ -35,13 +48,13 @@ const AnimalModal = ({ open, onClose, animal }: AnimalModalProps) => {
             {animal.name} ({animal.sex})
         </DialogTitle>
         <DialogContent dividers>
-            <DialogContentText style={{ display: 'flex' }}>
+            <DialogContentText>
                 Raça: {animal.race}
             </DialogContentText>
-            <DialogContentText style={{ display: 'flex' }}>
+            <DialogContentText>
                 Porte: {animal.size}
             </DialogContentText>
-            <DialogContentText style={{ display: 'flex' }}>
+            <DialogContentText>
                 Pelagem: {animal.hairType}
             </DialogContentText>
         </DialogContent>
@@ -53,7 +66,7 @@ const AnimalModal = ({ open, onClose, animal }: AnimalModalProps) => {
                 {animal.animalDescription}
             </DialogContentText>
         </DialogContent>
-        <Button style={{ color: "#fff", backgroundColor: "#1bff00" }} onClick={handleButtonClick}>candidatar-se</Button>
+        <Button style={{ color: "#fff", backgroundColor: "#1bff00" }} onClick={() => handleButtonClick(animal?.id)}>candidatar-se</Button>
         </>
       )}
     </Dialog>
