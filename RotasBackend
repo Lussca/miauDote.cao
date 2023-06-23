@@ -38,7 +38,7 @@ Rota: http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet
   Possíveis erros:
   16: Erro no servidor (Status 501)
   
-Rota: http://localhost:8080/MiauDoteCao/GetAnimalByFilter
+Rota: http://localhost:8080/MiauDoteCao/AnimalFilterServlet
   Resultado esperado: Status 200, mensagem 0 (JSON com o cadastro de 10 animais)
   Possíveis erros:
   21: Nenhum animal está de acordo com os filtros desejados (Status 404)
@@ -55,4 +55,7 @@ Rota: http://localhost:8080/MiauDoteCao/GetAllAnimals
 
 Rota: http://localhost:8080/MiauDoteCao/PetUpdateServlet
 
-Rota: http://localhost:8080/MiauDoteCao/...
+Rota: http://localhost:8080/MiauDoteCao/AnimalFilterServlet
+  Resultado esperado: Um email com um código de 4 digitos é enviado para o usuario 
+  Possíveis erros:
+  29: Email nao enviado

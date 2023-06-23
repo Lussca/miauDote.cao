@@ -42,5 +42,7 @@ INSERT INTO `adotecao`.`color` (`color`) VALUES
 
 -- Inserção na tabela race
 INSERT INTO `adotecao`.`race` (`race`) VALUES
-('macho'),
-('femea');
+('cachorro'),
+('gato');
+
+UPDATE `adotecao`.`race` SET `race` = 'gato' WHERE idRace = 2;

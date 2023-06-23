@@ -254,7 +254,7 @@ public class Dao {
 		if(isOng) {
 			sql = "UPDATE userOng set jwt=? WHERE email=?";
 		}else {
-			sql = "UPDATE userAdopter set jwt=? WHERE login=?";
+			sql = "UPDATE userAdopter set jwt=? WHERE email=?";
 		}
 		try(Connection conn = this.connectDB();
 				PreparedStatement statement = conn.prepareStatement(sql)){
@@ -408,6 +408,7 @@ public class Dao {
 	            a.setColor(rs.getString("idColor"));
 	            a.setAnimalDescription(rs.getString("descricao"));
 	            a.setImageUrl(rs.getString("imageUrl"));
+	            Animal.convertValues(a);
 	            animals.add(a);
 	        }
 
@@ -703,6 +704,9 @@ public class Dao {
 	        a.setId(rs.getString("idAnimal"));
 	        a.setColor(rs.getString("idColor"));
 	        a.setAnimalDescription(rs.getString("descricao"));
+	        System.out.println(a.getRace());
+	        Animal.convertValues(a);
+	        System.out.println(a.getRace());
 	        animals.add(a);
 	    }
 	    return animals;
@@ -715,9 +719,9 @@ public class Dao {
 	public boolean insertValidationNumber(int validationNumber, boolean isOng, String userId) throws NoSuchAlgorithmException {	
 		String sql;
 		if(isOng) {
-			sql = "UPDATE userOng SET validationNumber=? WHERE idOng=?";
+			sql = "UPDATE userOng SET validationCode=? WHERE idOng=?";
 		}else {
-			sql = "UPDATE userAdopter SET validationNumber=? WHERE idAdopter=?";
+			sql = "UPDATE userAdopter SET validationCode=? WHERE idAdopter=?";
 		}try (Connection connection = this.connectDB(); PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, new Encrypt().toHash(String.valueOf(validationNumber)));
 			statement.setString(2, userId);
@@ -760,7 +764,30 @@ public class Dao {
 		}
 	}
 
-	public ArrayList<String> getUserId(String email) throws SQLException {
+	
+	public String getUserId(String email, boolean isOng) throws ClassNotFoundException, SQLException, IOException {
+		String sql;
+		if(isOng) {
+			sql = "SELECT idOng FROM userOng WHERE email=?";
+		}else {
+			sql = "SELECT idAdopter FROM userAdopter WHERE email=?";
+		}
+		try(Connection conn = this.connectDB();
+				PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, email);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				String id = rs.getString(1);
+				return id;
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
+	public ArrayList<String> getUserIdAndType(String email) {
 		ArrayList<String> result = new ArrayList<String>();
 		String sql = "SELECT idOng FROM userOng WHERE email=?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -773,6 +800,7 @@ public class Dao {
 			}else {
 				sql = "SELECT idAdopter FROM userAdopter WHERE email=?";
 				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.setString(1, email);
 				ResultSet rs2 = ps.executeQuery();
 				if(rs2.next()) {
 					result.add(rs.getString(1));
@@ -782,7 +810,7 @@ public class Dao {
 				return null;
 			}
 			
-		} catch (ClassNotFoundException | IOException e) {
+		} catch (ClassNotFoundException | IOException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}

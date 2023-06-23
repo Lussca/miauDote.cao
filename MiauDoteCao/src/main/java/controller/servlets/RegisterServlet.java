@@ -33,11 +33,11 @@ public class RegisterServlet extends HttpServlet {
     public RegisterServlet() {
         super();
     }
-
+    @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
-
+    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 		request.setCharacterEncoding("UTF-8");

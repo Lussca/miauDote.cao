@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `adotecao`.`userOng` (
   `privateKey` VARCHAR(1000) NOT NULL,
   `jwt` VARCHAR(750) NULL,
   `idAdress` INT NOT NULL,
-  `validationCode` INT,
+  `validationCode` VARCHAR(64),
   PRIMARY KEY (`idOng`),
   INDEX `fk_userOng_adress_idx` (`idAdress` ASC) VISIBLE,
   CONSTRAINT `fk_userOng_adress`
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `adotecao`.`userAdopter` (
   `privateKey` VARCHAR(1000) NOT NULL,
   `jwt` VARCHAR(750) NULL,
   `idAdress` INT NOT NULL,
-  `validationCode` INT,
+  `validationCode` VARCHAR(64),
   PRIMARY KEY (`idAdopter`),
   INDEX `fk_userOng_adress_idx` (`idAdress` ASC) VISIBLE,
   CONSTRAINT `fk_userOng_adress0`

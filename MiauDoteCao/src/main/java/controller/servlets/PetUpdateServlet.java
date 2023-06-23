@@ -22,6 +22,7 @@ public class PetUpdateServlet extends HttpServlet {
     public PetUpdateServlet() {
         super();
     }
+    @Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
         StringBuilder requestBody = new StringBuilder();
@@ -45,6 +46,7 @@ public class PetUpdateServlet extends HttpServlet {
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_ANIMAL);
         	}
 		}
+    @Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
    	 rrh.configureCors(response);
     }

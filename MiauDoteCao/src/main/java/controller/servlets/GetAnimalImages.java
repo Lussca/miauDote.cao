@@ -25,6 +25,7 @@ public class GetAnimalImages extends HttpServlet {
     public GetAnimalImages() {
         super();
     }
+    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 		try{

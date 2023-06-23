@@ -57,12 +57,16 @@ public class ChangePassword {
 	    message.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
 	    message.setSubject("Código de verificação");
 	    int validationNumber = Validations.randomNumber(1111, 9999);
-	    ArrayList<String> data = dao.getUserId(emailTo);
+	    ArrayList<String> data = dao.getUserIdAndType(emailTo);
 	    //TODO terminar de arrumar metodos na Dao e aqui
 	    boolean b = dao.insertValidationNumber(validationNumber, Boolean.parseBoolean(data.get(1)), data.get(0));
+	    if(b) {
 	    message.setText("Aqui está seu código de verificação: "+ validationNumber);
 	    Transport.send(message);
 	    return true;
+	    }else {
+	    	return false;
+	    }
 	      } catch (Exception e) {
 	    	  e.printStackTrace();
 	    	  return false;	        

@@ -35,11 +35,9 @@ public class LoginServlet extends HttpServlet {
         super();
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
-
+    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		rrh.configureCors(response);
+    	rrh.configureCors(response);
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
 		List<Boolean> confirmations = new ArrayList<Boolean>();
@@ -49,16 +47,25 @@ public class LoginServlet extends HttpServlet {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.WRONG_CREDENTIALS);
 			e.printStackTrace();
 			}
-		
-		if(confirmations.get(0) && confirmations.get(1)) {
-			setSessionAndSendResponse(request, response, login, true);
-			}else if(!confirmations.get(0) && confirmations.get(1)) {
-				setSessionAndSendResponse(request, response, login, false);
-			}else {
-				rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.WRONG_CREDENTIALS);
+		try {
+			if(confirmations.get(0) && confirmations.get(1)) {
+				setSessionAndSendResponse(request, response, login, true);
+				}else if(!confirmations.get(0) && confirmations.get(1)) {
+					setSessionAndSendResponse(request, response, login, false);
+				}else {
+					rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.WRONG_CREDENTIALS);
+				}
+		}catch(IOException | SQLException e) {
+			e.printStackTrace();
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
 			}
 		}
-	private void setSessionAndSendResponse(HttpServletRequest request, HttpServletResponse response, String login, boolean isOng) throws IOException {
+    @Override
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		rrh.configureCors(response);
+	}
+    
+	private void setSessionAndSendResponse(HttpServletRequest request, HttpServletResponse response, String login, boolean isOng) throws IOException, SQLException {
 		HttpSession session = request.getSession();
 		session.setAttribute("login", login);
 		session.setAttribute("isLogged", true);
@@ -72,8 +79,10 @@ public class LoginServlet extends HttpServlet {
 		String id = idGenerator();
 		String subject = login;
 		String jwt = jwtHandler.createJWT(id, subject, Encrypt.JWT_ISSUER, 3600000);
+		String userId = null;
 		try {
 			dao.insertAndUpdateJWT(jwt, isOng, login);
+			 userId = dao.getUserId(login, isOng);
 		} catch (ClassNotFoundException | SQLException | IOException e1) {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.JWT_ERROR);
 			e1.printStackTrace();
@@ -83,6 +92,8 @@ public class LoginServlet extends HttpServlet {
 		sessionData.put("isLogged", session.getAttribute("isLogged"));
 		sessionData.put("isOng", session.getAttribute("isOng"));
 		sessionData.put("jwt", jwt);
+		if(userId != null) {
+		sessionData.put("userId", userId);
 		
 		Gson gson = new Gson();
 		String json = gson.toJson(sessionData);
@@ -98,6 +109,9 @@ public class LoginServlet extends HttpServlet {
 		} catch (IOException e) {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
 			e.printStackTrace();
+			}
+		}else {
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
 		}
 	}	
 	

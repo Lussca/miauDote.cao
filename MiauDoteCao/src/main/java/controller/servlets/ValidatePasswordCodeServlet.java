@@ -23,25 +23,26 @@ public class ValidatePasswordCodeServlet extends HttpServlet {
         super();
 
     }
+    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 		String email = request.getParameter("email");
 		String validationCode = request.getParameter("validationCode");
 		ArrayList<String> data = new ArrayList<String>();
 			try {
-				data = dao.getUserId(email);
+				data = dao.getUserIdAndType(email);
 				boolean validate = dao.compareValidationCode(validationCode, Boolean.parseBoolean(data.get(1)), data.get(0));
 				if(validate) {
 					rrh.sendOkResponse(response);
 				}else {
 					rrh.sendErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, Validations.WRONG_CREDENTIALS);
 				}
-			} catch (SQLException | NoSuchAlgorithmException e) {
+			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 				rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.SERVER_ERROR);
 			}
 	}
-
+    @Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 	}
