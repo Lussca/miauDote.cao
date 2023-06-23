@@ -2,7 +2,7 @@ import { AppBar, Toolbar, IconButton,Typography, Stack, ThemeProvider } from '@m
 import { createTheme } from '@mui/material/styles';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Logout } from '../../../Components/Logout/logout';
+import { Logout } from './logout';
 
 const theme = createTheme({
     palette: {
@@ -43,8 +43,9 @@ export const Navbar = () =>{
                         <Link to="/queroAdotar" style={{ textDecoration: 'none' }}>
                             <Button variant="contained" color="primary"> Quero Adotar </Button> 
                         </Link>
-                        {/* <Button variant="contained" color="secondary"> Formulário responsável </Button>  */}
-                        <Button variant="contained" color="secondary"> ONGS e Protetores </Button> 
+                        <Link to="/candidaturas" style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" color="secondary"> Candidaturas </Button> 
+                        </Link>
                     </ThemeProvider>
                 </Stack>
                 <Logout></Logout>

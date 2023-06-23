@@ -13,6 +13,7 @@ import OngMenu from './routes/ongMenu/ongMenu'
 import AdotanteMenu from './routes/adotanteMenu/adotanteMenu'
 import ErrorPage from './routes/ErrorPage/ErrorPage'
 import QueroAdotar from './routes/QueroAdotar/QueroAdotar'
+import Candidaturas from './routes/Candidaturas/Candidaturas'
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "queroAdotar",
         element: <QueroAdotar />
+      },
+      {
+        path: "candidaturas",
+        element: <Candidaturas />
       },
     ]
   }

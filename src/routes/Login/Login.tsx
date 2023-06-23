@@ -68,15 +68,16 @@ function Login(this: any)  {
           }
 
           if(httpRequest.status === 200){
-              window.sessionStorage.setItem("isOng", sessionData.isOng);
-              window.sessionStorage.setItem("isLogged", sessionData.isLogged);
-              window.sessionStorage.setItem("jwt", sessionData.jwt);
+            window.sessionStorage.setItem("userId", sessionData.userId);
+            window.sessionStorage.setItem("isOng", sessionData.isOng);
+            window.sessionStorage.setItem("isLogged", sessionData.isLogged);
+            window.sessionStorage.setItem("jwt", sessionData.jwt);
 
-              if(sessionData.isOng){
-                  window.location.href = "/ongMenu";
-              }else{
-                  window.location.href = "/adotanteMenu";
-              }
+            if(sessionData.isOng){
+                window.location.href = "/ongMenu";
+            }else{
+                window.location.href = "/adotanteMenu";
+            }
           }
         }
     }

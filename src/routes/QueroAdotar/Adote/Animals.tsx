@@ -7,7 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-import AnimalModal from "../../../Components/DialogAnimal/Dialog";
+import AnimalModal from "../DialogAnimal/Dialog";
 
 interface AnimalsProps {
   filterApplied: boolean;
@@ -27,29 +27,33 @@ const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
   const [selectedAnimal, setSelectedAnimal] = useState<{ id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string} | null>(null);
   const [animalData, setAnimalData] = useState<{ id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string}[]>([]);
 
+  const idUser = sessionStorage.getItem("userId");
+
+  const config = idUser ? { ...filters, idUser } : { ...filters };
+
   useEffect(() => {
     if(filterApplied){
-    // com filtros
-    axios
-    .post('http://localhost:8080/MiauDoteCao/GetAnimalByFilter', filters)
-    .then(response => {
-      setAnimalData(response.data.animals);
-    })
-    .catch(error => {
-      console.error('Erro:', error);
-    });
 
-    } else{
-      // todos os animais
       axios
-      .get('http://localhost:8080/MiauDoteCao/GetAllAnimals')
+      .post('http://localhost:8080/MiauDoteCao/AnimalFilterServlet', config)
       .then(response => {
-        console.log(response.data)
         setAnimalData(response.data.animals);
       })
       .catch(error => {
         console.error('Erro:', error);
       });
+
+    } else{
+
+      axios
+      .get('http://localhost:8080/MiauDoteCao/GetAllAnimals')
+      .then(response => {
+        setAnimalData(response.data.animals);
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+      });
+      
     }
   }, [filterApplied, filters]);
 

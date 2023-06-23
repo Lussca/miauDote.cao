@@ -23,44 +23,45 @@ function Adote(this: any)  {
         sexo: '',
         caa: '',
         cah: '',
-        idade: ''
+        idade: '',
+        porte: ''
       });
 
     const handleChangeEspecie = (event: { target: { value: string; }; }) => {
         setFilters({ ...filters, especie: event.target.value });
         setFilterApplied(true);
-
     };
 
     const handleChangePelagem = (event: { target: { value: string; }; }) => {
         setFilters({ ...filters, pelagem: event.target.value });
         setFilterApplied(true);
-
     };
 
     const handleChangeSexo = (event: { target: { value: string; }; }) => {
         setFilters({ ...filters, sexo: event.target.value });
         setFilterApplied(true);
-
     };
 
     const handleChangeCaa = (event: { target: { value: string; }; }) => {
         setFilters({ ...filters, caa: event.target.value });
         setFilterApplied(true);
-
     };
 
     const handleChangeCah = (event: { target: { value: string; }; }) => {
         setFilters({ ...filters, cah: event.target.value });
         setFilterApplied(true);
-
     };
 
     const handleChangeIdade = (event: { target: { value: string; }; }) => {
         setFilters({ ...filters, idade: event.target.value });
         setFilterApplied(true);
-
     };
+
+    const handleChangePorte = (event: { target: { value: string; }; }) => {
+        setFilters({ ...filters, porte: event.target.value });
+        setFilterApplied(true);
+    };
+
 
     const [filterApplied, setFilterApplied] = useState(false);
 
@@ -76,43 +77,51 @@ function Adote(this: any)  {
                         <FormControl style={{ width: '100%', marginTop: '5%' }}>
                             <InputLabel>Espécie</InputLabel>
                             <Select value={filters.especie} onChange={handleChangeEspecie}>
-                                <MenuItem value={'Canino'}>Canino</MenuItem>
-                                <MenuItem value={'Felino'}>Felino</MenuItem>
+                                <MenuItem value={'1'}>Canino</MenuItem>
+                                <MenuItem value={'2'}>Felino</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl style={{ width: '100%', marginTop: '5%' }}>
+                            <InputLabel>Porte</InputLabel>
+                            <Select value={filters.porte} onChange={handleChangePorte}>
+                                <MenuItem value={'1'}>Pequeno</MenuItem>
+                                <MenuItem value={'2'}>Médio</MenuItem>
+                                <MenuItem value={'3'}>Grande</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl style={{ width: '100%', marginTop: '5%' }}>
                             <InputLabel>Pelagem</InputLabel>
                             <Select value={filters.pelagem} onChange={handleChangePelagem}>
-                                <MenuItem value={'Longo'}>Longo</MenuItem>
-                                <MenuItem value={'Médio'}>Médio</MenuItem>
-                                <MenuItem value={'Curto'}>Curto</MenuItem>
+                                <MenuItem value={'3'}>Longo</MenuItem>
+                                <MenuItem value={'2'}>Médio</MenuItem>
+                                <MenuItem value={'1'}>Curto</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl style={{ width: '100%', marginTop: '5%' }}>
                             <InputLabel>Sexo</InputLabel>
                             <Select value={filters.sexo} onChange={handleChangeSexo}>
-                                <MenuItem value={'Macho'}>Macho</MenuItem>
-                                <MenuItem value={'Fêmea'}>Fêmea</MenuItem>
+                                <MenuItem value={'1'}>Macho</MenuItem>
+                                <MenuItem value={'2'}>Fêmea</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl style={{ width: '100%', marginTop: '5%' }}>
                             <InputLabel>Convivência entre animais</InputLabel>
                             <Select value={filters.caa} onChange={handleChangeCaa}>
-                                <MenuItem value={'manso'}>manso</MenuItem>
-                                <MenuItem value={'agressivo'}>agressivo</MenuItem>
-                                <MenuItem value={'agitado'}>agitado</MenuItem>
-                                <MenuItem value={'amigável'}>amigável</MenuItem>
-                                <MenuItem value={'amedrontado'}>amedrontado</MenuItem>
+                                <MenuItem value={'1'}>manso</MenuItem>
+                                <MenuItem value={'2'}>agressivo</MenuItem>
+                                <MenuItem value={'3'}>agitado</MenuItem>
+                                <MenuItem value={'4'}>amigável</MenuItem>
+                                <MenuItem value={'5'}>amedrontado</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl style={{ width: '100%', marginTop: '5%' }}>
                             <InputLabel>Convivência com humanos</InputLabel>
                             <Select value={filters.cah} onChange={handleChangeCah}>
-                                <MenuItem value={'manso'}>manso</MenuItem>
-                                <MenuItem value={'agressivo'}>agressivo</MenuItem>
-                                <MenuItem value={'agitado'}>agitado</MenuItem>
-                                <MenuItem value={'amigável'}>amigável</MenuItem>
-                                <MenuItem value={'amedrontado'}>amedrontado</MenuItem>
+                                <MenuItem value={'1'}>manso</MenuItem>
+                                <MenuItem value={'2'}>agressivo</MenuItem>
+                                <MenuItem value={'3'}>agitado</MenuItem>
+                                <MenuItem value={'4'}>amigável</MenuItem>
+                                <MenuItem value={'5'}>amedrontado</MenuItem>
                             </Select>
                         </FormControl>
                         <TextField value={filters.idade} onChange={handleChangeIdade} id="idade" label="Idade" variant="outlined" style={{ width: '100%', marginTop: '5%' }}/>
@@ -125,7 +134,6 @@ function Adote(this: any)  {
                 <Grid item xs={10} style={{ display: 'flex', flexWrap: 'wrap', columnGap: '21px' }}>
                     <Animals
                     filterApplied={filterApplied}
-                    // applyFilter={applyFilter}
                     removeFilter={removeFilter}
                     filters={filters}
                     ></Animals>

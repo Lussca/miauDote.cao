@@ -3,8 +3,11 @@ import { Button } from '@mui/material';
 
 // função para deslogar do sistema e remover as informações armazenadas no session storage
 const handleClick = () => {
-    // Remover as informações do session storage
+    // Seta as informações do session storage
     sessionStorage.setItem("isLogged", "false");
+
+    // Remover as informações do session storage
+    sessionStorage.removeItem('userId');
 
     // Redirecionar para a página de login ou para outra página adequada após o logout
     window.location.href = "/login";

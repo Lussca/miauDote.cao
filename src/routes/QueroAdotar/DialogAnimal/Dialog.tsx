@@ -21,11 +21,12 @@ interface AnimalModalProps {
 }
 
 function handleButtonClick(idAnimal: string) {
-  const userId = 1;
+
+  const idUser = sessionStorage.getItem("userId");
 
   axios
     .post('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet', {
-      userId: userId,
+      idUser: idUser,
       idAnimal: idAnimal
     })
     .then(response => {
