@@ -291,7 +291,7 @@ public class Dao {
 	}
 
 	public boolean adoptionApplication(String idAnimal, String idAdopter) throws ClassNotFoundException, IOException {
-		String sql = "INSERT INTO animaladoption (idAnimal, idAdopter) VALUES (?,?)";
+		String sql = "INSERT INTO application (idAnimal, idAdopter) VALUES (?,?)";
 		 try (Connection connection = this.connectDB();
 	             PreparedStatement statement = connection.prepareStatement(sql)) {
 	            statement.setString(1, idAnimal);
@@ -339,8 +339,11 @@ public class Dao {
 	    sqlBuilder.append("LEFT JOIN ( ");
 	    sqlBuilder.append("    SELECT idAnimal, imageUrl ");
 	    sqlBuilder.append("    FROM image ");
-	    sqlBuilder.append("    GROUP BY idAnimal, imageUrl ");
-	    sqlBuilder.append("    LIMIT 1 ");
+	    sqlBuilder.append("    WHERE idImage IN ( ");
+	    sqlBuilder.append("        SELECT MIN(idImage) ");
+	    sqlBuilder.append("        FROM image ");
+	    sqlBuilder.append("        GROUP BY idAnimal ");
+	    sqlBuilder.append("    ) ");
 	    sqlBuilder.append(") AS img ON a.idAnimal = img.idAnimal ");
 	    sqlBuilder.append("WHERE ad.city = ? ");
 	    sqlBuilder.append("  AND ad.state = ? ");
@@ -704,9 +707,7 @@ public class Dao {
 	        a.setId(rs.getString("idAnimal"));
 	        a.setColor(rs.getString("idColor"));
 	        a.setAnimalDescription(rs.getString("descricao"));
-	        System.out.println(a.getRace());
 	        Animal.convertValues(a);
-	        System.out.println(a.getRace());
 	        animals.add(a);
 	    }
 	    return animals;
@@ -815,5 +816,61 @@ public class Dao {
 			return null;
 		}
 	}
-	
+
+	public boolean checkForDuplicityAdoptionApplication(String idUser, String idAnimal) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM application WHERE idAdopter=? AND idAnimal=?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idUser);
+			statement.setString(2, idAnimal);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				return true;
+			}else {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public int deleteApplication(String idUser, String idAnimal) throws ClassNotFoundException, IOException {
+		String sql = "DELETE FROM application WHERE idAdopter=? AND idAnimal=?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idUser);
+			statement.setString(2, idAnimal);
+			int result = statement.executeUpdate();
+			return result;
+		}catch (SQLException e) {
+		e.printStackTrace();
+		return 0;
+			}
+		}
+	public ArrayList<Animal> getApplications(String idUser) throws ClassNotFoundException, IOException {
+		ArrayList<String> ids = new ArrayList<String>();
+		ArrayList<Animal> animals = new ArrayList<Animal>();
+		String sql = "SELECT idAnimal FROM application WHERE idAdopter=?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idUser);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				String id = rs.getString("idAnimal");
+				ids.add(id);
+				}
+			for(int i = 0; i < ids.size(); i++) {
+				Animal a  = new Animal(ids.get(i));
+				animals.add(a);
+			}
+			
+			if(animals.isEmpty()) {
+				return null;
+			}else {
+				return animals;
+				}
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+	}
 }

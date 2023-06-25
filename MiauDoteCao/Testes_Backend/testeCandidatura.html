@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Request Example</title>
+  <script>
+    function sendRequest() {
+      var xhr = new XMLHttpRequest();
+      var url = 'http://localhost:8080/MiauDoteCao/ApplicationServlet';
+      var params = 'idUser=1&idAnimal=3';
+
+      xhr.open('DELETE', url, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // Request completed successfully
+          console.log(xhr.responseText);
+        }
+      };
+      xhr.send(params);
+    }
+  </script>
+</head>
+<body>
+  <button onclick="sendRequest()">Send Request</button>
+</body>
+</html>

@@ -37,83 +37,73 @@ public class LoginServlet extends HttpServlet {
 
     @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	rrh.configureCors(response);
-		String login = request.getParameter("login");
-		String password = request.getParameter("password");
-		List<Boolean> confirmations = new ArrayList<Boolean>();
-		try {
-			confirmations = validations.verifyLogin(login, password);
-		} catch (NoSuchAlgorithmException | ClassNotFoundException | IOException e) {
-			rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.WRONG_CREDENTIALS);
-			e.printStackTrace();
-			}
-		try {
-			if(confirmations.get(0) && confirmations.get(1)) {
-				setSessionAndSendResponse(request, response, login, true);
-				}else if(!confirmations.get(0) && confirmations.get(1)) {
-					setSessionAndSendResponse(request, response, login, false);
-				}else {
-					rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.WRONG_CREDENTIALS);
-				}
-		}catch(IOException | SQLException e) {
-			e.printStackTrace();
-			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
-			}
-		}
+        rrh.configureCors(response);
+        String login = request.getParameter("login");
+        String password = request.getParameter("password");
+
+        try {
+            List<Boolean> confirmations = validations.verifyLogin(login, password);
+            if (confirmations.get(0) && confirmations.get(1)) {
+                setSessionAndSendResponse(request, response, login, true);
+            } else if (!confirmations.get(0) && confirmations.get(1)) {
+                setSessionAndSendResponse(request, response, login, false);
+            } else {
+                rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.WRONG_CREDENTIALS);
+            }
+        } catch (IOException | SQLException | NoSuchAlgorithmException | ClassNotFoundException e) {
+            e.printStackTrace();
+            rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.DATABASE_ERROR);
+        } 
+    }
     @Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 	}
     
-	private void setSessionAndSendResponse(HttpServletRequest request, HttpServletResponse response, String login, boolean isOng) throws IOException, SQLException {
-		HttpSession session = request.getSession();
-		session.setAttribute("login", login);
-		session.setAttribute("isLogged", true);
-		
-		if(isOng) {
-			session.setAttribute("isOng", true);
-		}else {
-			session.setAttribute("isOng", false);
+	private void setSessionAndSendResponse(HttpServletRequest request, HttpServletResponse response, String login, boolean isOng) throws IOException, SQLException, NoSuchAlgorithmException {
+		    HttpSession session = request.getSession();
+		    session.setAttribute("login", login);
+		    session.setAttribute("isLogged", true);
+		    session.setAttribute("isOng", isOng);
+
+		    String id = idGenerator();
+		    String subject = login;
+		    String jwt = jwtHandler.createJWT(id, new Encrypt().toHash(subject), Encrypt.JWT_ISSUER, 3600000);
+		    String userId = null;
+
+		    try {
+		        dao.insertAndUpdateJWT(jwt, isOng, login);
+		        userId = dao.getUserId(login, isOng);
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.JWT_ERROR);
+		        return;
+		    }
+
+		    Map<String, Object> sessionData = new HashMap<>();
+		    sessionData.put("isLogged", session.getAttribute("isLogged"));
+		    sessionData.put("isOng", session.getAttribute("isOng"));
+		    sessionData.put("jwt", jwt);
+
+		    if (userId != null) {
+		        sessionData.put("userId", userId);
+		        String json = new Gson().toJson(sessionData);
+
+		        response.setContentType("application/json");
+		        response.setCharacterEncoding("UTF-8");
+		        response.setStatus(HttpServletResponse.SC_OK);
+		        try (PrintWriter out = response.getWriter()) {
+		            out.print(json);
+		            out.flush();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		            rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
+		        }
+		    } else {
+		       rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
+		    }
 		}
 		
-		String id = idGenerator();
-		String subject = login;
-		String jwt = jwtHandler.createJWT(id, subject, Encrypt.JWT_ISSUER, 3600000);
-		String userId = null;
-		try {
-			dao.insertAndUpdateJWT(jwt, isOng, login);
-			 userId = dao.getUserId(login, isOng);
-		} catch (ClassNotFoundException | SQLException | IOException e1) {
-			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.JWT_ERROR);
-			e1.printStackTrace();
-		}
-		
-		Map<String, Object> sessionData = new HashMap<>();
-		sessionData.put("isLogged", session.getAttribute("isLogged"));
-		sessionData.put("isOng", session.getAttribute("isOng"));
-		sessionData.put("jwt", jwt);
-		if(userId != null) {
-		sessionData.put("userId", userId);
-		
-		Gson gson = new Gson();
-		String json = gson.toJson(sessionData);
-		
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.setStatus(HttpServletResponse.SC_OK);
-		try {
-			PrintWriter out = response.getWriter();
-			out.print(json);
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
-			e.printStackTrace();
-			}
-		}else {
-			rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
-		}
-	}	
 	
 	
 	private String idGenerator() {
