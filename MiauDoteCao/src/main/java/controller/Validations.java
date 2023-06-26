@@ -46,7 +46,13 @@ public class Validations {
 		public static final int NO_IMAGES_FOUND = 27;
 		public static final int NO_ANIMALS_FOUND = 28;
 		public static final int EMAIL_NOT_SENT = 29;
+		public static final int APPLICATION_ALREADY_EXISTS = 30;
+		public static final int APPLICATION_DO_NOT_EXISTS = 31;
+		public static final int NO_APPLICATIONS_FOUND = 32;
 	    public static final int NO_ERROR = 0;
+		
+		
+		
 
 		
 

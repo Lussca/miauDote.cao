@@ -42,17 +42,7 @@ public class GetAllAnimals extends HttpServlet {
 		try {
 			ArrayList<Animal> animals = dao.getAllAnimais();
 			if(!animals.isEmpty()) {
-			JsonArray jsonArray = new Gson().toJsonTree(animals).getAsJsonArray();
-			JsonObject jsonObject = new JsonObject();
-	        jsonObject.add("animals", jsonArray);
-	        response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-	        PrintWriter out = response.getWriter();
-	        String jsonString = jsonObject.toString();
-			out.print(jsonString);
-	        out.flush();
-	        out.close();
-	        rrh.sendOkResponse(response);
+			RequestResponseHandler.generateAndSendJson(animals, response);
 			}else {
 				rrh.sendErrorResponse(response, HttpServletResponse.SC_NO_CONTENT, Validations.NO_ANIMALS_FOUND);
 			}

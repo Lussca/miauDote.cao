@@ -59,3 +59,23 @@ Rota: http://localhost:8080/MiauDoteCao/AnimalFilterServlet
   Resultado esperado: Um email com um código de 4 digitos é enviado para o usuario 
   Possíveis erros:
   29: Email nao enviado
+
+Rota:http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet
+  POST:
+    Resultado: Status: 200 - Inserção da candidatura no banco de dados
+    Possíveis erros:
+      30: O usuário já se candidatou para este animal
+      16: Erro no servidor
+
+  DELETE:
+    Resultado: Status 200 - Deleção da candidatura do banco de dados
+    Possíveis erros:
+      31: A candidatura não foi encontrada no banco
+      16: Erro no servidor
+
+  GET:
+    Parametros(IdUser)
+    Resultado: Status 200 - JSON com todas as candidaturas
+    Possíveis erros:
+      32: O usuário ainda não tem candidaturas
+      16: Erro no servidor
