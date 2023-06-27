@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
+import styles from '../DialogAnimal/Dialog.module.css';
 
 import Dialog from '@mui/material/Dialog';
-import { Button, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Alert, AlertColor, Button, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 interface AnimalModalProps {
   open: boolean;
@@ -20,26 +21,59 @@ interface AnimalModalProps {
     animalDescription: string} | null;
 }
 
-function handleButtonClick(idAnimal: string) {
+const AnimalModal = ({ open, onClose, animal }: AnimalModalProps) => {
 
   const idUser = sessionStorage.getItem("userId");
+  const [severity, setSeverity] = useState('error');
+  const [msg, setMsg] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
 
-  axios
-    .post('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet', {
-      idUser: idUser,
-      idAnimal: idAnimal
-    })
-    .then(response => {
-      console.log("deu certo!")
-    })
-    .catch(error => {
-      console.error('Erro:', error);
-    });
-}
+  let alertSeverity: AlertColor | undefined;
 
-const AnimalModal = ({ open, onClose, animal }: AnimalModalProps) => {
+  switch (severity) {
+    case 'error':
+      alertSeverity = 'error';
+      break;
+    case 'warning':
+      alertSeverity = 'warning';
+      break;
+    case 'info':
+      alertSeverity = 'info';
+      break;
+    case 'success':
+      alertSeverity = 'success';
+      break;
+    default:
+      alertSeverity = undefined;
+  }
+
+  function handleButtonClick(idAnimal: string) {
+  
+    axios
+      .post('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet', {
+        idUser: idUser,
+        idAnimal: idAnimal
+      })
+      .then(response => {
+        console.log(response)
+          setShowAlert(true);
+          setSeverity('success');
+          setMsg('Candidatura realizada com sucesso!');
+      })
+      .catch(error => {
+        setShowAlert(true);
+        setSeverity('error');
+        setMsg('Você já se candidatou a adoção deste animal.');
+      });
+  }
+
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="responsive-dialog-title">
+       <div className={styles.alertArea}>
+        {showAlert && <Alert variant="filled" severity={alertSeverity}  onClose={() => {setShowAlert(false)}}>
+          {msg}
+        </Alert> }
+      </div>
       {animal && (
         <>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '5%' }}>

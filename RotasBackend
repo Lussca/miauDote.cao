@@ -60,7 +60,7 @@ Rota: http://localhost:8080/MiauDoteCao/AnimalFilterServlet
   Possíveis erros:
   29: Email nao enviado
 
-Rota:http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet
+Rota: http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet
   POST:
     Resultado: Status: 200 - Inserção da candidatura no banco de dados
     Possíveis erros:

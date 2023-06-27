@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import Alert, { AlertColor } from '@mui/material/Alert';
 
 //componentes
-import DogAnimation from '../../Components/dog/dogAnimation';
+import DogAnimation from '../adotanteMenu/dog/dogAnimation';
 import { Button } from '@mui/material';
   
 
