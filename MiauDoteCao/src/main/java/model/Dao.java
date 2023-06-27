@@ -850,6 +850,7 @@ public class Dao {
 	public ArrayList<Animal> getApplications(String idUser) throws ClassNotFoundException, IOException {
 		ArrayList<String> ids = new ArrayList<String>();
 		ArrayList<Animal> animals = new ArrayList<Animal>();
+		ArrayList<Animal> animalsData = new ArrayList<Animal>();
 		String sql = "SELECT idAnimal FROM application WHERE idAdopter=?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
 			statement.setString(1, idUser);
@@ -866,7 +867,10 @@ public class Dao {
 			if(animals.isEmpty()) {
 				return null;
 			}else {
-				return animals;
+				for(int i = 0; i < animals.size(); i++;){
+					animalsData = getAnimalData(animasls.get(i).getIdAnimal());
+				}
+				return animalsData;
 				}
 			
 			} catch (SQLException e) {
