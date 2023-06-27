@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from '../DialogAnimal/Dialog.module.css';
 
@@ -27,6 +27,7 @@ const AnimalModal = ({ open, onClose, animal }: AnimalModalProps) => {
   const [severity, setSeverity] = useState('error');
   const [msg, setMsg] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+  const [alertTimer, setAlertTimer] = useState<NodeJS.Timeout | null>(null);
 
   let alertSeverity: AlertColor | undefined;
 
@@ -47,6 +48,14 @@ const AnimalModal = ({ open, onClose, animal }: AnimalModalProps) => {
       alertSeverity = undefined;
   }
 
+  useEffect(() => {
+    return () => {
+      if (alertTimer) {
+        clearTimeout(alertTimer);
+      }
+    };
+  }, [alertTimer]);
+
   function handleButtonClick(idAnimal: string) {
   
     axios
@@ -59,11 +68,21 @@ const AnimalModal = ({ open, onClose, animal }: AnimalModalProps) => {
           setShowAlert(true);
           setSeverity('success');
           setMsg('Candidatura realizada com sucesso!');
+          setAlertTimer(
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 1500)
+        );
       })
       .catch(error => {
         setShowAlert(true);
         setSeverity('error');
         setMsg('Você já se candidatou a adoção deste animal.');
+        setAlertTimer(
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 1500)
+        );
       });
   }
 

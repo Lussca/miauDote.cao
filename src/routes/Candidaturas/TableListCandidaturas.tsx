@@ -27,8 +27,8 @@ const TableList = () =>  {
         axios
             .get('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet', { params })
             .then(response => {
-                console.log( response.data)
-                setCandidaturas(response.data);
+                console.log( response.data.animals)
+                setCandidaturas(response.data.animals);
             })
             .catch(error => {
                 console.error('Erro:', error);
@@ -42,7 +42,7 @@ const TableList = () =>  {
         backgroundColor: '#ff9900',
     };
 
-    const handleButtonClick = (id: string) => {
+    const handleButtonClick = (id: string, idUser: string) => {
         console.log(`Botão clicado para o ID ${id}`);
     };
 
@@ -60,13 +60,13 @@ const TableList = () =>  {
             <TableBody>
             {candidaturas.map((candidatura, index) => (
                 <TableRow key={index}>
-                    <TableCell>{candidatura}</TableCell>
-                    <TableCell>{candidatura}</TableCell>
-                    <TableCell>{candidatura}</TableCell>
+                    <TableCell>{candidatura.id}</TableCell>
+                    <TableCell>{candidatura.nome}</TableCell>
+                    <TableCell>{candidatura.ong}</TableCell>
                     <TableCell>
-                    {/* <Button onClick={() => handleButtonClick(row.id)}>
-                        <CancelIcon style={{ color: 'red' }}></CancelIcon>
-                    </Button> */}
+                        <Button onClick={() => handleButtonClick(candidatura.id, params.idUser)}>
+                            <CancelIcon style={{ color: 'red' }}></CancelIcon>
+                        </Button>
                     </TableCell>
                 </TableRow>
             ))}

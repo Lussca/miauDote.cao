@@ -30,7 +30,8 @@ public class Dao {
     private static final Logger LOGGER = Logger.getLogger(Dao.class.getName());
 
     private String getConfigValueByKey(String key) throws IOException {
-    	File file = new File("C:\\Projetos\\miauDote.cao\\admin\\configMySQL.ini");
+    	//File file = new File("C:\\Projetos\\miauDote.cao\\admin\\configMySQL.ini");
+    	File file = new File("C:\\Users\\lpereira\\Desktop\\miauDote.cao\\admin\\configMySQL.ini");
     	if(!file.exists()) {
     		file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miauDote.cao\\admin\\configMySQL.ini");
     	}
