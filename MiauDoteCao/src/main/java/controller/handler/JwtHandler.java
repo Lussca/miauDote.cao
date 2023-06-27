@@ -28,6 +28,8 @@ Dao dao = new Dao();
 		File f = new File("C:\\Users\\lpereira\\Desktop\\miauDote.cao\\admin\\secretKey.ini");
 		if(!f.exists()){
 			 f = new File("C:\\Users\\Joao Gabriel\\Desktop\\miauDote.cao\\admin\\secretKey.ini");
+		}else if(!file.exists){
+			file = new File("C:\\Projetos\\miauDote.cao\\admin\\secretKey.ini");
 		}
 		FileInputStream fis = new FileInputStream(f);
 		 Properties prop = new Properties();
