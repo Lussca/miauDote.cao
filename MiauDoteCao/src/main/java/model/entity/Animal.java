@@ -53,6 +53,7 @@ public class Animal {
     String animalDescription;
     String imageUrl;
     List<String> links;
+    String ongName;
 	public String getId() {
 		return id;
 	}
@@ -142,6 +143,12 @@ public class Animal {
 	}
 	public void setAnimalDescription(String animalDescription) {
 		this.animalDescription = animalDescription;
+	}
+	public String getOngName() {
+		return ongName;
+	}
+	public void setOngName(String ongName) {
+		this.ongName = ongName;
 	}
 	public Animal(String race, String name, String size, String hairType, String animalToAnimal,
 			String animalToPerson, String sex, String age, String idOng, String insertionDate, String color, String animalDescription,

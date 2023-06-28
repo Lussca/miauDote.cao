@@ -15,7 +15,24 @@ import TableContainer from '@mui/material/TableContainer';
 
 const TableList = () =>  {
 
-    const [candidaturas, setCandidaturas] = useState<{ id: string; name: string; idOng: string }[]>([]);
+    const [candidaturas, setCandidaturas] = useState<{ 
+        age: string; 
+        animalDescription: string; 
+        animalToAnimal: string; 
+        animalToPerson: string; 
+        color: string; 
+        hairType: string; 
+        id: string; 
+        idOng: string; 
+        name: string; 
+        ongName: string; 
+        race: string; 
+        sex: string; 
+        size: string 
+    }[]>([]);
+
+    const [deletionOccurred, setDeletionOccurred] = useState(false);
+    const [error, setError] = useState(false);
 
     const params = {
         idUser: sessionStorage.getItem('userId'),
@@ -24,26 +41,41 @@ const TableList = () =>  {
     useEffect(() => {
         const fetchData = async () => {
 
-        axios
+            axios
             .get('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet', { params })
             .then(response => {
-                console.log( response.data.animals)
                 setCandidaturas(response.data.animals);
+                setError(false);
             })
             .catch(error => {
                 console.error('Erro:', error);
+                setError(true);
             });
         };
       
         fetchData();
-    }, []);
+    }, [deletionOccurred]);
 
     const tableHeadStyle = {
         backgroundColor: '#ff9900',
     };
 
-    const handleButtonClick = (id: string, idUser: string) => {
-        console.log(`Botão clicado para o ID ${id}`);
+    const handleButtonClick = (id: string) => {
+
+        const idUser = sessionStorage.getItem('userId');
+
+        axios
+            .delete('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet',{
+                data: { id: idUser, idAnimal: id },
+            })
+            .then(response => {
+                console.log( response.data)
+                setDeletionOccurred(prev => !prev);
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+
     };
 
     return (
@@ -53,23 +85,33 @@ const TableList = () =>  {
               <TableRow style={tableHeadStyle}>
                 <TableCell>ID</TableCell>
                 <TableCell>Nome do Animal</TableCell>
+                <TableCell>Raça do Animal</TableCell>
                 <TableCell>ONG</TableCell>
                 <TableCell style={{ width: '10%' }}>Ações</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-            {candidaturas.map((candidatura, index) => (
-                <TableRow key={index}>
+            {candidaturas.length === 0 ? (
+                <TableRow>
+                    <TableCell colSpan={5} align="center">
+                    Nenhuma informação encontrada.
+                    </TableCell>
+                </TableRow>
+                ) : (
+                candidaturas.map((candidatura, index) => (
+                    <TableRow key={index}>
                     <TableCell>{candidatura.id}</TableCell>
-                    <TableCell>{candidatura.nome}</TableCell>
-                    <TableCell>{candidatura.ong}</TableCell>
+                    <TableCell>{candidatura.name}</TableCell>
+                    <TableCell>{candidatura.race}</TableCell>
+                    <TableCell>{candidatura.ongName}</TableCell>
                     <TableCell>
-                        <Button onClick={() => handleButtonClick(candidatura.id, params.idUser)}>
+                        <Button onClick={() => handleButtonClick(candidatura.id)}>
                             <CancelIcon style={{ color: 'red' }}></CancelIcon>
                         </Button>
                     </TableCell>
                 </TableRow>
-            ))}
+                ))  
+            )}
             </TableBody>
           </Table>
         </TableContainer>
