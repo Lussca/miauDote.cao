@@ -46,7 +46,7 @@ public class AdoptionApplicationServlet extends HttpServlet {
 			}catch(NumberFormatException | ClassNotFoundException e){
 				e.printStackTrace();
 				rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
-			}	
+			}
 		}
     
     @Override

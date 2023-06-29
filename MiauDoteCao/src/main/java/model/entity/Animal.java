@@ -185,6 +185,7 @@ public class Animal {
 	public Animal(String idAnimal) {
 		this.id = idAnimal;
 	}
+	
 	public static Animal parseAnimalJson(String jsonPayLoad) {
 		Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(jsonPayLoad, JsonObject.class);

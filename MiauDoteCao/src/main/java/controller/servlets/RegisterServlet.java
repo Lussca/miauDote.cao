@@ -49,7 +49,6 @@ public class RegisterServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String cpf = request.getParameter("cpf");
 		String birth = request.getParameter("birth");
-		System.err.println(birth);
 		String state = request.getParameter("state");
 		String city = request.getParameter("city");
 		String neighborhood = request.getParameter("neighborhood");
