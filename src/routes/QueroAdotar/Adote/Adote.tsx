@@ -66,8 +66,17 @@ function Adote(this: any)  {
     const [filterApplied, setFilterApplied] = useState(false);
 
     const removeFilter = () => {
+        setFilters({
+          especie: '',
+          pelagem: '',
+          sexo: '',
+          caa: '',
+          cah: '',
+          idade: '',
+          porte: ''
+        });
         setFilterApplied(false);
-    };
+      };
 
     return (
         <div className={styles.adoteArea}>

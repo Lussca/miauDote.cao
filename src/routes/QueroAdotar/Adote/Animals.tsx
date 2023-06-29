@@ -65,7 +65,7 @@ const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
   return (
     <>
       {animalData.map((animal, index) => (
-        <Card key={index} sx={{ width: 200, height: 'auto', marginBottom: 3 }} onClick={() => openAnimalModal(animal)}>
+        <Card key={index} sx={{ width: 200, height: 'auto', maxHeight: '21em' , marginBottom: 3 }} onClick={() => openAnimalModal(animal)}>
           <CardActionArea>
             <CardMedia
               component="img"

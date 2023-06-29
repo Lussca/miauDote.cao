@@ -31,6 +31,7 @@ public class Dao {
 
     private String getConfigValueByKey(String key) throws IOException {
     	File file = new File("C:\\Projetos\\miauDote.cao\\admin\\configMySQL.ini");
+    	//File file = new File("C:\\Users\\lpereira\\Desktop\\miauDote.cao\\admin\\configMySQL.ini");
     	if(!file.exists()) {
     		file = new File("C:\\Users\\Joao Gabriel\\Desktop\\miauDote.cao\\admin\\configMySQL.ini");
     	}
@@ -309,21 +310,18 @@ public class Dao {
 	        }
 	    }
 
-	public ArrayList<UserOng> getOngName() throws SQLException, ClassNotFoundException, IOException {
-		String sql = "SELECT ongName, idOng FROM userOng";
-		ArrayList<UserOng> ongs = new ArrayList<UserOng>();
+	public UserOng getOngName(String idOng) throws SQLException, ClassNotFoundException, IOException {
+		String sql = "SELECT ongName FROM userOng WHERE idOng=?";
+		UserOng ong = new UserOng();
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, idOng);
 			ResultSet rs = statement.executeQuery();
-			while(rs.next()) {
-				UserOng ong = new UserOng();
+			if(rs.next()) {
+				
 				ong.setOngName(rs.getString("ongName"));
-				ong.setIdOng(rs.getString("idOng"));
-				ongs.add(ong);
-			}
-			if(ongs.isEmpty()) {
-				return null;
+				return ong;
 			}else {
-			return ongs;
+				return null;
 			}
 		}
 	}
@@ -600,16 +598,17 @@ public class Dao {
 			if(rs.next()) {
 				Animal a = new Animal();
 				a.setName(rs.getString("animalName"));
-				a.setRace(rs.getString("race"));
-				a.setSize(rs.getString("size"));
-				a.setHairType(rs.getString("hairType"));
-				a.setAnimalToAnimal(rs.getString("animalToAnimal"));
-				a.setAnimalToPerson(rs.getString("animalToPerson"));
+				a.setRace(rs.getString("idRace"));
+				a.setSize(rs.getString("idAnimalSize"));
+				a.setHairType(rs.getString("idAnimalFurType"));
+				a.setAnimalToAnimal(rs.getString("idAnimalToAnimal"));
+				a.setAnimalToPerson(rs.getString("idAnimalToPerson"));
 				a.setSex(rs.getString("sex"));
 				a.setAge(rs.getString("age"));
 				a.setId(rs.getString("idAnimal"));
-				a.setColor(rs.getString("color"));
-				a.setAnimalDescription(rs.getString("animalDescription"));
+				a.setColor(rs.getString("idColor"));
+				a.setAnimalDescription(rs.getString("descricao"));
+				a.setIdOng(rs.getString("idOng"));
 				return a;
 			}else {
 				return null;
@@ -846,9 +845,11 @@ public class Dao {
 		return 0;
 			}
 		}
+	@SuppressWarnings("static-access")
 	public ArrayList<Animal> getApplications(String idUser) throws ClassNotFoundException, IOException {
 		ArrayList<String> ids = new ArrayList<String>();
 		ArrayList<Animal> animals = new ArrayList<Animal>();
+		ArrayList<Animal> animalsData = new ArrayList<Animal>();
 		String sql = "SELECT idAnimal FROM application WHERE idAdopter=?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
 			statement.setString(1, idUser);
@@ -865,7 +866,14 @@ public class Dao {
 			if(animals.isEmpty()) {
 				return null;
 			}else {
-				return animals;
+				for(int i = 0; i < animals.size(); i++){
+					Animal animal = getAnimalData(animals.get(i));
+					animal.convertValues(animal);
+					UserOng o = getOngName(animal.getIdOng());
+					animal.setOngName(o.getOngName());
+					animalsData.add(animal);
+				}
+				return animalsData;
 				}
 			
 			} catch (SQLException e) {

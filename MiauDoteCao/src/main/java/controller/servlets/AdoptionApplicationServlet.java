@@ -56,7 +56,7 @@ public class AdoptionApplicationServlet extends HttpServlet {
     		String requestBody = RequestResponseHandler.getRequestBody(request);
     		Gson gson = new Gson();
 	        JsonObject json = gson.fromJson(requestBody, JsonObject.class);
-	        String idUser = json.get("idUser").getAsString();
+	        String idUser = json.get("id").getAsString();
 	        String idAnimal = json.get("idAnimal").getAsString();
 	        int result = dao.deleteApplication(idUser, idAnimal);
 	        if(result > 0) {

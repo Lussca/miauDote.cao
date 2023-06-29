@@ -31,10 +31,7 @@ export const Navbar = () =>{
                 <Stack direction='row' spacing={1}>
                     <ThemeProvider theme={theme}>
                         <Link to="/queroAdotar" style={{ textDecoration: 'none' }}>
-                            <Button variant="contained" color="primary"> Quero Adotar </Button> 
-                        </Link>
-                        <Link to="/candidaturas" style={{ textDecoration: 'none' }}>
-                            <Button variant="contained" color="secondary"> Candidaturas </Button> 
+                            <Button variant="contained" color="primary"> adicionar animal </Button> 
                         </Link>
                     </ThemeProvider>
                 </Stack>
