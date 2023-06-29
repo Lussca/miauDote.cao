@@ -11,7 +11,6 @@ import AnimalModal from "../DialogAnimal/Dialog";
 
 interface AnimalsProps {
   filterApplied: boolean;
-  removeFilter: () => void;
   filters: {
     especie: string;
     pelagem: string;
@@ -22,7 +21,7 @@ interface AnimalsProps {
   };
 }
 
-const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
+const Animals = ({ filterApplied, filters }: AnimalsProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState<{ id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string} | null>(null);
   const [animalData, setAnimalData] = useState<{ id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string}[]>([]);
@@ -64,7 +63,10 @@ const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
   
   return (
     <>
-      {animalData.map((animal, index) => (
+      {animalData.length === 0 ? (
+        <Typography variant="body1">No animals found.</Typography>
+      ) : (
+      animalData.map((animal, index) => (
         <Card key={index} sx={{ width: 200, height: 'auto', maxHeight: '21em' , marginBottom: 3 }} onClick={() => openAnimalModal(animal)}>
           <CardActionArea>
             <CardMedia
@@ -86,7 +88,8 @@ const Animals = ({ filterApplied, removeFilter, filters }: AnimalsProps) => {
             </CardContent>
           </CardActionArea>
         </Card>
-      ))}
+        ))
+      )}
       <AnimalModal
         open={openModal}
         onClose={() => setOpenModal(false)}

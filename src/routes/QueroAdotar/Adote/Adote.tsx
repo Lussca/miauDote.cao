@@ -17,7 +17,7 @@ import { useState } from 'react';
 
 function Adote(this: any)  {
 
-    const [filters, setFilters] = useState({
+    const initialFilters = {
         especie: '',
         pelagem: '',
         sexo: '',
@@ -25,7 +25,9 @@ function Adote(this: any)  {
         cah: '',
         idade: '',
         porte: ''
-      });
+      };
+
+    const [filters, setFilters] = useState(initialFilters);
 
     const handleChangeEspecie = (event: { target: { value: string; }; }) => {
         setFilters({ ...filters, especie: event.target.value });
@@ -62,21 +64,12 @@ function Adote(this: any)  {
         setFilterApplied(true);
     };
 
-
     const [filterApplied, setFilterApplied] = useState(false);
 
-    const removeFilter = () => {
-        setFilters({
-          especie: '',
-          pelagem: '',
-          sexo: '',
-          caa: '',
-          cah: '',
-          idade: '',
-          porte: ''
-        });
+    const handleClearFilters = () => {
+        setFilters(initialFilters);
         setFilterApplied(false);
-      };
+    };
 
     return (
         <div className={styles.adoteArea}>
@@ -136,14 +129,13 @@ function Adote(this: any)  {
                         <TextField value={filters.idade} onChange={handleChangeIdade} id="idade" label="Idade" variant="outlined" style={{ width: '100%', marginTop: '5%' }}/>
 
                         <div className={styles.buttons}>
-                            <Button variant="contained" color="error" onChange={removeFilter}>Remover</Button>
+                            <Button variant="contained" color="error" onClick={handleClearFilters}>Remover</Button>
                         </div>
                     </div>
                 </Grid>
                 <Grid item xs={10} style={{ display: 'flex', flexWrap: 'wrap', columnGap: '21px' }}>
                     <Animals
                     filterApplied={filterApplied}
-                    removeFilter={removeFilter}
                     filters={filters}
                     ></Animals>
                 </Grid>
