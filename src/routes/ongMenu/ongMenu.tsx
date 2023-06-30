@@ -1,73 +1,89 @@
 //imports padrão react
 import styles from'./ongMenu.module.css';
+import axios, { AxiosRequestConfig } from 'axios';
+import { useEffect, useState } from 'react';
 
 //components
 import { Navbar } from './Navbar/Navbar';
+import dogAnimation from '../adotanteMenu/dog/dogAnimation';
 
 //imports MUI
-import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, IconButton } from '@mui/material';
+import { Delete, Delete as DeleteIcon, Edit, Edit as EditIcon } from '@mui/icons-material';
 
-const data = [
-  { id: 1, name: 'Item 1' },
-  { id: 2, name: 'Item 2' },
-  // ... adicione mais itens aqui
-  { id: 30, name: 'Item 30' },
-];
-
-const itemsPerPage = 30;
+interface Animal {
+  id: number;
+  nome: string;
+  idade: number;
+  raca: string;
+  pelagem: string;
+}
 
 function adotanteMenu(this: any)  {
 
-  const [page, setPage] = useState(0);
+  const idUser = sessionStorage.getItem("userId");
+  const [animals, setAnimals] = useState<any[]>([]);
 
-  const handleChangePage = (event: any, newPage: React.SetStateAction<number>) => {
-    setPage(newPage);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const config: AxiosRequestConfig = {
+        params: {
+          idUser: idUser,
+        },
+      };
 
-  const rowsPerPage = itemsPerPage;
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+      axios
+        .get('http://localhost:8080/MiauDoteCao/GetAnimalsByOngId', config)
+        .then(response => {
+          setAnimals(response.data);
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+        });
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Nome do animal</TableCell>
-            <TableCell>Idade do animal</TableCell>
-            <TableCell>Cor do animal</TableCell>
-            <TableCell>Editar</TableCell>
-            <TableCell>Ecxluir</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.id}</TableCell>
-              <TableCell>{item.nameAnimal}</TableCell>
-              <TableCell>{item.ageAnimal}</TableCell>
-              <TableCell>{item.colorAnimal}</TableCell>
-              <TableCell>{item.update}</TableCell>
-              <TableCell>{item.delete}</TableCell>
-            </TableRow>
-          ))}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={2} />
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <TablePagination
-        rowsPerPageOptions={[rowsPerPage]}
-        component="div"
-        count={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-      />
-    </TableContainer>
+    <div className={styles.menuArea}>
+      <Navbar></Navbar>
+      {animals.length === 0 ? (
+        <div className={styles.header}>
+          <p>Não encontramos nenhum animal!</p>
+        </div>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Nome do Animal</TableCell>
+                <TableCell>Idade</TableCell>
+                <TableCell>Raça</TableCell>
+                <TableCell>Pelagem</TableCell>
+                <TableCell>Ações</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {animals.map(animal => (
+                <TableRow key={animal.id}>
+                  <TableCell>{animal.id}</TableCell>
+                  <TableCell>{animal.nome}</TableCell>
+                  <TableCell>{animal.idade}</TableCell>
+                  <TableCell>{animal.raca}</TableCell>
+                  <TableCell>{animal.pelagem}</TableCell>
+                  <TableCell>
+                    <Delete />
+                    <Edit />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </div>
   );
   
 }

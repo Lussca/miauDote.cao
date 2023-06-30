@@ -25,7 +25,7 @@ function Adote(this: any)  {
         cah: '',
         idade: '',
         porte: ''
-      };
+    };
 
     const [filters, setFilters] = useState(initialFilters);
 

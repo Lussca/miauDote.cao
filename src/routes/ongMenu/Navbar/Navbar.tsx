@@ -1,8 +1,12 @@
-import { AppBar, Toolbar, IconButton,Typography, Stack, ThemeProvider } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
+import { useState } from 'react';
+
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { createTheme } from '@mui/material/styles';
+import { AppBar, Toolbar, IconButton,Typography, Stack, ThemeProvider } from '@mui/material';
+
 import { Logout } from './logout';
+import AnimalModalAdd from '../DialogAnimlByOng/DialogAnimalByOng';
 
 const theme = createTheme({
     palette: {
@@ -18,11 +22,18 @@ const theme = createTheme({
 });
 
 export const Navbar = () =>{
+
+  const [openModal, setOpenModal] = useState(false);
+
+    const openModalRegister = () => {
+        setOpenModal(true);
+    }
+    
     return(
         <AppBar position='relative' style={{ background: 'transparent' }}>
             <Toolbar>
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-                    <Link to="/adotanteMenu">
+                    <Link to="/ongMenu">
                         <IconButton size='large' edge='start' color='inherit' aria-label='Início'>
                             <img src="./imgs/logos/LogoSemFonte_Azul.svg" style={{ width: 60 }}></img>
                         </IconButton>
@@ -30,13 +41,15 @@ export const Navbar = () =>{
                 </Typography>
                 <Stack direction='row' spacing={1}>
                     <ThemeProvider theme={theme}>
-                        <Link to="/queroAdotar" style={{ textDecoration: 'none' }}>
-                            <Button variant="contained" color="primary"> adicionar animal </Button> 
-                        </Link>
+                        <Button variant="contained" color="primary" onClick={() => openModalRegister()}> adicionar animal </Button>
                     </ThemeProvider>
                 </Stack>
                 <Logout></Logout>
             </Toolbar>
+            <AnimalModalAdd
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+            />
         </AppBar>
     )
 }
