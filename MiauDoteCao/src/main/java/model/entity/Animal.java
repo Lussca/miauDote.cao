@@ -150,6 +150,27 @@ public class Animal {
 	public void setOngName(String ongName) {
 		this.ongName = ongName;
 	}
+	
+	
+	
+	public Animal(String id, String race, String name, String size, String hairType, String animalToAnimal,
+			String animalToPerson, String sex, String age, String idOng, String insertionDate, String color,
+			String animalDescription) {
+		super();
+		this.id = id;
+		this.race = race;
+		this.name = name;
+		this.size = size;
+		this.hairType = hairType;
+		this.animalToAnimal = animalToAnimal;
+		this.animalToPerson = animalToPerson;
+		this.sex = sex;
+		this.age = age;
+		this.idOng = idOng;
+		this.insertionDate = insertionDate;
+		this.color = color;
+		this.animalDescription = animalDescription;
+	}
 	public Animal(String race, String name, String size, String hairType, String animalToAnimal,
 			String animalToPerson, String sex, String age, String idOng, String insertionDate, String color, String animalDescription,
 			List<String> links) {

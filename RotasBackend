@@ -81,3 +81,12 @@ JSON
     Possíveis erros:
       32: O usuário ainda não tem candidaturas
       16: Erro no servidor
+
+  Rota:http://localhost:8080/MiauDoteCao/GetAnimalsByOngId?
+  GET:
+    Parametros(idUser)
+    Resultado: Status 200 - JSON com todos os animais da ONG
+    Possíveis erros:
+      14: Erro no banco de dados
+      28: Nenhum animal encontrado
+    

@@ -892,4 +892,27 @@ public class Dao {
 				return null;
 			}
 	}
+
+	public ArrayList<Animal> getAnimalsByOngId(String idOng) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM animal WHERE idOng=?";
+		ArrayList<Animal> animals = new ArrayList<>();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idOng);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				Animal a = new Animal(rs.getString("idAnimal"), rs.getString("idRace"), rs.getString("animalName"), rs.getString("idAnimalSize"), rs.getString("idAnimalFurType"),
+						rs.getString("idAnimalToAnimal"), rs.getString("idAnimalToPerson"), rs.getString("sex"), rs.getString("age"), rs.getString("idOng"),
+						rs.getString("insertionDate"), rs.getString("idColor"), rs.getString("descricao"));
+				animals.add(a);
+		}
+			if(animals.isEmpty()) {
+				return null;
+			}else {
+				return animals;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
