@@ -916,4 +916,16 @@ public class Dao {
 			return null;
 		}
 	}
+	public int deleteAnimal(String idAnimal, String idUser)  throws ClassNotFoundException, IOException{
+		String sql = "DELETE FROM animal WHERE idAnimal =? AND idOng =?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.preparedStatement(sql)){
+			statement.setString(1, idAnimal);
+			statement.setString(2, idOng);
+			int result = statement.executeUpdate();
+			return result;
+		} catch(SQLException e){
+			e.printStackTrace();
+			return -1;
+		}
+	}
 }

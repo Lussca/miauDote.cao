@@ -107,9 +107,10 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
                 cor: animal.cor,
                 descricao: animal.descricao,
                 Links: {
-                    link1: 'LINK1',
-                    link2: 'LINK2',
-                    link3: 'LINK3'
+                    link1: imageUrls[0] || '',
+                    link2: imageUrls[1] || '',
+                    link3: imageUrls[2] || '',
+                    link4: imageUrls[3] || ''
                 }
             }
         };
