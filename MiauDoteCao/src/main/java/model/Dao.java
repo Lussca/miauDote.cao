@@ -619,21 +619,32 @@ public class Dao {
 	}
 
 	public int updateAnimalImages(Animal animal) throws ClassNotFoundException, IOException {
-	    ArrayList<String> oldImages = getAnimalImages(animal.getId());
-	    Animal animal2 = getAnimalData(animal);
-	    List<String> newImages = animal.getLinks();
-
-	    List<String> imagesToAdd = new ArrayList<>(newImages);
-
-	    imagesToAdd.removeAll(oldImages);
-
-	    List<String> imagesToRemove = new ArrayList<>(oldImages);
-
-	    imagesToRemove.retainAll(newImages);
-
+	    ArrayList<String> databaseImages = getAnimalImages(animal.getId());
+	    ArrayList<String> requestImages = (ArrayList<String>)animal.getLinks();
+	    List<String> keepImages = new ArrayList<>();
+        List<String> newImages = new ArrayList<>();
+        List<String> imagesToBeRemoved = new ArrayList<>();
+        
+        // Iterate through the user's request ArrayList
+        for (String image : requestImages) {
+            if (databaseImages.contains(image)) {
+                keepImages.add(image);
+            } else {
+                newImages.add(image);
+            }
+        }
+        
+        // Iterate through the database ArrayList
+        for (String image : databaseImages) {
+            if (!requestImages.contains(image)) {
+                imagesToBeRemoved.add(image);
+            }
+        }
+        
+        
 	    StringBuilder sqlBuilder = new StringBuilder();
 	    sqlBuilder.append("INSERT INTO image (idAnimal, imageUrl) VALUES ");
-	    for (int i = 0; i < imagesToAdd.size(); i++) {
+	    for (int i = 0; i < newImages.size(); i++) {
 	        sqlBuilder.append("(?, ?), ");
 	    }
 	    sqlBuilder.setLength(sqlBuilder.length() - 2);
@@ -641,7 +652,7 @@ public class Dao {
 
 	    sqlBuilder = new StringBuilder();
 	    sqlBuilder.append("DELETE FROM image WHERE idAnimal = ? AND imageUrl IN (");
-	    for (int i = 0; i < imagesToRemove.size(); i++) {
+	    for (int i = 0; i < imagesToBeRemoved.size(); i++) {
 	        sqlBuilder.append("?, ");
 	    }
 	    sqlBuilder.setLength(sqlBuilder.length() - 2);
@@ -654,23 +665,23 @@ public class Dao {
 	    	int insertResult = 0;
 	    	int deleteResult = 0;
 	        int parameterIndex = 1;
-	        for (String imageUrl : imagesToAdd) {
+	        for (String imageUrl : newImages) {
 	            insertStatement.setString(parameterIndex++, animal.getId());
 	            insertStatement.setString(parameterIndex++, imageUrl);
 	        }
 
 	        deleteStatement.setString(1, animal.getId());
-	        for (int i = 0; i < imagesToRemove.size(); i++) {
-	            deleteStatement.setString(i + 2, imagesToRemove.get(i));
+	        for (int i = 0; i < imagesToBeRemoved.size(); i++) {
+	            deleteStatement.setString(i + 2, imagesToBeRemoved.get(i));
 	        }
 
-	        if (!imagesToAdd.isEmpty()) {
+	        if (!newImages.isEmpty()) {
 	             insertResult = insertStatement.executeUpdate();
 	        }
-	        if (!imagesToRemove.isEmpty()) {
+	        if (!imagesToBeRemoved.isEmpty()) {
 	             deleteResult = deleteStatement.executeUpdate();
 	        }
-	        if(insertResult > 0 && deleteResult > 0) {
+	        if(insertResult > 0 || deleteResult > 0) {
 	        	return 1;
 	        }else {
 	        	return 0;

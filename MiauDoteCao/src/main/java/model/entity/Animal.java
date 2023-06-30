@@ -201,16 +201,16 @@ public class Animal {
         
         try {
             int race = animalObject.get("race").getAsInt();
-            String name = animalObject.get("name").getAsString();
-            int size = animalObject.get("size").getAsInt();
-            int hairType = animalObject.get("hairType").getAsInt();
-            int animalToAnimal = animalObject.get("animalToAnimal").getAsInt();
-            int animalToPerson = animalObject.get("animalToPerson").getAsInt();
-            int sex = animalObject.get("sex").getAsInt();
-            int age = animalObject.get("age").getAsInt();
+            String name = animalObject.get("nome").getAsString();
+            int size = animalObject.get("porte").getAsInt();
+            int hairType = animalObject.get("pelagem").getAsInt();
+            int animalToAnimal = animalObject.get("caa").getAsInt();
+            int animalToPerson = animalObject.get("cah").getAsInt();
+            int sex = animalObject.get("sexo").getAsInt();
+            int age = animalObject.get("idade").getAsInt();
             int idOng = animalObject.get("idOng").getAsInt();
-            int color = animalObject.get("color").getAsInt();
-            String description = animalObject.get("description").getAsString();
+            int color = animalObject.get("cor").getAsInt();
+            String description = animalObject.get("descricao").getAsString();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDateTime ldt = LocalDateTime.now();
             String insertionDate = ldt.format(formatter);
@@ -237,21 +237,24 @@ public class Animal {
 	        try {
 	        	int idAnimal = animalObject.get("idAnimal").getAsInt();
 	            String race = animalObject.get("race").getAsString();
-	            String name = animalObject.get("name").getAsString();
-	            int size = animalObject.get("size").getAsInt();
-	            int hairType = animalObject.get("hairType").getAsInt();
-	            int animalToAnimal = animalObject.get("animalToAnimal").getAsInt();
-	            int animalToPerson = animalObject.get("animalToPerson").getAsInt();
-	            int sex = animalObject.get("sex").getAsInt();
-	            int age = animalObject.get("age").getAsInt();
+	            String name = animalObject.get("nome").getAsString();
+	            int size = animalObject.get("porte").getAsInt();
+	            int hairType = animalObject.get("pelagem").getAsInt();
+	            int animalToAnimal = animalObject.get("caa").getAsInt();
+	            int animalToPerson = animalObject.get("cah").getAsInt();
+	            int sex = animalObject.get("sexo").getAsInt();
+	            int age = animalObject.get("idade").getAsInt();
 	            int idOng = animalObject.get("idOng").getAsInt();
-	            int color = animalObject.get("color").getAsInt();
-	            String description = animalObject.get("description").getAsString();
+	            int color = animalObject.get("cor").getAsInt();
+	            String description = animalObject.get("descricao").getAsString();
 	            List<String> links = new ArrayList<>();
-	            JsonObject linksObject = animalObject.getAsJsonObject("Links");
-	            for (String key : linksObject.keySet()) {
-	                String link = linksObject.get(key).getAsString();
-	                links.add(link);
+	            
+	            if (animalObject.has("Links")) {
+	                JsonObject linksObject = animalObject.getAsJsonObject("Links");
+	                for (String key : linksObject.keySet()) {
+	                    String link = linksObject.get(key).getAsString();
+	                    links.add(link);
+	                }
 	            }
 	            return new Animal(String.valueOf(idAnimal), race, name, String.valueOf(size), String.valueOf(hairType), String.valueOf(animalToAnimal),
 	                    String.valueOf(animalToPerson), String.valueOf(sex), String.valueOf(age), String.valueOf(idOng), String.valueOf(color), description, links, number);

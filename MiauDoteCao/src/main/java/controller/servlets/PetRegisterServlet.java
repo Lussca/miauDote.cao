@@ -73,12 +73,8 @@ public class PetRegisterServlet extends HttpServlet {
     	 
      
     	System.out.println("CHEGOU AQUI");
-        StringBuilder requestBody = new StringBuilder();
-        BufferedReader reader = request.getReader();
-        	String line;
-        	while((line = reader.readLine()) != null) {
-        		requestBody.append(line);
-        	}
+    	String requestBody = RequestResponseHandler.getRequestBody(request);
+        
         	String jsonPayLoad = requestBody.toString();
         	try {
         	Animal animal = Animal.parseAnimalJson(jsonPayLoad);
@@ -88,6 +84,7 @@ public class PetRegisterServlet extends HttpServlet {
         		}else {
         			for(int i = 0; i< animal.getLinks().size(); i++) {
     	        		int newImageId = dao.insertImages(animal, idAnimal, i);
+    	        		System.out.println("Imagem inserida");
     	        		if(newImageId == -1) {
     	        			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.ERROR_ON_IMAGE_INSERTION);
     	        			break;
