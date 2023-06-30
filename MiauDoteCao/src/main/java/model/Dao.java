@@ -903,6 +903,7 @@ public class Dao {
 				Animal a = new Animal(rs.getString("idAnimal"), rs.getString("idRace"), rs.getString("animalName"), rs.getString("idAnimalSize"), rs.getString("idAnimalFurType"),
 						rs.getString("idAnimalToAnimal"), rs.getString("idAnimalToPerson"), rs.getString("sex"), rs.getString("age"), rs.getString("idOng"),
 						rs.getString("insertionDate"), rs.getString("idColor"), rs.getString("descricao"));
+				Animal.convertValues(a);
 				animals.add(a);
 		}
 			if(animals.isEmpty()) {
