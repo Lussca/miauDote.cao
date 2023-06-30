@@ -46,6 +46,24 @@ public class PetUpdateServlet extends HttpServlet {
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_ANIMAL);
         	}
 		}
+
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response){
+		rrh.configureCors(response);
+		String requestBody = RequestResponseHandler.getRequestBody(request);
+		String jsonPayload = requestBody.toString();
+		
+			Gson gson = new Gson();
+        	JsonObject jsonObject = gson.fromJson(jsonPayLoad, JsonObject.class);
+
+        	JsonObject animalObject = jsonObject.getAsJsonObject("Animal");
+			
+			String idAnimal = animalObject.get("idAnimal").getAsString();
+			String idUser = animalObject.get("idUser").getAsString();
+			int result = dao.deleteAnimal(idAnimal, idUser);
+		
+	}
+
     @Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
    	 rrh.configureCors(response);
