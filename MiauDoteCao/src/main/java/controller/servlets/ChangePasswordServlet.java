@@ -9,6 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+
 import controller.handler.email.*;
 
 /**
@@ -26,7 +30,11 @@ public class ChangePasswordServlet extends HttpServlet {
     @Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
-		String email = request.getParameter("email");
+		String requestBody = RequestResponseHandler.getRequestBody(request);
+		Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(requestBody, JsonObject.class);
+        JsonObject emailObject = jsonObject.getAsJsonObject("data");
+        String email = emailObject.get("email").getAsString();
 		ChangePassword cp = new ChangePassword();
 		if(cp.send(email)) {
 			rrh.sendOkResponse(response);

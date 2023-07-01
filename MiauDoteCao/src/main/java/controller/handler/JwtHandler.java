@@ -76,7 +76,8 @@ public String createJWT(String id, String issuer, String subject, long ttlMillis
 	return builder.compact();
 }
 private static Claims decodeJWT(String jwt) throws SignatureException, ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, IllegalArgumentException, IOException {
-    Claims claims = Jwts.parser()
+    @SuppressWarnings("deprecation")
+	Claims claims = Jwts.parser()
             .setSigningKey(Base64.getDecoder().decode(getSecretKey("secretKey")))
             .parseClaimsJws(jwt).getBody();
     return claims;

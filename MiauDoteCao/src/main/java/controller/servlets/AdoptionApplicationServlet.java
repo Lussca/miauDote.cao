@@ -48,7 +48,6 @@ public class AdoptionApplicationServlet extends HttpServlet {
 				rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED, Validations.SERVER_ERROR);
 			}
 		}
-    
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	rrh.configureCors(response);
@@ -89,8 +88,5 @@ public class AdoptionApplicationServlet extends HttpServlet {
 	@Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
-	}
-	
-	
-	
+	}	
 }

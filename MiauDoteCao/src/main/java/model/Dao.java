@@ -128,6 +128,7 @@ public class Dao {
 	        }
 	    }
 
+	@SuppressWarnings("unused")
 	public int registerAdress(Adress adress) throws ClassNotFoundException, IOException {
 		String sql = "INSERT INTO adress (state, city, neighbor, cep, street) VALUES (?,?,?,?,?)";
 		//Adicionar  CAST (? AS INTEGER) no numero do endereco caso esteja conectando ao postgreSQL
@@ -446,6 +447,7 @@ public class Dao {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public int insertAnimal(Animal animal) {
 		String sql = "INSERT INTO animal (animalName, age, sex, insertionDate, descricao, idOng, idAnimalSize, idAnimalFurType, idAnimalToAnimal, idAnimalToPerson, idColor, idRace) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
@@ -475,6 +477,7 @@ public class Dao {
 			}
 		}
 
+	@SuppressWarnings("unused")
 	public int insertImages(Animal animal, int idAnimal, int i) {
 		String sql = "INSERT INTO image (idAnimal, imageUrl) VALUES (?,?)";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
@@ -748,7 +751,7 @@ public class Dao {
 			}
 		}
 
-	public boolean compareValidationCode(String typedCode, boolean isOng, String idOng) throws NoSuchAlgorithmException {
+	public boolean compareValidationCode(String typedCode, boolean isOng, String idUser) throws NoSuchAlgorithmException {
 		String sql;
 		if(isOng) {
 			 sql = "SELECT validationCode FROM userOng WHERE idOng=?";
@@ -756,7 +759,7 @@ public class Dao {
 			 sql = "SELECT validationCode FROM userAdopter WHERE idAdopter=?";
 		}
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
-			statement.setString(1, idOng);
+			statement.setString(1, idUser);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				String dbCode = rs.getString(1);
@@ -918,9 +921,44 @@ public class Dao {
 	}
 	public int deleteAnimal(String idAnimal, String idUser)  throws ClassNotFoundException, IOException{
 		String sql = "DELETE FROM animal WHERE idAnimal =? AND idOng =?";
-		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.preparedStatement(sql)){
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
 			statement.setString(1, idAnimal);
-			statement.setString(2, idOng);
+			statement.setString(2, idUser);
+			int result = statement.executeUpdate();
+			return result;
+		} catch(SQLException e){
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	public int deleteValidationCode(boolean isOng, String idUser) throws ClassNotFoundException, IOException, NoSuchAlgorithmException {
+		String sql = "";
+		if (isOng) {
+			 sql = "UPDATE userOng SET validationCode = NULL WHERE idOng =?";
+		}else {
+			 sql = "UPDATE userAdopter SET validationCode = NULL WHERE idAdopter =?";
+		}
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idUser);
+			int result = statement.executeUpdate();
+			return result;
+		} catch(SQLException e){
+			e.printStackTrace();
+			return -1;
+		}
+		
+	}
+	public int changePassword(String newPassword, boolean isOng, String idUser) throws ClassNotFoundException, IOException, NoSuchAlgorithmException {
+		String sql = "";
+		if(isOng) {
+			sql = "UPDATE userOng SET pw=? WHERE idOng=?";
+		}else {
+			sql = "UPDATE userAdopter SET pw=? WHERE idAdopter=?";
+		}
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, new Encrypt().toHash(newPassword));
+			statement.setString(2, idUser);
 			int result = statement.executeUpdate();
 			return result;
 		} catch(SQLException e){

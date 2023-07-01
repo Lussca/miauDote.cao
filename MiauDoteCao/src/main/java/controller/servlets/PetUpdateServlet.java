@@ -1,6 +1,5 @@
 package controller.servlets;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -8,6 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 
 import controller.Validations;
 import controller.handler.RequestResponseHandler;
@@ -25,12 +27,7 @@ public class PetUpdateServlet extends HttpServlet {
     @Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
-        StringBuilder requestBody = new StringBuilder();
-        BufferedReader reader = request.getReader();
-        	String line;
-        	while((line = reader.readLine()) != null) {
-        		requestBody.append(line);
-        	}
+        String requestBody = RequestResponseHandler.getRequestBody(request);
         	String jsonPayLoad = requestBody.toString();
         	try {
         	Animal animal = Animal.parseAnimalJson(jsonPayLoad, 1);
@@ -48,20 +45,28 @@ public class PetUpdateServlet extends HttpServlet {
 		}
 
 	@Override
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response){
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		rrh.configureCors(response);
 		String requestBody = RequestResponseHandler.getRequestBody(request);
 		String jsonPayload = requestBody.toString();
 		
 			Gson gson = new Gson();
-        	JsonObject jsonObject = gson.fromJson(jsonPayLoad, JsonObject.class);
+        	JsonObject jsonObject = gson.fromJson(jsonPayload, JsonObject.class);
 
         	JsonObject animalObject = jsonObject.getAsJsonObject("Animal");
 			
 			String idAnimal = animalObject.get("idAnimal").getAsString();
 			String idUser = animalObject.get("idUser").getAsString();
-			int result = dao.deleteAnimal(idAnimal, idUser);
-		
+			try {
+				int result = dao.deleteAnimal(idAnimal, idUser);
+				if(result > 0) {
+					rrh.sendOkResponse(response);
+				}else {
+					rrh.sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, Validations.ANIMAL_NOT_DELETED);
+				}
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+			}	
 	}
 
     @Override

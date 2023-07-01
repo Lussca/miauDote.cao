@@ -49,7 +49,9 @@ public class Validations {
 		public static final int APPLICATION_ALREADY_EXISTS = 30;
 		public static final int APPLICATION_DO_NOT_EXISTS = 31;
 		public static final int NO_APPLICATIONS_FOUND = 32;
+		public static final int ANIMAL_NOT_DELETED = 33;
 	    public static final int NO_ERROR = 0;
+		
 		
 		
 		
@@ -132,15 +134,15 @@ public class Validations {
 		
 	}
 	
-	private boolean validatePassword(String password) {
+	public boolean validatePassword(String password) {
 		boolean upperCase = false;
 		boolean lowerCase = false;
 		boolean hasSpecialChar = false;
 		boolean hasNumber = false;
-		if(password.length() < 4 || password.length() > 10) {
+		if(password.length() < 4 || password.length() > 15) {
 			if(password.length() < 4) {
 				System.out.println("senha curta");
-			}else if(password.length() > 10) {
+			}else if(password.length() > 15) {
 				System.out.println("Senha longa");
 			}
 			return false;

@@ -20,24 +20,14 @@ import model.Dao;
 import model.entity.Adress;
 import model.entity.Animal;
 
-/**
- * Servlet implementation class AnimalFilterServlet
- */
 public class AnimalFilterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	RequestResponseHandler rrh = new RequestResponseHandler();
 	Dao dao = new Dao();
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public AnimalFilterServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
 		System.out.println("entrou na servlet");

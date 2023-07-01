@@ -82,6 +82,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.GetAnimalsByOngId</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>ValidateChangePasswordCode</servlet-name>
+  	<display-name>ValidateChangePasswordCode</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.ValidateChangePasswordCode</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -133,6 +139,10 @@
   <servlet-mapping>
   	<servlet-name>GetAnimalsByOngId</servlet-name>
   	<url-pattern>/GetAnimalsByOngId</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ValidateChangePasswordCode</servlet-name>
+  	<url-pattern>/ValidateChangePasswordCode</url-pattern>
   </servlet-mapping>
   
 </web-app>
