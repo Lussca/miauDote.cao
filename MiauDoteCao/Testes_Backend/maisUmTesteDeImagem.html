@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Save Image to Firebase Storage</title>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAu-pIEf1lQOq5iNGhcw_KLGsVomA5FypQ",
+      authDomain: "miaudotecao-f1d2d.firebaseapp.com",
+      projectId: "miaudotecao-f1d2d",
+      storageBucket: "miaudotecao-f1d2d.appspot.com",
+      messagingSenderId: "1019311786165",
+      appId: "1:1019311786165:web:b4cbe032b52f6625b8d6fc",
+      measurementId: "G-HK0EL2LREG"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Function to save an image to Firebase Storage and return the download URL
+    async function saveImageToFirebaseStorage(file) {
+      try {
+        // Create a storage reference
+        const storageRef = firebase.storage().ref();
+
+        // Generate a unique filename for the image
+        const filename = `${Date.now()}_${file.name}`;
+
+        // Upload the file to the storage reference
+        const snapshot = await storageRef.child(filename).put(file);
+
+        // Get the download URL of the uploaded image
+        const downloadURL = await snapshot.ref.getDownloadURL();
+
+        return downloadURL; // Return the download URL
+      } catch (error) {
+        throw error;
+      }
+    }
+
+    // Function to handle the button click event
+    function handleButtonClick() {
+      const fileInput = document.getElementById('imageInput');
+      const file = fileInput.files[0];
+
+      // Save the image to Firebase Storage and display the URL
+      saveImageToFirebaseStorage(file)
+        .then(function(imageUrl) {
+          console.log('Image URL:', imageUrl);
+          // Display the image URL on the page
+          document.getElementById('imageUrl').textContent = imageUrl;
+        })
+        .catch(function(error) {
+          console.error('Error uploading image:', error);
+        });
+    }
+  </script>
+</head>
+<body>
+  <input type="file" id="imageInput">
+  <button onclick="handleButtonClick()">Upload Image</button>
+
+  <p>Image URL: <span id="imageUrl"></span></p>
+</body>
+</html>
