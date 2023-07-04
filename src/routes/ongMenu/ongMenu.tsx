@@ -22,7 +22,20 @@ interface Animal {
 function adotanteMenu(this: any)  {
 
   const idUser = sessionStorage.getItem("userId");
-  const [animals, setAnimals] = useState<any[]>([]);
+  const [animals, setAnimals] = useState<{
+    age:string, 
+    animalDescription: string, 
+    animalToAnimal: string, 
+    animalToPerson: string, 
+    color: string, 
+    hairType: string, 
+    id: string, 
+    idOng: string, 
+    insertionDate: string, 
+    name: string, 
+    race: string,
+    sex: string,
+    size: string,}[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +48,7 @@ function adotanteMenu(this: any)  {
       axios
         .get('http://localhost:8080/MiauDoteCao/GetAnimalsByOngId', config)
         .then(response => {
-          setAnimals(response.data);
+          setAnimals(response.data.animals);
         })
         .catch(error => {
           console.error('Erro:', error);
@@ -44,6 +57,36 @@ function adotanteMenu(this: any)  {
 
     fetchData();
   }, []);
+
+  const handleDelete = (animalId: string) => {
+
+    const idUser = sessionStorage.getItem("userId");
+    const idAnimal = animalId;
+
+    const Animal: AxiosRequestConfig = {
+      data: {
+        idAnimal: idAnimal,
+        idUser: idUser,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    axios
+        .delete('http://localhost:8080/MiauDoteCao/PetUpdateServlet', Animal)
+        .then(response => {
+          console.log("Deu certo")
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+        });
+  };
+
+  const handleEdit = (animalId: string) => {
+    // Lógica para editar o animal com o ID fornecido
+    console.log(`Editar animal com ID ${animalId}`);
+  };
 
   return (
     <div className={styles.menuArea}>
@@ -69,13 +112,17 @@ function adotanteMenu(this: any)  {
               {animals.map(animal => (
                 <TableRow key={animal.id}>
                   <TableCell>{animal.id}</TableCell>
-                  <TableCell>{animal.nome}</TableCell>
-                  <TableCell>{animal.idade}</TableCell>
-                  <TableCell>{animal.raca}</TableCell>
-                  <TableCell>{animal.pelagem}</TableCell>
+                  <TableCell>{animal.name}</TableCell>
+                  <TableCell>{animal.age}</TableCell>
+                  <TableCell>{animal.race}</TableCell>
+                  <TableCell>{animal.hairType}</TableCell>
                   <TableCell>
-                    <Delete />
-                    <Edit />
+                  <IconButton onClick={() => handleDelete(animal.id)}>
+                      <Delete />
+                    </IconButton>
+                    <IconButton onClick={() => handleEdit(animal.id)}>
+                      <Edit />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
