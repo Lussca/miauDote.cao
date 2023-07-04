@@ -116,7 +116,7 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
         };
     
         axios
-        .post('http://localhost:8080/MiauDoteCao/PetRegistetServlet', animalData)
+        .post('http://localhost:8080/MiauDoteCao/PetRegisterServlet', animalData)
         .then(response => {
             console.log(response);
         })

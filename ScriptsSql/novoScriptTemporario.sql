@@ -218,9 +218,10 @@ CREATE TABLE IF NOT EXISTS `adotecao`.`image` (
   CONSTRAINT `fk_image_animal1`
     FOREIGN KEY (`idAnimal`)
     REFERENCES `adotecao`.`animal` (`idAnimal`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+) ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
@@ -235,14 +236,16 @@ CREATE TABLE IF NOT EXISTS `adotecao`.`application` (
   CONSTRAINT `fk_userAdopter_has_animal_userAdopter1`
     FOREIGN KEY (`idAdopter`)
     REFERENCES `adotecao`.`userAdopter` (`idAdopter`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_userAdopter_has_animal_animal1`
     FOREIGN KEY (`idAnimal`)
     REFERENCES `adotecao`.`animal` (`idAnimal`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+) ENGINE = InnoDB;
+
+
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

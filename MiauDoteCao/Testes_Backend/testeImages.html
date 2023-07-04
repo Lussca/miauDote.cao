@@ -1,0 +1,42 @@
+<script>
+    function sendRequest() {
+      const imageFiles = document.getElementById('imageFiles').files;
+  
+      // Create a FormData object
+      const formData = new FormData();
+  
+      // Append the image files to the FormData object
+      for (let i = 0; i < imageFiles.length; i++) {
+        formData.append('imageFiles', imageFiles[i]);
+      }
+  
+      // Create an object for the additional JSON data
+      const jsonData = {
+        email: 'gabrielsilva79@live.com',
+        name: document.getElementById('name').value,
+        age: document.getElementById('age').value,
+      };
+  
+      // Append the JSON data as a string to the FormData
+      formData.append('jsonData', JSON.stringify(jsonData));
+  
+      // Send the request to the servlet
+      fetch('http://localhost:8080/MiauDoteCao/TesteParaImagensPeloBack', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data); // Handle the server response
+        })
+        .catch(error => {
+          console.error(error); // Handle any errors
+        });
+    }
+  </script>
+  
+  <input type="file" id="imageFiles" name="imageFiles" multiple>
+  <input type="text" id="name" name="name">
+  <input type="text" id="age" name="age">
+  <button onclick="sendRequest()">Submit</button>
+  

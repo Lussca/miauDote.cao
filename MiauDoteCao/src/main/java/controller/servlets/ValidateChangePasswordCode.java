@@ -42,8 +42,11 @@ public class ValidateChangePasswordCode extends HttpServlet {
             try {
             	if(validateNewPassword) {
 					if(dao.compareValidationCode(validationCode, Boolean.parseBoolean(data.get(1)), data.get(0))) {
+						System.out.println("CÓDIGO CERTO");
 						if(dao.changePassword(newPassword, Boolean.parseBoolean(data.get(1)), data.get(0)) > 0) {
+							System.out.println("SENHA ALTERADA");
 							if(dao.deleteValidationCode(Boolean.parseBoolean(data.get(1)), data.get(0)) > 0){
+								System.out.println("CODIGO DELETADO");
 								rrh.sendOkResponse(response);
 							}else {
 								System.out.println("deu erro");

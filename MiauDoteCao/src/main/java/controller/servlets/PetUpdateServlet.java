@@ -53,7 +53,7 @@ public class PetUpdateServlet extends HttpServlet {
 			Gson gson = new Gson();
         	JsonObject jsonObject = gson.fromJson(jsonPayload, JsonObject.class);
 
-        	JsonObject animalObject = jsonObject.getAsJsonObject("Animal");
+        	JsonObject animalObject = jsonObject.getAsJsonObject();
 			
 			String idAnimal = animalObject.get("idAnimal").getAsString();
 			String idUser = animalObject.get("idUser").getAsString();

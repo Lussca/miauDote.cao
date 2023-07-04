@@ -40,7 +40,7 @@ public class ChangePassword {
 	      final String username = from;
 	      final String password = p.getProperty("password");
 	      final String host = "smtp.gmail.com";
-	      Properties props = new Properties();
+	      Properties props =  EmailConfig.emailConfig();
 	      props.put("mail.smtp.auth", "true");
 	      props.put("mail.smtp.starttls.enable", "true");
 	      props.put("mail.smtp.host", host);

@@ -88,6 +88,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.ValidateChangePasswordCode</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>TesteParaImagensPeloBack</servlet-name>
+  	<display-name>TesteParaImagensPeloBack</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.TesteParaImagensPeloBack</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -143,6 +149,10 @@
   <servlet-mapping>
   	<servlet-name>ValidateChangePasswordCode</servlet-name>
   	<url-pattern>/ValidateChangePasswordCode</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>TesteParaImagensPeloBack</servlet-name>
+  	<url-pattern>/TesteParaImagensPeloBack</url-pattern>
   </servlet-mapping>
   
 </web-app>
