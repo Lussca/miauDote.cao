@@ -10,6 +10,7 @@ public class UserOng {
 	String ongName;
 	String publicKey;
 	String privateKey;
+	String phoneNumber;
 	int idAdress;
 	public String getIdOng() {
 		return idOng;
@@ -64,6 +65,13 @@ public class UserOng {
 	}
 	public void setPrivateKey(String privateKey) {
 		this.privateKey = privateKey;
+	}
+	
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	public int getIdAdress() {
 		return idAdress;

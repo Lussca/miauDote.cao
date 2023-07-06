@@ -12,6 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import controller.handler.RequestResponseHandler;
+import controller.handler.email.ApplicationEmail;
+import jakarta.mail.MessagingException;
 import controller.Validations;
 import model.Dao;
 import model.entity.Animal;
@@ -40,6 +42,14 @@ public class AdoptionApplicationServlet extends HttpServlet {
 				rrh.sendResponse(response, HttpServletResponse.SC_CONFLICT, Validations.APPLICATION_ALREADY_EXISTS);
 			}else {
 	        if(dao.adoptionApplication(idAnimal,idUser)) {
+	        	ApplicationEmail ae = new ApplicationEmail();
+		        	try {
+						ae.sendToOng(idUser, idAnimal);
+						ae.sendToAdopter(idUser, idAnimal);
+					} catch (MessagingException e) {
+						e.printStackTrace();
+						rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.APPLICATION_ADDED_AND_EMAIL_NOT_SENT);
+					}
 				rrh.sendOkResponse(response);
 					}
 				}

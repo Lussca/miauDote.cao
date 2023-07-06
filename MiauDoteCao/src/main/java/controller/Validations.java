@@ -50,7 +50,9 @@ public class Validations {
 		public static final int APPLICATION_DO_NOT_EXISTS = 31;
 		public static final int NO_APPLICATIONS_FOUND = 32;
 		public static final int ANIMAL_NOT_DELETED = 33;
+		public static final int APPLICATION_ADDED_AND_EMAIL_NOT_SENT = 34;
 	    public static final int NO_ERROR = 0;
+		
 		
 		
 		

@@ -39,7 +39,7 @@ public class Adress {
 		this.street = street;
 	}
 	public String getNumber() {
-		return state;
+		return number;
 	}
 	public void setNumber(String number) {
 		this.number = number;

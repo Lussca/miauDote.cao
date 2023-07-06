@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class EmailConfig {
 	
-	public static Properties emailConfig() {
+	protected static Properties emailConfig() {
 			Properties properties = new Properties();
 			File f = new File("C:\\Projetos\\miauDote.cao\\admin\\emailConfig.ini");
 			if(!f.exists()){
@@ -20,6 +20,7 @@ public class EmailConfig {
 	        }
 	        return properties;
 	    }
+	
 	}
 
 

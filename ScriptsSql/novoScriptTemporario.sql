@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `adotecao`.`userOng` (
   `jwt` VARCHAR(750) NULL,
   `idAdress` INT NOT NULL,
   `validationCode` VARCHAR(64),
+  `phoneNumber` VARCHAR(25),
   PRIMARY KEY (`idOng`),
   INDEX `fk_userOng_adress_idx` (`idAdress` ASC) VISIBLE,
   CONSTRAINT `fk_userOng_adress`
@@ -73,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `adotecao`.`userAdopter` (
   `jwt` VARCHAR(750) NULL,
   `idAdress` INT NOT NULL,
   `validationCode` VARCHAR(64),
+  `phoneNumber` VARCHAR(25),
   PRIMARY KEY (`idAdopter`),
   INDEX `fk_userOng_adress_idx` (`idAdress` ASC) VISIBLE,
   CONSTRAINT `fk_userOng_adress0`

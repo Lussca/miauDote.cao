@@ -54,11 +54,7 @@ public class Dao {
         String url = getConfigValueByKey("url");
         String user = getConfigValueByKey("user");
         String password = getConfigValueByKey("password");
-        /*Class.forName("org.postgresql.Driver");  
-         * Utilizar esta linha para se conectar com o postgreSQL
-         *Class.forName("com.mysql.jdbc.Driver"); MySQL antigo
-         * */
-        Class.forName("com.mysql.cj.jdbc.Driver"); //Utilizar esta linha para conectar ao MySQL
+        Class.forName("com.mysql.cj.jdbc.Driver");
 
         Connection connection = null;
         try {
@@ -71,7 +67,6 @@ public class Dao {
     }
     
     public boolean registerUserOng(UserOng user, int idAdress) throws SQLException, ClassNotFoundException, IOException {
-		// se precisar colocar public.userOng (em todas as tabelas que fazem transação)
         String sql = "INSERT INTO userOng (email, pw, username, cpf, birth, ongName, publicKey, privateKey, idAdress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = this.connectDB();
              PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -130,8 +125,8 @@ public class Dao {
 
 	@SuppressWarnings("unused")
 	public int registerAdress(Adress adress) throws ClassNotFoundException, IOException {
-		String sql = "INSERT INTO adress (state, city, neighbor, cep, street) VALUES (?,?,?,?,?)";
-		//Adicionar  CAST (? AS INTEGER) no numero do endereco caso esteja conectando ao postgreSQL
+		String sql = "INSERT INTO adress (state, city, neighbor, cep, street, number) VALUES (?,?,?,?,?, ?)";
+
 		try (Connection connection = this.connectDB();
 	             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			statement.setString(1, adress.getState());
@@ -139,7 +134,7 @@ public class Dao {
 			statement.setString(3, adress.getNeighborhood());
 			statement.setString(4, adress.getCep());
 			statement.setString(5, adress.getStreet());
-			//statement.setString(6, adress.getNumber());
+			statement.setString(6, adress.getNumber());
 			int update = statement.executeUpdate();
 			ResultSet keys = statement.getGeneratedKeys();
 			if(keys.next()) {
@@ -446,6 +441,84 @@ public class Dao {
 			return null;
 		}
 	}
+	
+	public UserAdopter getUserAdopter(String idUser) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM userAdopter WHERE idAdopter=?";
+		UserAdopter a = new UserAdopter();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idUser);	
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				a.setUsername(rs.getString("username"));
+				a.setLogin(rs.getString("email"));
+				a.setPhoneNumber(rs.getString("phoneNumber"));
+				return a;
+			}else {
+				return null;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+			}
+		
+	}
+	public UserOng getUserOng(String idUser) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM userOng WHERE idOng=?";
+		UserOng a = new UserOng();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idUser);	
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				a.setUsername(rs.getString("username"));
+				a.setLogin(rs.getString("email"));
+				a.setPhoneNumber(rs.getString("phoneNumber"));
+				a.setOngName("ongName");
+				return a;
+			}else {
+				return null;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+			}
+		
+	}
+	public UserOng getOngByIdAnimal(String idAnimal) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM animal WHERE idAnimal=?";
+		UserOng a = new UserOng();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idAnimal);	
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				a = getUserOng(rs.getString("idOng"));
+				return a;
+			}else {
+				return null;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+			}
+	}
+	public Animal getAnimalById(String idAnimal) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM animal WHERE idAnimal=?";
+		Animal a = new Animal();
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, idAnimal);	
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				a.setName(rs.getString("animalName"));
+				a.setId(idAnimal);
+				return a;
+			}else {
+				return null;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+			}
+	}
+	
 
 	@SuppressWarnings("unused")
 	public int insertAnimal(Animal animal) {

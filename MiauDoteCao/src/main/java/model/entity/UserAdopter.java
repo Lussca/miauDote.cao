@@ -9,6 +9,13 @@ public class UserAdopter {
 	String birth;
 	String publicKey;
 	String privateKey;
+	String phoneNumber;
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 	int idAdress;
 	public int getId() {
 		return id;
