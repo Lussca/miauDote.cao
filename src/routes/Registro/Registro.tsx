@@ -59,6 +59,7 @@ function Registro(this: any)  {
   const [cpf, setCpf] = useState('');
   const [birth, setBirth] = useState(null);
   const [birthFormated, setSelectedDateString] = useState('');
+  const [telefone, setTelefone] = useState('');
 
   //variavel da api do enderço
   const [address, setAddress] = useState<Endereco | null>(null);
@@ -105,8 +106,35 @@ function Registro(this: any)  {
   const handleChangeNumber = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setNumber(event.target.value);
   };
+
+  const handleChange = (event: { target: { value: any; }; }) => {
+    const { value } = event.target;
+    const telefoneFormatado = formatarTelefone(value);
+    setTelefone(telefoneFormatado);
+  };
   
   //================================================================================================//
+
+  //mask telefone
+  const formatarTelefone = (value: string) => {
+    const digits = value.replace(/\D/g, ''); // Remove caracteres não numéricos
+    const firstBlock = digits.slice(0, 2);
+    const secondBlock = digits.slice(2, 7);
+    const thirdBlock = digits.slice(7, 11);
+
+    let telefoneFormatado = '';
+    if (firstBlock) {
+      telefoneFormatado += `(${firstBlock})`;
+    }
+    if (secondBlock) {
+      telefoneFormatado += ` ${secondBlock}`;
+    }
+    if (thirdBlock) {
+      telefoneFormatado += `-${thirdBlock}`;
+    }
+
+    return telefoneFormatado;
+  };
 
   //formata e monta a data
   const handleDateChange = (date:any) => {
@@ -283,6 +311,7 @@ function Registro(this: any)  {
         "&password="+password+
         "&name="+name+
         "&cpf="+cpf+
+        "&telefone="+telefone+
         "&birth="+birthFormated+
         "&isOng="+isOng+
         "&ongName="+ongName+
@@ -301,6 +330,7 @@ function Registro(this: any)  {
         "&password="+password+
         "&name="+name+
         "&cpf="+cpf+
+        "&telefone="+telefone+
         "&birth="+birthFormated+
         "&isOng="+isOng+
         "&state="+state+
@@ -417,6 +447,16 @@ function Registro(this: any)  {
                   setCpf(formatCpf(event.target.value));
                 }
               }
+            />
+          </div>
+          <div className={styles.campos}>
+            <TextField
+              label="Telefone"
+              variant="outlined"
+              fullWidth
+              required
+              value={telefone}
+              onChange={handleChange}
             />
           </div>
           <div className={styles.campos}>
