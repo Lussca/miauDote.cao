@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `adotecao`.`userOng` (
   CONSTRAINT `fk_userOng_adress`
     FOREIGN KEY (`idAdress`)
     REFERENCES `adotecao`.`adress` (`idAdress`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `adotecao`.`userAdopter` (
   CONSTRAINT `fk_userOng_adress0`
     FOREIGN KEY (`idAdress`)
     REFERENCES `adotecao`.`adress` (`idAdress`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
