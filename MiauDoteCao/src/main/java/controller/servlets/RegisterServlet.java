@@ -51,6 +51,7 @@ public class RegisterServlet extends HttpServlet {
 		String cep = request.getParameter("cep");
 		String street = request.getParameter("street");
 		String number = request.getParameter("number");
+		String phoneNumber = request.getParameter("telefone");
 		String ongName;
 		int validate = 0;
 		if(isOng) {
@@ -60,7 +61,7 @@ public class RegisterServlet extends HttpServlet {
 		}
 		
 		try {
-			validate = validations.validateInputs(city, neighborhood, cep, login, password, name, cpf, birth, ongName, street, number, isOng);
+			validate = validations.validateInputs(city, neighborhood, cep, login, password, name, cpf, birth, ongName, street, number, isOng, phoneNumber);
 		} catch (ClassNotFoundException | IOException | ParseException e2) {
 			e2.printStackTrace();
 		}	
@@ -95,6 +96,10 @@ public class RegisterServlet extends HttpServlet {
 		case Validations.LOGIN_ALREADY_EXISTS:
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_CONFLICT, Validations.LOGIN_ALREADY_EXISTS);
 			break;
+		case Validations.PHONE_ALREADY_EXISTS:
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_CONFLICT, Validations.PHONE_ALREADY_EXISTS);
+		case Validations.INVALID_PHONE_NUMBER:
+			rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_PHONE_NUMBER);
 		case Validations.NO_ERROR:
 			if(isOng) {
 				UserOng ong = new UserOng();
@@ -110,8 +115,8 @@ public class RegisterServlet extends HttpServlet {
 				try {
 					ong.setBirth(Validations.dateFormat(birth));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.BAD_REQUEST);
 				}
 				ong.setOngName(ongName);
 				
@@ -151,14 +156,15 @@ public class RegisterServlet extends HttpServlet {
 					adopter.setPw(encrypt.toHash(password));
 				} catch (NoSuchAlgorithmException e1) {
 					e1.printStackTrace();
+					rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.BAD_REQUEST);
 				}
 				adopter.setUsername(name);
 				adopter.setCpf(cpf);
 				try {
 					adopter.setBirth(Validations.dateFormat(birth));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.BAD_REQUEST);
 				}
 				
 				List<String> keys = encrypt.generateKeys(password);

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import model.Dao;
 
@@ -51,7 +54,21 @@ public class Validations {
 		public static final int NO_APPLICATIONS_FOUND = 32;
 		public static final int ANIMAL_NOT_DELETED = 33;
 		public static final int APPLICATION_ADDED_AND_EMAIL_NOT_SENT = 34;
+		public static final int PHONE_ALREADY_EXISTS = 35;
+		public static final int INVALID_PHONE_NUMBER = 36;
 	    public static final int NO_ERROR = 0;
+	    
+	    private static final Set<String> VALID_DDDS = new HashSet<>(Arrays.asList(
+	            "11", "12", "13", "14", "15", "16", "17", "18", "19",
+	            "21", "22", "24", "27", "28", "31", "32", "33", "34",
+	            "35", "37", "38", "41", "42", "43", "44", "45", "46",
+	            "47", "48", "49", "51", "53", "54", "55", "61", "62",
+	            "63", "64", "65", "66", "67", "68", "69", "71", "73",
+	            "74", "75", "77", "79", "81", "82", "83", "84", "85",
+	            "86", "87", "88", "89", "91", "92", "93", "94", "95",
+	            "96", "97", "98", "99"
+	    ));
+		
 		
 		
 		
@@ -63,7 +80,7 @@ public class Validations {
 
 	
 	public int validateInputs(String city, String neighborhood, String cep,
-			String login, String password, String name, String cpf, String birth, String ongName, String street, String number, boolean isOng)
+			String login, String password, String name, String cpf, String birth, String ongName, String street, String number, boolean isOng, String phoneNumber)
 					throws ClassNotFoundException, IOException, ParseException {
 		 String[] inputs = {city, neighborhood, cep, login, password, name, cpf, birth, street, number};
 		int errorMessage = -1;
@@ -127,13 +144,25 @@ public class Validations {
 			errorMessage = ONG_ALREADY_EXISTS;
 			System.out.println("ong ja existe");
 			return errorMessage;
-		}else {
+		}else if(dao.checkForDuplicityAdopterPhoneNumber(phoneNumber)) {
+			errorMessage = PHONE_ALREADY_EXISTS;
+			System.out.println("telefone ja existe");
+			return errorMessage;
+		}else if(dao.checkForDuplicityOngPhoneNumber(phoneNumber)) {
+			errorMessage = PHONE_ALREADY_EXISTS;
+			System.out.println("telefone ja existe");
+			return errorMessage;
+		}else if(validatePhoneNumber(phoneNumber)) {
+			errorMessage = INVALID_PHONE_NUMBER;
+			System.out.println("telefone invalido");
+			return errorMessage;
+		}
+		else {
 			errorMessage = NO_ERROR;
 			System.out.println("semm erros");
 			return errorMessage;
 		}
 		return errorMessage;
-		
 	}
 	
 	public boolean validatePassword(String password) {
@@ -247,7 +276,16 @@ public class Validations {
         } catch (DateTimeParseException e) {
             return false;
         }
-    }	
+    }
+	
+	private boolean validatePhoneNumber(String phoneNumber) {
+		String noMask = phoneNumber.replaceAll("\\D", "");
+        if (noMask.length() == 11 && VALID_DDDS.contains(noMask.substring(0, 2))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 	
 	public List<Boolean> verifyLogin(String login, String password) throws NoSuchAlgorithmException, ClassNotFoundException, IOException{
 		List<Boolean> result = new ArrayList<Boolean>();
@@ -277,4 +315,5 @@ public class Validations {
 		int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
 		return randomNum;
 	}
+	
 }

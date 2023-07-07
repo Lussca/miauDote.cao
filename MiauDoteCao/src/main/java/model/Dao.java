@@ -201,11 +201,32 @@ public class Dao {
 		        System.out.println(e.getMessage());
 		        return false;
 		    }
-		
-		
 	}
 
-
+	public boolean checkForDuplicityAdopterPhoneNumber(String phoneNumber) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM userAdopter WHERE phoneNumber = ?";
+		try (Connection conn = this.connectDB();
+		         PreparedStatement statement = conn.prepareStatement(sql)) {
+		        statement.setString(1, phoneNumber);
+		        ResultSet rs = statement.executeQuery();
+		        return rs.next();
+		    } catch (SQLException e) {
+		        System.out.println(e.getMessage());
+		        return false;
+		    }
+	}
+	public boolean checkForDuplicityOngPhoneNumber(String phoneNumber) throws ClassNotFoundException, IOException {
+		String sql = "SELECT * FROM userOng WHERE phoneNumber = ?";
+		try (Connection conn = this.connectDB();
+		        PreparedStatement statement = conn.prepareStatement(sql)) {
+		        statement.setString(1, phoneNumber);
+		        ResultSet rs = statement.executeQuery();
+		        return rs.next();
+		    } catch (SQLException e) {
+		        System.out.println(e.getMessage());
+		        return false;
+		    }
+	}
 	public boolean checkForDuplicityAdopterCPF(String cpf) throws ClassNotFoundException, IOException {
 		String sql = "SELECT * FROM userAdopter WHERE cpf = ?";
 		try (Connection conn = this.connectDB();
