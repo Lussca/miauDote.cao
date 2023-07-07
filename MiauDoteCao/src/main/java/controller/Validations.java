@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import model.Dao;
 
@@ -58,7 +55,7 @@ public class Validations {
 		public static final int INVALID_PHONE_NUMBER = 36;
 	    public static final int NO_ERROR = 0;
 	    
-	    private static final Set<String> VALID_DDDS = new HashSet<>(Arrays.asList(
+	    private final String[]DDDS = {
 	            "11", "12", "13", "14", "15", "16", "17", "18", "19",
 	            "21", "22", "24", "27", "28", "31", "32", "33", "34",
 	            "35", "37", "38", "41", "42", "43", "44", "45", "46",
@@ -66,8 +63,7 @@ public class Validations {
 	            "63", "64", "65", "66", "67", "68", "69", "71", "73",
 	            "74", "75", "77", "79", "81", "82", "83", "84", "85",
 	            "86", "87", "88", "89", "91", "92", "93", "94", "95",
-	            "96", "97", "98", "99"
-	    ));
+	            "96", "97", "98", "99"};
 		
 		
 		
@@ -279,12 +275,26 @@ public class Validations {
     }
 	
 	private boolean validatePhoneNumber(String phoneNumber) {
-		String noMask = phoneNumber.replaceAll("\\D", "");
-        if (noMask.length() == 11 && VALID_DDDS.contains(noMask.substring(0, 2))) {
-            return true;
-        } else {
-            return false;
-        }
+		boolean size = false;
+		boolean ddd = false;
+		String noMask = phoneNumber.replaceAll("[()\\-]", "");
+		noMask.replace(" ", "");
+		if(noMask.length() == 11) {	
+			size = true;
+			System.out.println("TAMANHO");
+		}
+		for(int i = 0; i < DDDS.length; i ++) {
+			if(noMask.substring(0,2) == DDDS[i]) {
+				ddd = true;
+				System.out.println("DDD ENCONTRADO");
+				break;
+				}
+			}
+		if(size && ddd) {
+			return true;
+		}else {
+			return false;
+		}
     }
 	
 	public List<Boolean> verifyLogin(String login, String password) throws NoSuchAlgorithmException, ClassNotFoundException, IOException{

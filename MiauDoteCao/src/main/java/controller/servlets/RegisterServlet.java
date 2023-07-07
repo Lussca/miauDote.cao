@@ -119,6 +119,7 @@ public class RegisterServlet extends HttpServlet {
 					rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.BAD_REQUEST);
 				}
 				ong.setOngName(ongName);
+				ong.setPhoneNumber(phoneNumber);
 				
 				List<String> keys = encrypt.generateKeys(password);
 				String publicKey = keys.get(0);
@@ -174,6 +175,7 @@ public class RegisterServlet extends HttpServlet {
 
 				adopter.setPublicKey(publicKey);
 				adopter.setPrivateKey(privateKey);
+				adopter.setPhoneNumber(phoneNumber);
 				
 				adress.setState(state);
 				adress.setCity(city);

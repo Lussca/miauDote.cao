@@ -67,7 +67,7 @@ public class Dao {
     }
     
     public boolean registerUserOng(UserOng user, int idAdress) throws SQLException, ClassNotFoundException, IOException {
-        String sql = "INSERT INTO userOng (email, pw, username, cpf, birth, ongName, publicKey, privateKey, idAdress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO userOng (email, pw, username, cpf, birth, ongName, publicKey, privateKey, idAdress, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = this.connectDB();
              PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getLogin());
@@ -79,6 +79,7 @@ public class Dao {
             statement.setString(7, user.getPublicKey());
             statement.setString(8, user.getPrivateKey());
             statement.setInt(9, idAdress);
+            statement.setString(10, user.getPhoneNumber());
             @SuppressWarnings("unused")
 			int update = statement.executeUpdate();
             ResultSet keys = statement.getGeneratedKeys();
@@ -96,7 +97,7 @@ public class Dao {
     }
 
 	public boolean registerUserAdopter(UserAdopter user, int idAdress) throws SQLException, ClassNotFoundException, IOException {
-		 String sql = "INSERT INTO userAdopter (email, pw, username, cpf, birth, publicKey, privateKey, idAdress) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		 String sql = "INSERT INTO userAdopter (email, pw, username, cpf, birth, publicKey, privateKey, idAdress, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	        try (Connection connection = this.connectDB();
 	             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 	            statement.setString(1, user.getLogin());
@@ -107,6 +108,7 @@ public class Dao {
 	            statement.setString(6, user.getPublicKey());
 	            statement.setString(7, user.getPrivateKey());
 	            statement.setInt(8, idAdress);
+	            statement.setString(9, user.getPhoneNumber());
 	            @SuppressWarnings("unused")
 				int update = statement.executeUpdate();
 	            ResultSet keys = statement.getGeneratedKeys();
