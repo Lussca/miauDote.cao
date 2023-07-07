@@ -48,24 +48,24 @@ function ongMenu(this: any)  {
   
   const [animalData, setAnimalData] = useState<Animal | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const config: AxiosRequestConfig = {
-        params: {
-          idUser: idUser,
-        },
-      };
-
-      axios
-        .get('http://localhost:8080/MiauDoteCao/GetAnimalsByOngId', config)
-        .then(response => {
-          setAnimals(response.data.animals);
-        })
-        .catch(error => {
-          console.error('Erro:', error);
-        });
+  const fetchData = async () => {
+    const config: AxiosRequestConfig = {
+      params: {
+        idUser: idUser,
+      },
     };
 
+    axios
+      .get('http://localhost:8080/MiauDoteCao/GetAnimalsByOngId', config)
+      .then(response => {
+        setAnimals(response.data.animals);
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+      });
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -87,10 +87,11 @@ function ongMenu(this: any)  {
     axios
         .delete('http://localhost:8080/MiauDoteCao/PetUpdateServlet', Animal)
         .then(response => {
-          console.log("Deu certo")
+          fetchData();
         })
         .catch(error => {
           console.error('Erro:', error);
+          fetchData();
         });
   };
 
