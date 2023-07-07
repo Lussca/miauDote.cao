@@ -7,66 +7,109 @@ import { storageRef, uploadBytes, getDownloadURL } from '../../../Components/Fir
 //imports MUI
 import { AlertColor, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
-interface ModalProps {
-  open: boolean;
-  onClose: () => void;
+interface Animal {
+    age: string,
+    animalDescription: string,
+    animalToAnimal: string,
+    animalToPerson: string,
+    color: string,
+    hairType: string,
+    id: string,
+    idOng: string,
+    insertionDate: string,
+    name: string,
+    race: string,
+    sex: string,
+    size: string,
 }
 
-const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
+interface AnimalModalProps  {
+    open: boolean;
+    onClose: () => void;
+    animalData?: Animal | null;
+}
+
+const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) => {
 
     const animalsInformations = {
-        cah: '',
-        caa: '',
-        cor: '',
-        nome: '',
-        sexo: '',
-        idade: '',
-        porte: '',
-        especie: '',
-        pelagem: '',
-        descricao: '',
+        age: '',
+        animalDescription: '',
+        animalToAnimal: '',
+        animalToPerson: '',
+        color: '',
+        hairType: '',
+        id: '',
+        idOng: '',
+        insertionDate: '',
+        name: '',
+        race: '',
+        sex: '',
+        size: '',
     };
+
+    useEffect(() => {
+        if (animalData) {
+            console.log(animalData)
+            setAnimal({
+                age: animalData.age,
+                animalDescription: animalData.animalDescription,
+                animalToAnimal: animalData.animalToAnimal,
+                animalToPerson: animalData.animalToPerson,
+                color: animalData.color,
+                hairType: animalData.hairType,
+                id: animalData.id,
+                idOng: animalData.idOng,
+                insertionDate: animalData.insertionDate,
+                name: animalData.name,
+                race: animalData.race,
+                sex: animalData.sex,
+                size: animalData.size,
+            });
+        } else {
+          setAnimal(animalsInformations);
+        }
+    }, [animalData]);
 
     const [animal, setAnimal] = useState(animalsInformations);
 
     const handleChangeName = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, nome: event.target.value });
+        setAnimal({ ...animal, name: event.target.value });
     };
 
     const handleChangeDescription = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, descricao: event.target.value });
+        setAnimal({ ...animal, animalDescription: event.target.value });
     };
 
     const handleChangeEspecie = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, especie: event.target.value });
+        setAnimal({ ...animal, race: event.target.value });
     };
 
     const handleChangePelagem = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, pelagem: event.target.value });
+        setAnimal({ ...animal, hairType: event.target.value });
     };
 
     const handleChangeSexo = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, sexo: event.target.value });
+        setAnimal({ ...animal, sex: event.target.value });
     };
 
     const handleChangeCaa = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, caa: event.target.value });
+        setAnimal({ ...animal, animalToAnimal: event.target.value });
     };
 
     const handleChangeCah = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, cah: event.target.value });
+        setAnimal({ ...animal, animalToPerson: event.target.value });
     };
 
     const handleChangeIdade = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, idade: event.target.value });
+        setAnimal({ ...animal, age: event.target.value });
     };
 
     const handleChangePorte = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, porte: event.target.value });
+        setAnimal({ ...animal, size: event.target.value });
     };
 
     const handleChangeCor = (event: { target: { value: string; }; }) => {
-        setAnimal({ ...animal, cor: event.target.value });
+        setAnimal({ ...animal, color: event.target.value });
     };
 
     const [images, setImages] = useState<File[]>([]);
@@ -95,17 +138,17 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
 
         const animalData = {
             Animal: {
-                race: animal.especie,
-                nome: animal.nome,
-                porte: animal.porte,
-                pelagem: animal.pelagem,
-                caa: animal.caa,
-                cah: animal.cah,
-                sexo: animal.sexo,
-                idade: animal.idade,
+                race: animal.race,
+                nome: animal.name,
+                porte: animal.size,
+                pelagem: animal.hairType,
+                caa: animal.animalToAnimal,
+                cah: animal.animalToPerson,
+                sexo: animal.sex,
+                idade: animal.age,
                 idOng: sessionStorage.getItem('userId'),
-                cor: animal.cor,
-                descricao: animal.descricao,
+                cor: animal.color,
+                descricao: animal.animalDescription,
                 Links: {
                     link1: imageUrls[0] || '',
                     link2: imageUrls[1] || '',
@@ -131,19 +174,19 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
       <DialogTitle>Adicionar Animal</DialogTitle>
       <DialogContent style={{ overflowY: 'initial' }}>
         <input type="file" accept="image/*" multiple onChange={handleImageChange} />
-        <TextField value={animal.nome} onChange={handleChangeName} id="nome" label="Nome" variant="outlined" style={{ width: '50%', marginTop: '5%' }}/>
-        <TextField value={animal.idade} onChange={handleChangeIdade} id="idade" label="Idade" variant="outlined" style={{ width: '50%', marginTop: '5%' }}/>
-        <TextField value={animal.descricao} onChange={handleChangeDescription} id="descricao" label="Descrição" variant="outlined" style={{ width: '100%', marginTop: '5%' }}/>
+        <TextField value={animal.name} onChange={handleChangeName} id="nome" label="Nome" variant="outlined" style={{ width: '50%', marginTop: '5%' }}/>
+        <TextField value={animal.age} onChange={handleChangeIdade} id="idade" label="Idade" variant="outlined" style={{ width: '50%', marginTop: '5%' }}/>
+        <TextField value={animal.animalDescription} onChange={handleChangeDescription} id="descricao" label="Descrição" variant="outlined" style={{ width: '100%', marginTop: '5%' }}/>
         <FormControl style={{ width: '50%', marginTop: '5%' }}>
             <InputLabel>Espécie</InputLabel>
-            <Select value={animal.especie} onChange={handleChangeEspecie}>
+            <Select value={animal.race} onChange={handleChangeEspecie}>
                 <MenuItem value={'1'}>Canino</MenuItem>
                 <MenuItem value={'2'}>Felino</MenuItem>
             </Select>
         </FormControl>
         <FormControl style={{ width: '50%', marginTop: '5%' }}>
             <InputLabel>Porte</InputLabel>
-            <Select value={animal.porte} onChange={handleChangePorte}>
+            <Select value={animal.size} onChange={handleChangePorte}>
                 <MenuItem value={'1'}>Pequeno</MenuItem>
                 <MenuItem value={'2'}>Médio</MenuItem>
                 <MenuItem value={'3'}>Grande</MenuItem>
@@ -151,7 +194,7 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
         </FormControl>
         <FormControl style={{ width: '50%', marginTop: '5%' }}>
             <InputLabel>Pelagem</InputLabel>
-            <Select value={animal.pelagem} onChange={handleChangePelagem}>
+            <Select value={animal.hairType} onChange={handleChangePelagem}>
                 <MenuItem value={'1'}>Curto</MenuItem>
                 <MenuItem value={'2'}>Médio</MenuItem>
                 <MenuItem value={'3'}>Longo</MenuItem>
@@ -159,14 +202,14 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
         </FormControl>
         <FormControl style={{ width: '50%', marginTop: '5%' }}>
             <InputLabel>Sexo</InputLabel>
-            <Select value={animal.sexo} onChange={handleChangeSexo}>
+            <Select value={animal.sex} onChange={handleChangeSexo}>
                 <MenuItem value={'1'}>Macho</MenuItem>
                 <MenuItem value={'2'}>Fêmea</MenuItem>
             </Select>
         </FormControl>
         <FormControl style={{ width: '50%', marginTop: '5%' }}>
             <InputLabel>Convivência entre animais</InputLabel>
-            <Select value={animal.caa} onChange={handleChangeCaa}>
+            <Select value={animal.animalToAnimal} onChange={handleChangeCaa}>
                 <MenuItem value={'1'}>manso</MenuItem>
                 <MenuItem value={'2'}>agressivo</MenuItem>
                 <MenuItem value={'3'}>agitado</MenuItem>
@@ -176,7 +219,7 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
         </FormControl>
         <FormControl style={{ width: '50%', marginTop: '5%' }}>
             <InputLabel>Convivência com humanos</InputLabel>
-            <Select value={animal.cah} onChange={handleChangeCah}>
+            <Select value={animal.animalToPerson} onChange={handleChangeCah}>
                 <MenuItem value={'1'}>manso</MenuItem>
                 <MenuItem value={'2'}>agressivo</MenuItem>
                 <MenuItem value={'3'}>agitado</MenuItem>
@@ -186,7 +229,7 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
         </FormControl>
         <FormControl style={{ width: '100%', marginTop: '5%' }}>
             <InputLabel>Cor do pelo</InputLabel>
-            <Select value={animal.cor} onChange={handleChangeCor}>
+            <Select value={animal.color} onChange={handleChangeCor}>
                 <MenuItem value={'1'}>Marrom</MenuItem>
                 <MenuItem value={'2'}>Branco</MenuItem>
                 <MenuItem value={'3'}>Preto</MenuItem>
@@ -208,4 +251,4 @@ const AnimalModalAdd = ({ open, onClose }: ModalProps) => {
   );
 };
 
-export default AnimalModalAdd;
+export default AnimalModalAddEdit;

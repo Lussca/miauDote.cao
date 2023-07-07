@@ -6,7 +6,7 @@ import { createTheme } from '@mui/material/styles';
 import { AppBar, Toolbar, IconButton,Typography, Stack, ThemeProvider } from '@mui/material';
 
 import { Logout } from './logout';
-import AnimalModalAdd from '../DialogAnimlByOng/DialogAnimalByOng';
+import AnimalModalAddEdit from '../DialogAnimlByOng/DialogAnimalByOng';
 
 const theme = createTheme({
     palette: {
@@ -46,7 +46,7 @@ export const Navbar = () =>{
                 </Stack>
                 <Logout></Logout>
             </Toolbar>
-            <AnimalModalAdd
+            <AnimalModalAddEdit
                 open={openModal}
                 onClose={() => setOpenModal(false)}
             />

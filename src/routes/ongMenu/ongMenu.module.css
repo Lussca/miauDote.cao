@@ -12,3 +12,9 @@
     background-color: aliceblue;
     margin-top: 19%;
 }
+
+.tableAnimal{
+    margin-top: 3%;
+    display: flex;
+    justify-content: center;
+}
