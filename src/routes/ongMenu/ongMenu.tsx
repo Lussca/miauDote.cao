@@ -49,11 +49,11 @@ function ongMenu(this: any)  {
   const [animalData, setAnimalData] = useState<Animal | null>(null);
 
   const fetchData = async () => {
-    const config: AxiosRequestConfig = {
-      params: {
-        idUser: idUser,
-      },
-    };
+      const config: AxiosRequestConfig = {
+        params: {
+          idUser: idUser,
+        },
+      };
 
     axios
       .get('http://localhost:8080/MiauDoteCao/GetAnimalsByOngId', config)
@@ -97,7 +97,7 @@ function ongMenu(this: any)  {
 
   const handleEdit = (animalId: string) => {
     const animal = animals.find(animal => animal.id === animalId);
-    console.log(animal)
+    
     if (animal) {
       openModalRegister(animal);
     }
