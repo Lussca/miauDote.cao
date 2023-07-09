@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.Key;
 import java.sql.SQLException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.Properties;
 
@@ -18,6 +17,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import model.Dao;
 
@@ -69,37 +69,57 @@ public String createJWT(String id, String issuer, String subject, long ttlMillis
 			.setIssuer(issuer)
 			.signWith(signatureAlgorithm, signingKey);
 	if(ttlMillis > 0) {
-		long expMillis = nowMillis + ttlMillis;
+		long expMillis = nowMillis + (ttlMillis * 24 * 60 * 60 * 1000);
 		Date exp = new Date(expMillis);
 		builder.setExpiration(exp);
 	}
 	return builder.compact();
 }
 private static Claims decodeJWT(String jwt) throws SignatureException, ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, IllegalArgumentException, IOException {
-    @SuppressWarnings("deprecation")
-	Claims claims = Jwts.parser()
-            .setSigningKey(Base64.getDecoder().decode(getSecretKey("secretKey")))
-            .parseClaimsJws(jwt).getBody();
-    return claims;
+	String secretKey = getSecretKey("secretKey");
+	try {
+	Claims claims = Jwts.parserBuilder()
+            .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+            .build()
+            .parseClaimsJws(jwt)
+            .getBody();
+		return claims;
+	}catch(ExpiredJwtException e) {
+		return null;
+	}
+
 }
 
-public boolean validateJWT(String jwt, String login, boolean isOng) throws ClassNotFoundException, IOException, SQLException {
+public boolean validateJWT(String reqJwt, String login, boolean isOng) throws ClassNotFoundException, IOException, SQLException {
 	String dbJwt = dao.getJWT(login, isOng);
+	try {
 	Claims dbClaims = decodeJWT(dbJwt);
-	Claims reqClaims = decodeJWT(jwt);
-	if (dbClaims.getSubject().equals(reqClaims.getSubject()) 
-	        && dbClaims.getId().equals(reqClaims.getId())
-	        && dbClaims.getIssuer().equals(reqClaims.getIssuer())) {
-				Date expiration = reqClaims.getExpiration();
-				if(expiration != null && expiration.before(new Date())) {
-					String newJwt = createJWT(dbClaims.getId(), dbClaims.getIssuer(), dbClaims.getSubject(), 3600000);
-					dao.insertAndUpdateJWT(newJwt, isOng, login);
-				}else {
-					return false;
-				}		
-			return true;
-	}else{
-	    return false;
+	Claims reqClaims = decodeJWT(reqJwt);
+	    String reqIssuer = reqClaims.getIssuer();
+	    String dbIssuer = dbClaims.getIssuer();
+	    String reqSub = reqClaims.getSubject();
+	    String dbSub = dbClaims.getSubject();   
+	    String reqId = reqClaims.getId();
+	    String dbId = reqClaims.getId();
+
+	    if (reqIssuer != null && dbIssuer != null && reqIssuer.equals(dbIssuer)) {       
+	        System.out.println("ISSUE VALIDO");
+	        if(reqSub != null && dbSub != null && reqSub.equals(dbSub)) {
+	        	System.out.println("SUB VALIDO");
+	        	if(reqId != null && dbId != null && reqId.equals(dbId)) {
+	        		System.out.println("ID VALIDO");
+	        		return true;
+	        	}else {
+	        		return false;
+	        	}
+	        }else {
+	        	return false;
+	        }
+	    }else {
+	    	return false;
+	    	}
+		}catch(NullPointerException | UnsupportedJwtException | MalformedJwtException | ExpiredJwtException | SignatureException | IllegalArgumentException e ) {
+			return false;
 		}
 	}
 }

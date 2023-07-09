@@ -3,6 +3,7 @@ package controller.handler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,10 @@ import com.google.gson.JsonObject;
 
 import controller.Validations;
 
+import model.Dao;
+
 public class RequestResponseHandler {
+	
 	public void configureCors(HttpServletResponse response){
 		response.addHeader("Access-Control-Allow-Origin","*");
 		response.addHeader("Access-Control-Allow-Methods","POST,GET,OPTIONS,PUT,DELETE,HEAD");
@@ -65,4 +69,27 @@ public class RequestResponseHandler {
         out.close();
         new RequestResponseHandler().sendOkResponse(response);
 	}
+	@SuppressWarnings("unused")
+	public static boolean jwtValidator(HttpServletRequest request, String idUser, boolean isOng) throws ClassNotFoundException, IOException, SQLException {
+		Dao dao = new Dao();
+		String authorizationHeader = request.getHeader("Authorization");
+   	 	System.out.println("PEGOU O TOKEN: "+authorizationHeader);
+   	 	if(authorizationHeader.startsWith("Bearer ") || authorizationHeader  != null) {
+   	 		System.out.println("Primeira validação feita.");
+   	 		String reqJWT = authorizationHeader.substring(7);
+   	 		System.out.println("O token é: "+reqJWT);
+   	 		ArrayList<String> userTypeAndEmail = dao.getUserEmailAndType(idUser, isOng);
+   	 		String email = userTypeAndEmail.get(0);
+   	 		JwtHandler jh = new JwtHandler();
+   	 		boolean validate = jh.validateJWT(reqJWT, email, isOng);
+   	 		if(validate) {
+   	 			System.out.println("VALIDO");
+   	 			return true;
+   	 			}else {
+   	 				System.out.println("INVALIDO");
+   	 				return false;
+   	 			}
+   	 		}
+		return false;
+		}
 }

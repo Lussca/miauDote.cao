@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
 
 		    String id = idGenerator();
 		    String subject = login;
-		    String jwt = jwtHandler.createJWT(id, new Encrypt().toHash(subject), Encrypt.JWT_ISSUER, 3600000);
+		    String jwt = jwtHandler.createJWT(id, new Encrypt().toHash(subject), Encrypt.JWT_ISSUER, 5);
 		    String userId = null;
 
 		    try {
