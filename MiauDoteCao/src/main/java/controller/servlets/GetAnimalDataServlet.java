@@ -22,8 +22,8 @@ public class GetAnimalDataServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		rrh.configureCors(response);
 		String idAnimal = request.getParameter("idAnimal");
-		System.out.println(idAnimal);
 		Dao dao = new Dao();
 		try {
 			Animal animal = dao.getAnimalData(new Animal(idAnimal));
