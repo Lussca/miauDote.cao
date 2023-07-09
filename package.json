@@ -24,6 +24,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loader-spinner": "^5.3.4",
+    "react-material-ui-carousel": "^3.4.2",
     "react-router-dom": "^6.10.0",
     "react-text-mask": "^5.5.0",
     "sass": "^1.62.0",

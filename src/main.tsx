@@ -14,6 +14,7 @@ import AdotanteMenu from './routes/adotanteMenu/adotanteMenu'
 import ErrorPage from './routes/ErrorPage/ErrorPage'
 import QueroAdotar from './routes/QueroAdotar/QueroAdotar'
 import Candidaturas from './routes/Candidaturas/Candidaturas'
+import AlterarSenha from './routes/AlterarSenha/AlterarSenha'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/registrar",
     element: <Registro />
+  },
+  {
+    path: "/alterarSenha",
+    element: <AlterarSenha />
   },
   {
     path: "/",

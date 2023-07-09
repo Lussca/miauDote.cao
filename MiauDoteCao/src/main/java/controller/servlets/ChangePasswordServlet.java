@@ -33,7 +33,7 @@ public class ChangePasswordServlet extends HttpServlet {
 		String requestBody = RequestResponseHandler.getRequestBody(request);
 		Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(requestBody, JsonObject.class);
-        JsonObject emailObject = jsonObject.getAsJsonObject("data");
+        JsonObject emailObject = jsonObject.getAsJsonObject();
         String email = emailObject.get("email").getAsString();
 		ChangePassword cp = new ChangePassword();
 		if(cp.send(email)) {

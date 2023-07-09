@@ -129,7 +129,7 @@ function Login(this: any)  {
             </Link>
           </p>
           <p className={styles.Link}>Esqueceu a senha? 
-            <Link to="/registrar" className={styles.link}>
+            <Link to="/alterarSenha" className={styles.link}>
               {'Clique aqui!'}
             </Link>
           </p>

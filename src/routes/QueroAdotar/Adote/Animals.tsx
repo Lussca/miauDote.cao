@@ -21,10 +21,34 @@ interface AnimalsProps {
   };
 }
 
+interface animals {
+  id: string;
+  name: string;
+  age: string;
+  links: any[]; // Você pode substituir "any" pelo tipo adequado dos elementos do array "links"
+  race: string;
+  size: string;
+  hairType: string;
+  sex: string;
+  idOng: string;
+  animalDescription: string;
+}
+
 const Animals = ({ filterApplied, filters }: AnimalsProps) => {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedAnimal, setSelectedAnimal] = useState<{ id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string} | null>(null);
-  const [animalData, setAnimalData] = useState<{ id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string}[]>([]);
+  const [selectedAnimal, setSelectedAnimal] = useState<{
+    id: string;
+    name: string;
+    age: string;
+    links: Array<any>; // Ou substitua "any" pelo tipo adequado para os elementos do array "links"
+    race: string;
+    size: string;
+    hairType: string;
+    sex: string;
+    idOng: string;
+    animalDescription: string;
+  } | null>(null);
+  const [animalData, setAnimalData] = useState<animals[]>([]);
 
   const idUser = sessionStorage.getItem("userId");
 
@@ -32,6 +56,7 @@ const Animals = ({ filterApplied, filters }: AnimalsProps) => {
 
   useEffect(() => {
     if(filterApplied){
+
       axios
       .post('http://localhost:8080/MiauDoteCao/AnimalFilterServlet', config)
       .then(response => {
@@ -42,6 +67,7 @@ const Animals = ({ filterApplied, filters }: AnimalsProps) => {
       });
 
     } else{
+
       const params = {
         idUser: sessionStorage.getItem("userId"),
       };
@@ -58,15 +84,15 @@ const Animals = ({ filterApplied, filters }: AnimalsProps) => {
     }
   }, [filterApplied, filters]);
 
-  const openAnimalModal = (animal: { id:string, name: string, age: string, imageUrl: string, race: string, size: string, hairType: string, sex: string, idOng: string, animalDescription: string}) => {
+  const openAnimalModal = (animal: animals) => {
     setSelectedAnimal(animal);
     setOpenModal(true);
   };
   
   return (
     <>
-      {animalData.length === 0 ? (
-        <Typography variant="body1">No animals found.</Typography>
+      {animalData.length === 0 || animalData.length === null ? (
+        <Typography variant="body1">nenhum animal encontrado no seu Estado.</Typography>
       ) : (
       animalData.map((animal, index) => (
         <Card key={index} sx={{ width: 200, height: 'auto', maxHeight: '21em' , marginBottom: 3 }} onClick={() => openAnimalModal(animal)}>
@@ -74,7 +100,7 @@ const Animals = ({ filterApplied, filters }: AnimalsProps) => {
             <CardMedia
               component="img"
               height="140"
-              image={animal.imageUrl}
+              image={animal.links[0]}
               alt={animal.name}
             />
             <CardContent>

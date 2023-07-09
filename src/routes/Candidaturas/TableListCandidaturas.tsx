@@ -1,5 +1,5 @@
 //imports react 
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
 
 // imports MUI
@@ -64,10 +64,19 @@ const TableList = () =>  {
 
         const idUser = sessionStorage.getItem('userId');
 
+        const token = sessionStorage.getItem('jwt')
+        const config: AxiosRequestConfig = {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            data: {
+              idUser: idUser,
+              idAnimal: id,
+            }
+        };
+
         axios
-            .delete('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet',{
-                data: { id: idUser, idAnimal: id },
-            })
+            .delete('http://localhost:8080/MiauDoteCao/AdoptionApplicationServlet', config)
             .then(response => {
                 console.log( response.data)
                 setDeletionOccurred(prev => !prev);

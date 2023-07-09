@@ -39,23 +39,21 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
     useEffect(() => {
 
         if (animalData) {
-
             setTitel("Editar")
             setNomeBotao("ATUALIZAR")
 
             const params = {
-                idAnimal: animal.id,
+                idAnimal: animalData.id,
             };
     
             axios
-                .delete('http://localhost:8080/MiauDoteCao/GetAnimalDataServlet', {params})
+                .get('http://localhost:8080/MiauDoteCao/GetAnimalDataServlet', {params})
                 .then(response => {
-                    setAnimal(response.data);
+                    setAnimal({...response.data});
                 })
                 .catch(error => {
                   console.error('Erro:', error);
                 });
-
         } else {
             setAnimal({...animalsInformations});
             setTitel("Cadastrar")
@@ -116,6 +114,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
         if (files) {
           const selectedImages: File[] = Array.from(files);
           setImages(selectedImages);
+          console.log(images)
         }
     };
 
@@ -132,45 +131,98 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             }
         }
 
-        const animalData = {
-            Animal: {
-                race: animal.race,
-                nome: animal.name,
-                porte: animal.size,
-                pelagem: animal.hairType,
-                caa: animal.animalToAnimal,
-                cah: animal.animalToPerson,
-                sexo: animal.sex,
-                idade: animal.age,
-                idOng: sessionStorage.getItem('userId'),
-                cor: animal.color,
-                descricao: animal.animalDescription,
-                Links: {
-                    link1: imageUrls[0] || '',
-                    link2: imageUrls[1] || '',
-                    link3: imageUrls[2] || '',
-                    link4: imageUrls[3] || ''
+        if(animalData != null){
+
+            const data = {
+                Animal: {
+                    idAnimal: animalData.id,
+                    race: animal.race,
+                    nome: animal.name,
+                    porte: animal.size,
+                    pelagem: animal.hairType,
+                    caa: animal.animalToAnimal,
+                    cah: animal.animalToPerson,
+                    sexo: animal.sex,
+                    idade: animal.age,
+                    idOng: sessionStorage.getItem('userId'),
+                    cor: animal.color,
+                    descricao: animal.animalDescription,
+                    Links: {
+                        link1: imageUrls[0] || '',
+                        link2: imageUrls[1] || '',
+                        link3: imageUrls[2] || '',
+                        link4: imageUrls[3] || ''
+                    }
                 }
-            }
-        };
-
-        const jsonData = JSON.stringify(animalData);
-
-        const config = {
-            headers: {
-              'Content-Type': 'multipart/form-data; charset=utf-8',
-            },
-        };
+            };
     
-        axios
-        .post('http://localhost:8080/MiauDoteCao/PetRegisterServlet', jsonData, config)
-        .then(response => {
-            window.location.reload()
-        })
-        .catch(error => {
-            console.error("Erro: " + error);
-        });
+            const jsonData = JSON.stringify(data);
+
+            const token = sessionStorage.getItem('jwt');
+    
+            const config = {
+                headers: {
+                'Content-Type': 'multipart/form-data; charset=utf-8',
+                'Authorization': `Bearer ${token}`
+                },
+            };
+            
+            axios
+            .put('http://localhost:8080/MiauDoteCao/PetUpdateServlet', jsonData, config)
+            .then(response => {
+                window.location.reload()
+            })
+            .catch(error => {
+                console.error("Erro: " + error);
+                setImageUrls([]);
+                setAnimal({...animalsInformations});
+            });
+        } else{
+
+            const data = {
+                Animal: {
+                    race: animal.race,
+                    nome: animal.name,
+                    porte: animal.size,
+                    pelagem: animal.hairType,
+                    caa: animal.animalToAnimal,
+                    cah: animal.animalToPerson,
+                    sexo: animal.sex,
+                    idade: animal.age,
+                    idOng: sessionStorage.getItem('userId'),
+                    cor: animal.color,
+                    descricao: animal.animalDescription,
+                    Links: {
+                        link1: imageUrls[0] || '',
+                        link2: imageUrls[1] || '',
+                        link3: imageUrls[2] || '',
+                        link4: imageUrls[3] || ''
+                    }
+                }
+            };
+    
+            const jsonData = JSON.stringify(data);
+
+            const token = sessionStorage.getItem('jwt')
+    
+            const config = {
+                headers: {
+                'Content-Type': 'multipart/form-data; charset=utf-8',
+                'Authorization': `Bearer ${token}`
+                },
+            };
         
+            axios
+            .post('http://localhost:8080/MiauDoteCao/PetRegisterServlet', jsonData, config)
+            .then(response => {
+                window.location.reload()
+            })
+            .catch(error => {
+                console.error("Erro: " + error);
+                setImageUrls([]);
+                setAnimal({...animalsInformations});
+            });
+        }
     }
 
   return (
