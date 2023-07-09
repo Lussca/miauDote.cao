@@ -38,23 +38,23 @@ public class GetAnimalDataServlet extends HttpServlet {
 			Animal animal = dao.getAnimalData(new Animal(idAnimal));
 			JSONObject animalJson = new JSONObject();
 			animalJson.put("race", animal.getRace());
-	        animalJson.put("nome", animal.getName());
-	        animalJson.put("porte", animal.getSize());
-	        animalJson.put("pelagem", animal.getHairType());
-	        animalJson.put("caa", animal.getAnimalToAnimal());
-	        animalJson.put("cah", animal.getAnimalToPerson());
-	        animalJson.put("sexo", animal.getSex());
-	        animalJson.put("idade", animal.getAge());
+	        animalJson.put("name", animal.getName());
+	        animalJson.put("size", animal.getSize());
+	        animalJson.put("animalHairType", animal.getHairType());
+	        animalJson.put("animalToAnimal", animal.getAnimalToAnimal());
+	        animalJson.put("animalToPerson", animal.getAnimalToPerson());
+	        animalJson.put("sex", animal.getSex());
+	        animalJson.put("age", animal.getAge());
 	        animalJson.put("idOng", animal.getIdOng());
-	        animalJson.put("cor", animal.getColor());
-	        animalJson.put("descricao", animal.getAnimalDescription());
+	        animalJson.put("color", animal.getColor());
+	        animalJson.put("animalDescription", animal.getAnimalDescription());
 	        String jsonString = animalJson.toString();
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
 	        OutputStream outputStream = response.getOutputStream();
 	        outputStream.write(jsonString.getBytes());
-
-	        outputStream.close();		
+	        outputStream.close();
+	        rrh.sendOkResponse(response);
 		} catch (ClassNotFoundException | IOException e) {
 			rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.SERVER_ERROR);
 			e.printStackTrace();
