@@ -6,22 +6,10 @@ import { storageRef, uploadBytes, getDownloadURL } from '../../../Components/Fir
 import styles from '../DialogAnimlByOng/DialogAnimalByOng.module.css';
 
 //imports MUI
-import { AlertColor, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 interface Animal {
-    age: string,
-    animalDescription: string,
-    animalToAnimal: string,
-    animalToPerson: string,
-    color: string,
-    hairType: string,
-    id: string,
-    idOng: string,
-    insertionDate: string,
-    name: string,
-    race: string,
-    sex: string,
-    size: string,
+    id: string
 }
 
 interface AnimalModalProps  {
@@ -49,18 +37,39 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
     };
 
     useEffect(() => {
+
         if (animalData) {
-            setAnimal({ ...animalData });
-            console.log(animal);
+
+            setTitel("Editar")
+            setNomeBotao("ATUALIZAR")
+
+            const params = {
+                idAnimal: animal.id,
+            };
+    
+            axios
+                .delete('http://localhost:8080/MiauDoteCao/GetAnimalDataServlet', {params})
+                .then(response => {
+                    setAnimal(response.data);
+                })
+                .catch(error => {
+                  console.error('Erro:', error);
+                });
+
         } else {
-            setAnimal({ ...animalsInformations });
-            console.log(animal);
+            setAnimal({...animalsInformations});
+            setTitel("Cadastrar")
+            setNomeBotao("CADASTRAR")
         }
+
     }, [animalData]);
 
     const [animal, setAnimal] = useState(animalsInformations);
     const [images, setImages] = useState<File[]>([]);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+    const [titel, setTitel] = useState('');
+    const [nomeBotao, setNomeBotao] = useState('');
 
     const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
         setAnimal({ ...animal, name: event.target.value });
@@ -156,7 +165,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
         axios
         .post('http://localhost:8080/MiauDoteCao/PetRegisterServlet', jsonData, config)
         .then(response => {
-            console.log(response);
+            window.location.reload()
         })
         .catch(error => {
             console.error("Erro: " + error);
@@ -166,7 +175,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Adicionar Animal</DialogTitle>
+      <DialogTitle>{titel} Animal</DialogTitle>
       <DialogContent className={styles.ajustesAnimalAdd}>
         <input type="file" accept="image/*" multiple onChange={handleImageChange} className={styles.input}/>
         <div className={styles.componentsText}>
@@ -211,7 +220,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
                     <MenuItem value={'3'}>Grande</MenuItem>
                 </Select>
             </FormControl>
-            <FormControl style={{ width: '50%' }}>
+            <FormControl style={{ width: '50%', marginTop: '2%' }}>
                 <InputLabel>Pelagem</InputLabel>
                 <Select value={animal.hairType} onChange={handleChangePelagem}>
                     <MenuItem value={'1'}>Curto</MenuItem>
@@ -219,14 +228,14 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
                     <MenuItem value={'3'}>Longo</MenuItem>
                 </Select>
             </FormControl>
-            <FormControl style={{ width: '50%' }}>
+            <FormControl style={{ width: '50%', marginTop: '2%' }}>
                 <InputLabel>Sexo</InputLabel>
                 <Select value={animal.sex} onChange={handleChangeSexo}>
                     <MenuItem value={'1'}>Macho</MenuItem>
                     <MenuItem value={'2'}>Fêmea</MenuItem>
                 </Select>
             </FormControl>
-            <FormControl style={{ width: '50%' }}>
+            <FormControl style={{ width: '50%', marginTop: '2%' }}>
                 <InputLabel>Convivência entre animais</InputLabel>
                 <Select value={animal.animalToAnimal} onChange={handleChangeCaa}>
                     <MenuItem value={'1'}>manso</MenuItem>
@@ -236,7 +245,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
                     <MenuItem value={'5'}>amedrontado</MenuItem>
                 </Select>
             </FormControl>
-            <FormControl style={{ width: '50%' }}>
+            <FormControl style={{ width: '50%', marginTop: '2%' }}>
                 <InputLabel>Convivência com humanos</InputLabel>
                 <Select value={animal.animalToPerson} onChange={handleChangeCah}>
                     <MenuItem value={'1'}>manso</MenuItem>
@@ -246,7 +255,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
                     <MenuItem value={'5'}>amedrontado</MenuItem>
                 </Select>
             </FormControl>
-            <FormControl style={{ width: '100%' }}>
+            <FormControl style={{ width: '100%', marginTop: '2%' }}>
                 <InputLabel>Cor do pelo</InputLabel>
                 <Select value={animal.color} onChange={handleChangeCor}>
                     <MenuItem value={'1'}>Marrom</MenuItem>
@@ -265,7 +274,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
       </DialogContent>
       <DialogActions>
         <Button variant="contained" color="error" onClick={onClose}>CANCELAR</Button>
-        <Button variant="contained" color="success" onClick={handleButtonClick}>CADASTRAR ANIMAL</Button>
+        <Button variant="contained" color="success" onClick={handleButtonClick}>{nomeBotao} ANIMAL</Button>
       </DialogActions>
     </Dialog>
   );
