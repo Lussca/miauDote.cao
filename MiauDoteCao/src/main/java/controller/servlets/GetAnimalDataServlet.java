@@ -1,7 +1,6 @@
 package controller.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -10,11 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
 
 import controller.Validations;
 import controller.handler.RequestResponseHandler;

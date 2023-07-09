@@ -293,7 +293,6 @@ public class Dao {
 	}
 	public String getJWT(String email, boolean isOng) throws ClassNotFoundException, IOException {
 	    String sql;
-	    System.out.println(email);
 	    if (isOng) {
 	        sql = "SELECT jwt FROM userOng WHERE email=?";
 	    } else {
