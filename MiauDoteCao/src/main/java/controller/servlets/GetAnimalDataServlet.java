@@ -40,7 +40,7 @@ public class GetAnimalDataServlet extends HttpServlet {
 			animalJson.put("race", animal.getRace());
 	        animalJson.put("name", animal.getName());
 	        animalJson.put("size", animal.getSize());
-	        animalJson.put("animalHairType", animal.getHairType());
+	        animalJson.put("hairType", animal.getHairType());
 	        animalJson.put("animalToAnimal", animal.getAnimalToAnimal());
 	        animalJson.put("animalToPerson", animal.getAnimalToPerson());
 	        animalJson.put("sex", animal.getSex());
