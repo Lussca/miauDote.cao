@@ -94,6 +94,12 @@
   	<description></description>
   	<servlet-class>controller.servlets.TesteParaImagensPeloBack</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>GetAnimalDataServlet</servlet-name>
+  	<display-name>GetAnimalDataServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.servlets.GetAnimalDataServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/RegisterServlet</url-pattern>
@@ -153,6 +159,10 @@
   <servlet-mapping>
   	<servlet-name>TesteParaImagensPeloBack</servlet-name>
   	<url-pattern>/TesteParaImagensPeloBack</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>GetAnimalDataServlet</servlet-name>
+  	<url-pattern>/GetAnimalDataServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>

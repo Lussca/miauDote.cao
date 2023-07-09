@@ -347,23 +347,15 @@ public class Dao {
 
 	public ArrayList<Animal> selectAnimals(String race, String size, String hairType, String animalToAnimal, String animalToPerson,
 	        String sex, String age, String id, String city, String state) throws SQLException {
-	    StringBuilder sqlBuilder = new StringBuilder();
-	    sqlBuilder.append("SELECT a.idAnimal, a.idRace, a.animalName, a.idAnimalSize, a.idAnimalFurType, a.idAnimalToAnimal, a.idAnimalToPerson, ");
-	    sqlBuilder.append("a.sex, a.age, a.idOng, a.idColor, a.descricao, img.imageUrl ");
-	    sqlBuilder.append("FROM animal AS a ");
-	    sqlBuilder.append("JOIN userOng AS u ON a.idOng = u.idOng ");
-	    sqlBuilder.append("JOIN adress AS ad ON u.idAdress = ad.idAdress ");
-	    sqlBuilder.append("LEFT JOIN ( ");
-	    sqlBuilder.append("    SELECT idAnimal, imageUrl ");
-	    sqlBuilder.append("    FROM image ");
-	    sqlBuilder.append("    WHERE idImage IN ( ");
-	    sqlBuilder.append("        SELECT MIN(idImage) ");
-	    sqlBuilder.append("        FROM image ");
-	    sqlBuilder.append("        GROUP BY idAnimal ");
-	    sqlBuilder.append("    ) ");
-	    sqlBuilder.append(") AS img ON a.idAnimal = img.idAnimal ");
-	    sqlBuilder.append("WHERE ad.city = ? ");
-	    sqlBuilder.append("  AND ad.state = ? ");
+		StringBuilder sqlBuilder = new StringBuilder();
+		sqlBuilder.append("SELECT a.idAnimal, a.idRace, a.animalName, a.idAnimalSize, a.idAnimalFurType, a.idAnimalToAnimal, a.idAnimalToPerson, ");
+		sqlBuilder.append("a.sex, a.age, a.idOng, a.idColor, a.descricao, img.imageUrl ");
+		sqlBuilder.append("FROM animal AS a ");
+		sqlBuilder.append("JOIN userOng AS u ON a.idOng = u.idOng ");
+		sqlBuilder.append("JOIN adress AS ad ON u.idAdress = ad.idAdress ");
+		sqlBuilder.append("LEFT JOIN image AS img ON a.idAnimal = img.idAnimal ");
+		sqlBuilder.append("WHERE ad.city = ? ");
+		sqlBuilder.append("  AND ad.state = ? ");
 	    ArrayList<String> parameters = new ArrayList<>();
 	    parameters.add(city);
 	    parameters.add(state);
@@ -427,7 +419,7 @@ public class Dao {
 	            a.setIdOng(rs.getString("idOng"));
 	            a.setColor(rs.getString("idColor"));
 	            a.setAnimalDescription(rs.getString("descricao"));
-	            a.setImageUrl(rs.getString("imageUrl"));
+	            a.setLinks(getAnimalImages(a.getId()));
 	            Animal.convertValues(a);
 	            animals.add(a);
 	        }
@@ -441,11 +433,34 @@ public class Dao {
 
 
 
-	public Adress getUserAdress(String userId) throws ClassNotFoundException, IOException {
+	public Adress getUserOngAdress(String userId) throws ClassNotFoundException, IOException {
 		String sql = "SELECT ad.city, ad.state " +
 		        "FROM adress AS ad " +
 		        "JOIN userOng AS u ON ad.idAdress = u.idAdress " +
 		        "WHERE u.idOng = ?";
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+			statement.setString(1, userId);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				String city = rs.getString("city");
+				String state = rs.getString("state");
+				Adress a = new Adress();
+				a.setCity(city);
+				a.setState(state);
+				return a;
+			}else {
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public Adress getUserAdopterAdress(String userId) throws ClassNotFoundException, IOException {
+		String sql = "SELECT ad.city, ad.state " +
+		        "FROM adress AS ad " +
+		        "JOIN userAdopter AS u ON ad.idAdress = u.idAdress " +
+		        "WHERE u.idAdopter = ?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
 			statement.setString(1, userId);
 			ResultSet rs = statement.executeQuery();
@@ -689,7 +704,7 @@ public class Dao {
 	}
 
 
-	private Animal getAnimalData(Animal animal) throws IOException, ClassNotFoundException {
+	public Animal getAnimalData(Animal animal) throws IOException, ClassNotFoundException {
 		String sql = "SELECT * FROM animal WHERE idAnimal=?";
 		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
 			statement.setString(1, animal.getId());
@@ -791,14 +806,22 @@ public class Dao {
 	    }
 	}
 
-	public ArrayList<Animal> getAllAnimais() throws ClassNotFoundException, IOException {
-		String sql = "SELECT a.idAnimal, a.idRace, a.animalName, a.idAnimalSize, a.idAnimalFurType, a.idAnimalToAnimal, a.idAnimalToPerson, a.sex, a.age, a.idOng, a.insertionDate, a.idColor, a.descricao, MAX(i.imageUrl) AS imageUrl "
-	             + "FROM animal a "
-	             + "LEFT JOIN image i "
-	             + "ON a.idAnimal = i.idAnimal "
-	             + "GROUP BY a.idAnimal";
+	public ArrayList<Animal> getAllAnimais(String idUser) throws ClassNotFoundException, IOException {
+		Adress adress = getUserAdopterAdress(idUser);
+		StringBuilder sqlBuilder = new StringBuilder();
+		sqlBuilder.append("SELECT DISTINCT a.idAnimal, a.idRace, a.animalName, a.idAnimalSize, a.idAnimalFurType, a.idAnimalToAnimal, a.idAnimalToPerson, ");
+		sqlBuilder.append("a.sex, a.age, a.idOng, a.insertionDate, a.idColor, a.descricao, img.imageUrl ");
+		sqlBuilder.append("FROM animal AS a ");
+		sqlBuilder.append("JOIN userOng AS u ON a.idOng = u.idOng ");
+		sqlBuilder.append("JOIN adress AS ad ON u.idAdress = ad.idAdress ");
+		sqlBuilder.append("LEFT JOIN image AS img ON a.idAnimal = img.idAnimal ");
+		sqlBuilder.append("WHERE ad.city = ? ");
+		sqlBuilder.append("  AND ad.state = ? ");
 	ArrayList<Animal> animals = new ArrayList<Animal>();
+	String sql = sqlBuilder.toString();
 	try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
+		statement.setString(1, adress.getCity());
+		statement.setString(2, adress.getState());
 	    ResultSet rs = statement.executeQuery();
 	    while(rs.next()) {
 	        Animal a = new Animal();
@@ -812,9 +835,10 @@ public class Dao {
 	        a.setAge(rs.getString("age"));
 	        a.setIdOng(rs.getString("idOng"));
 	        a.setInsertionDate(rs.getString("insertionDate"));
-	        a.setImageUrl(rs.getString("imageUrl"));
+	        //a.setImageUrl(rs.getString("imageUrl"));
 	        a.setId(rs.getString("idAnimal"));
 	        a.setColor(rs.getString("idColor"));
+	        a.setLinks(getAnimalImages(a.getId()));
 	        a.setAnimalDescription(rs.getString("descricao"));
 	        Animal.convertValues(a);
 	        animals.add(a);

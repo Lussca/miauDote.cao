@@ -32,7 +32,6 @@ const Animals = ({ filterApplied, filters }: AnimalsProps) => {
 
   useEffect(() => {
     if(filterApplied){
-
       axios
       .post('http://localhost:8080/MiauDoteCao/AnimalFilterServlet', config)
       .then(response => {
@@ -43,9 +42,12 @@ const Animals = ({ filterApplied, filters }: AnimalsProps) => {
       });
 
     } else{
-
+      const params = {
+        idUser: sessionStorage.getItem("userId"),
+      };
+      
       axios
-      .get('http://localhost:8080/MiauDoteCao/GetAllAnimals')
+      .get('http://localhost:8080/MiauDoteCao/GetAllAnimals',{params})
       .then(response => {
         setAnimalData(response.data.animals);
       })

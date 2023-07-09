@@ -25,8 +25,9 @@ public class GetAllAnimals extends HttpServlet {
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
+		String idUser = request.getParameter("idUser");
 		try {
-			ArrayList<Animal> animals = dao.getAllAnimais();
+			ArrayList<Animal> animals = dao.getAllAnimais(idUser);
 			if(!animals.isEmpty()) {
 			RequestResponseHandler.generateAndSendJson(animals, response);
 			}else {

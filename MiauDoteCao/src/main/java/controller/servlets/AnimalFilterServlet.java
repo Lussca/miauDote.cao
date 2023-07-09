@@ -40,7 +40,7 @@ public class AnimalFilterServlet extends HttpServlet {
 			String age = request.getParameter("age");
 			String userId = request.getParameter("userId");	
 			try {
-				Adress a = dao.getUserAdress(userId);
+				Adress a = dao.getUserOngAdress(userId);
 				ArrayList<Animal> animals = dao.selectAnimals(race, size, hairType, animalToAnimal, animalToPerson, sex, age, userId, a.getCity(), a.getState());
 				if(!animals.isEmpty()) {
 					JsonArray jsonArray = new Gson().toJsonTree(animals).getAsJsonArray();
@@ -85,7 +85,7 @@ public class AnimalFilterServlet extends HttpServlet {
         String sex = json.get("sexo").getAsString();
         //String age = json.get("age").getAsString();
 			try {
-				Adress a = dao.getUserAdress(idUser);
+				Adress a = dao.getUserOngAdress(idUser);
 				ArrayList<Animal> animals = dao.selectAnimals(especies, size, furType, animalToAnimal, animalToPerson, sex, "0", idUser, a.getCity(), a.getState());
 				if(!animals.isEmpty()) {
 					RequestResponseHandler.generateAndSendJson(animals, response);
