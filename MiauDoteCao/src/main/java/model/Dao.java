@@ -293,6 +293,7 @@ public class Dao {
 	}
 	public String getJWT(String email, boolean isOng) throws ClassNotFoundException, IOException {
 	    String sql;
+	    System.out.println(email);
 	    if (isOng) {
 	        sql = "SELECT jwt FROM userOng WHERE email=?";
 	    } else {
@@ -354,10 +355,8 @@ public class Dao {
 		sqlBuilder.append("JOIN userOng AS u ON a.idOng = u.idOng ");
 		sqlBuilder.append("JOIN adress AS ad ON u.idAdress = ad.idAdress ");
 		sqlBuilder.append("LEFT JOIN image AS img ON a.idAnimal = img.idAnimal ");
-		sqlBuilder.append("WHERE ad.city = ? ");
-		sqlBuilder.append("  AND ad.state = ? ");
+		sqlBuilder.append("WHERE ad.state = ? ");
 	    ArrayList<String> parameters = new ArrayList<>();
-	    parameters.add(city);
 	    parameters.add(state);
 
 	    if (race != null && !race.isEmpty() && !race.equals("0")) {
@@ -632,7 +631,7 @@ public class Dao {
 	    ArrayList<String> parameters = new ArrayList<>();
 
 	    if (!oldAnimal.getRace().equals(newAnimal.getRace())) {
-	        sqlBuilder.append("race = ?, ");
+	        sqlBuilder.append("idRace = ?, ");
 	        parameters.add(newAnimal.getRace());
 	    }
 
@@ -642,22 +641,22 @@ public class Dao {
 	    }
 
 	    if (!oldAnimal.getSize().equals(newAnimal.getSize())) {
-	        sqlBuilder.append("size = ?, ");
+	        sqlBuilder.append("idAnimalSize = ?, ");
 	        parameters.add(newAnimal.getSize());
 	    }
 
 	    if (!oldAnimal.getHairType().equals(newAnimal.getHairType())) {
-	        sqlBuilder.append("hairType = ?, ");
+	        sqlBuilder.append("idAnimalFurType = ?, ");
 	        parameters.add(newAnimal.getHairType());
 	    }
 
 	    if (!oldAnimal.getAnimalToAnimal().equals(newAnimal.getAnimalToAnimal())) {
-	        sqlBuilder.append("animalToAnimal = ?, ");
+	        sqlBuilder.append("idAnimalToAnimal = ?, ");
 	        parameters.add(newAnimal.getAnimalToAnimal());
 	    }
 
 	    if (!oldAnimal.getAnimalToPerson().equals(newAnimal.getAnimalToPerson())) {
-	        sqlBuilder.append("animalToPerson = ?, ");
+	        sqlBuilder.append("idAnimalToPerson = ?, ");
 	        parameters.add(newAnimal.getAnimalToPerson());
 	    }
 
@@ -672,12 +671,12 @@ public class Dao {
 	    }
 	    
 	    if(!oldAnimal.getColor().equals(newAnimal.getColor())) {
-	    	sqlBuilder.append("color = ?, ");
+	    	sqlBuilder.append("idColor = ?, ");
 	    	parameters.add(newAnimal.getColor());
 	    }
 	    
 	    if(!oldAnimal.getAnimalDescription().equals(newAnimal.getAnimalDescription())) {
-	    	sqlBuilder.append("animalDescription = ?, ");
+	    	sqlBuilder.append("descricao = ?, ");
 	    	parameters.add(newAnimal.getAnimalDescription());
 	    }
 	    sqlBuilder.setLength(sqlBuilder.length() - 2);
@@ -815,13 +814,11 @@ public class Dao {
 		sqlBuilder.append("JOIN userOng AS u ON a.idOng = u.idOng ");
 		sqlBuilder.append("JOIN adress AS ad ON u.idAdress = ad.idAdress ");
 		sqlBuilder.append("LEFT JOIN image AS img ON a.idAnimal = img.idAnimal ");
-		sqlBuilder.append("WHERE ad.city = ? ");
-		sqlBuilder.append("  AND ad.state = ? ");
+		sqlBuilder.append("WHERE ad.state = ? ");
 	ArrayList<Animal> animals = new ArrayList<Animal>();
 	String sql = sqlBuilder.toString();
 	try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)){
-		statement.setString(1, adress.getCity());
-		statement.setString(2, adress.getState());
+		statement.setString(1, adress.getState());
 	    ResultSet rs = statement.executeQuery();
 	    while(rs.next()) {
 	        Animal a = new Animal();
@@ -941,6 +938,31 @@ public class Dao {
 					result.add("false");
 					return result;
 				}
+				return null;
+			}
+			
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public ArrayList<String> getUserEmailAndType(String idUser, boolean isOng) {
+		ArrayList<String> result = new ArrayList<String>();
+		String sql;
+		if(isOng) {
+			sql = "SELECT email FROM userOng WHERE idOng=?";
+		}else {
+			sql = "SELECT email FROM userAdopter WHERE idAdopter=?";
+		}
+		try(Connection conn = this.connectDB(); PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, idUser);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				result.add(rs.getString(1));
+				result.add("true");
+				return result;
+			}else {
+				
 				return null;
 			}
 			

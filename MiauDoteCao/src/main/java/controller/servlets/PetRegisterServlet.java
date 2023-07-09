@@ -2,6 +2,7 @@ package controller.servlets;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,55 +27,26 @@ public class PetRegisterServlet extends HttpServlet {
        
      }
      @Override
-     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-    	response.setContentType("text/plain");
- 	    response.setStatus(200);
- 	    response.getWriter().println("MENSAGEM");
- 	    response.getWriter().flush();
- 	    response.getWriter().close();
-     }
-     @Override
      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
     	rrh.configureCors(response);
-    	 /*String authorizationHeader = request.getHeader("Authorization");
-    	 System.out.println("PEGOU O TOKEN");
-    	 if(authorizationHeader == null || authorizationHeader.startsWith("Bearer ")) {
-    	 	rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.INVALID_TOKEN);
-    	 	return;
-    	 }else {
-    	 String jwt = authorizationHeader.substring(7);
-    	 String login = request.getParameter("login");
-    	 boolean isOng = Boolean.parseBoolean(request.getParameter("isOng"));
-
-    	 try {
-    	 	if(jwtH.validateJWT(jwt, login, isOng)) {
-    	 		StringBuilder requestBody = new StringBuilder();
-    	 		try(BufferedReader reader = request.getReader()){
-    	 			String line;
-    	 			while((line = reader.readLine()) != null){
-    	 				requestBody.append(line);
-    	 			}
-    	 		}
-    	 		Gson gson = new Gson();
-    	 		String urlJson = requestBody.toString();
-    	 		String json = gson.toJson(urlJson);
-    	 		//teste para extração de link das imagens de um animal
-    	 		Type urlListType = new TypeToken<ArrayList<String>>(){}.getType();
-    	 		ArrayList<String> urlArray = gson.fromJson(json, urlListType);
-
-    	 	}
-    	 	}catch(Exception e) {
-    	 		
-    	 	}*/
-    	 
-     
-    	System.out.println("CHEGOU AQUI");
     	String requestBody = RequestResponseHandler.getRequestBody(request);
         
         	String jsonPayLoad = requestBody.toString();
         	try {
         	Animal animal = Animal.parseAnimalJson(jsonPayLoad);
+        	boolean jwtValidator = false;
+	        try {
+				jwtValidator = RequestResponseHandler.jwtValidator(request, animal.getIdOng(), true);
+			} catch (IOException | SQLException | ClassNotFoundException e) {
+				e.printStackTrace();
+				rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+			}
+	        
+	        if(!jwtValidator) {
+	        	rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+	        }else {
         	int idAnimal = dao.insertAnimal(animal);
+        	
         	if(idAnimal == -1) {
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.DATABASE_ERROR);
         		}else {
@@ -89,6 +61,7 @@ public class PetRegisterServlet extends HttpServlet {
     	        		}
         			}
         		}
+        	}
         	}catch(NumberFormatException e) {
         		e.printStackTrace();
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_ANIMAL);
@@ -100,34 +73,3 @@ public class PetRegisterServlet extends HttpServlet {
     	 rrh.configureCors(response);
      }
 }
-/*String authorizationHeader = request.getHeader("Authorization");
-if(authorizationHeader == null || authorizationHeader.startsWith("Bearer ")) {
-	rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.INVALID_TOKEN);
-	return;
-}else {
-String jwt = authorizationHeader.substring(7);
-String login = request.getParameter("login");
-boolean isOng = Boolean.parseBoolean(request.getParameter("isOng"));
-
-try {
-	if(jwtH.validateJWT(jwt, login, isOng)) {
-		StringBuilder requestBody = new StringBuilder();
-		try(BufferedReader reader = request.getReader()){
-			String line;
-			while((line = reader.readLine()) != null){
-				requestBody.append(line);
-			}
-		}
-		Gson gson = new Gson();
-		String urlJson = requestBody.toString();
-		String json = gson.toJson(urlJson);
-		//teste para extração de link das imagens de um animal
-		Type urlListType = new TypeToken<ArrayList<String>>(){}.getType();
-		ArrayList<String> urlArray = gson.fromJson(json, urlListType);
-
-	}
-} catch (ClassNotFoundException | IOException | SQLException e) {
-	rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.SERVER_ERROR);
-	e.printStackTrace();
-		}
-	}*/

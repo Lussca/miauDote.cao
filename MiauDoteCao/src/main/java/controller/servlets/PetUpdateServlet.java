@@ -31,13 +31,25 @@ public class PetUpdateServlet extends HttpServlet {
         	String jsonPayLoad = requestBody.toString();
         	try {
         	Animal animal = Animal.parseAnimalJson(jsonPayLoad, 1);
+        	boolean jwtValidator = false;
+	        try {
+				jwtValidator = RequestResponseHandler.jwtValidator(request, animal.getIdOng(), true);
+			} catch (IOException | SQLException e) {
+				e.printStackTrace();
+				rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+			}
+	        
+	        if(!jwtValidator) {
+	        	rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+	        }else {
         	int hasErrorAnimal = dao.updateAnimal(animal);
         	int hasErrorImage = dao.updateAnimalImages(animal);
         	if(hasErrorAnimal == 0 && hasErrorImage == 0) {
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Validations.DATABASE_ERROR);
         		}else {
         			rrh.sendOkResponse(response);
-        		}
+        			}
+	        	}
         	}catch(NumberFormatException | ClassNotFoundException | SQLException e) {
         		e.printStackTrace();
         		rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.INVALID_ANIMAL);
@@ -57,6 +69,17 @@ public class PetUpdateServlet extends HttpServlet {
 			
 			String idAnimal = animalObject.get("idAnimal").getAsString();
 			String idUser = animalObject.get("idUser").getAsString();
+			boolean jwtValidator = false;
+	        try {
+				jwtValidator = RequestResponseHandler.jwtValidator(request, idUser, true);
+			} catch (IOException | SQLException | ClassNotFoundException e) {
+				e.printStackTrace();
+				rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+			}
+	        
+	        if(!jwtValidator) {
+	        	rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+	        }else {
 			try {
 				int result = dao.deleteAnimal(idAnimal, idUser);
 				if(result > 0) {
@@ -66,7 +89,8 @@ public class PetUpdateServlet extends HttpServlet {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
-			}	
+				}	
+			}
 	}
 
     @Override
