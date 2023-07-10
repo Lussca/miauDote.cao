@@ -40,7 +40,8 @@ public class PetUpdateServlet extends HttpServlet {
 			}
 	        
 	        if(!jwtValidator) {
-	        	rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+	        	rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.JWT_ERROR);
+	        	return;
 	        }else {
         	int hasErrorAnimal = dao.updateAnimal(animal);
         	int hasErrorImage = dao.updateAnimalImages(animal);

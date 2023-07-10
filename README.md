@@ -20,7 +20,7 @@ A equipe responsável pelo desenvolvimento do MiauDote.cão é composta por:
 # Desenvolvimento futuro
 Algumas das funcionalidades que planejamos implementar em versões futuras do Adote.cão incluem:
 
-Sistema de cadastro de animais
+Sistema de chat ao vivo
 
 Sistema de agendamento de entrevistas para adoção
 
