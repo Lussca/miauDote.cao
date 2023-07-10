@@ -47,7 +47,8 @@ public class AdoptionApplicationServlet extends HttpServlet {
 			}
 	        
 	        if(!jwtValidator) {
-	        	rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+	        	rrh.sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, Validations.JWT_ERROR);
+	        	return;
 	        }else {
 	        boolean alreadyExists = dao.checkForDuplicityAdoptionApplication(idUser, idAnimal);
 			if(alreadyExists) {
@@ -92,7 +93,9 @@ public class AdoptionApplicationServlet extends HttpServlet {
 	        
 	        if(!jwtValidator) {
 	        	rrh.sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, Validations.JWT_ERROR);
+	        	return;
 	        }else {
+	        	System.out.println("VALIDO");
 	        int result = dao.deleteApplication(idUser, idAnimal);
 	        if(result > 0) {
 	        	rrh.sendOkResponse(response);
