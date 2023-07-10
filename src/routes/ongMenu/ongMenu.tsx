@@ -72,15 +72,17 @@ function ongMenu(this: any)  {
   const handleDelete = (animalId: string) => {
 
     const idUser = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem('jwt')
     const idAnimal = animalId;
 
     const Animal: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       data: {
         idAnimal: idAnimal,
         idUser: idUser,
-      },
-      headers: {
-        'Content-Type': 'application/json',
       },
     };
 

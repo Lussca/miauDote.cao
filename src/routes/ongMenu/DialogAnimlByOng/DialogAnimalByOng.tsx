@@ -6,7 +6,7 @@ import { storageRef, uploadBytes, getDownloadURL } from '../../../Components/Fir
 import styles from '../DialogAnimlByOng/DialogAnimalByOng.module.css';
 
 //imports MUI
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Alert, AlertColor, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 interface Animal {
     id: string
@@ -69,6 +69,29 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
     const [titel, setTitel] = useState('');
     const [nomeBotao, setNomeBotao] = useState('');
 
+    const [msg, setMsg] = useState('');
+    const [severity, setSeverity] = useState('error');
+    const [showAlert, setShowAlert] = useState(false);
+
+    let alertSeverity: AlertColor | undefined;
+
+    switch (severity) {
+        case 'error':
+        alertSeverity = 'error';
+        break;
+        case 'warning':
+        alertSeverity = 'warning';
+        break;
+        case 'info':
+        alertSeverity = 'info';
+        break;
+        case 'success':
+        alertSeverity = 'success';
+        break;
+        default:
+        alertSeverity = undefined;
+    }
+
     const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
         setAnimal({ ...animal, name: event.target.value });
     };
@@ -120,6 +143,16 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
 
     async function handleButtonClick() {
 
+        const idAnimal = animalData?.id;
+
+        if (images.length === 0) {
+            console.error('Erro: Nenhuma imagem selecionada');
+            setShowAlert(true);
+            setSeverity('error');
+            setMsg('Atenção! Nenhuma imagem selecionada.');
+            return;
+        }
+
         for (const image of images) {
             const storageChildRef = ref(storageRef, `images/${image.name}`);
             try {
@@ -131,11 +164,11 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             }
         }
 
-        if(animalData != null){
+        if(idAnimal != null){
 
             const data = {
                 Animal: {
-                    idAnimal: animalData.id,
+                    idAnimal: idAnimal,
                     race: animal.race,
                     nome: animal.name,
                     porte: animal.size,
@@ -227,6 +260,9 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
 
   return (
     <Dialog open={open} onClose={onClose}>
+        {showAlert && <Alert variant="filled" severity={alertSeverity}  onClose={() => {setShowAlert(false)}}>
+            {msg}
+        </Alert> }
       <DialogTitle>{titel} Animal</DialogTitle>
       <DialogContent className={styles.ajustesAnimalAdd}>
         <input type="file" accept="image/*" multiple onChange={handleImageChange} className={styles.input}/>
