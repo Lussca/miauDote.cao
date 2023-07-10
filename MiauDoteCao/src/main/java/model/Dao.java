@@ -933,7 +933,7 @@ public class Dao {
 				ps.setString(1, email);
 				ResultSet rs2 = ps.executeQuery();
 				if(rs2.next()) {
-					result.add(rs.getString(1));
+					result.add(rs2.getString(1));
 					result.add("false");
 					return result;
 				}

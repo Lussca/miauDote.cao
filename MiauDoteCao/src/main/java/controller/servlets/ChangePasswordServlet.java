@@ -25,8 +25,6 @@ public class ChangePasswordServlet extends HttpServlet {
     public ChangePasswordServlet() {
         super();
     }
-    //ESTÁ COM PROBLEMA DE CORS
-    //ALTERAR O MÉTODO DE ENVIO DE EMAIL
     @Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rrh.configureCors(response);
