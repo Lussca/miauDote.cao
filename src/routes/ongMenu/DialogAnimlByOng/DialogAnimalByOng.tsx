@@ -135,7 +135,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
-        if (files) {
+        if (files != undefined && files != null) {
           const selectedImages: File[] = Array.from(files);
           setImages(selectedImages);
         }
@@ -155,16 +155,20 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             return;
         }
 
-        for (const image of images) {
-            const storageChildRef = ref(storageRef, `images/${image.name}`);
+        const imgsTemp:{ [key:number]:string } = {};
+
+        for (let i = 0; i < images.length; i++) {
+            const storageChildRef = ref(storageRef, `images/${images[i].name}`);
             try {
-              const snapshot = await uploadBytes(storageChildRef, image);
+              const snapshot = await uploadBytes(storageChildRef, images[i]);
               const url = await getDownloadURL(snapshot.ref);
-              setImageUrls((prevImageUrls) => [...prevImageUrls, url]);
+              imgsTemp[i] = url;
             } catch (error) {
               console.error('Error uploading image: ', error);
             }
         }
+
+        // setImageUrls(imgsTemp);
 
         if(idAnimal != null){
 
@@ -182,12 +186,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
                     idOng: sessionStorage.getItem('userId'),
                     cor: animal.color,
                     descricao: animal.animalDescription,
-                    Links: {
-                        link1: imageUrls[0] || '',
-                        link2: imageUrls[1] || '',
-                        link3: imageUrls[2] || '',
-                        link4: imageUrls[3] || ''
-                    }
+                    Links: imgsTemp
                 }
             };
     
@@ -232,12 +231,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
                     idOng: sessionStorage.getItem('userId'),
                     cor: animal.color,
                     descricao: animal.animalDescription,
-                    Links: {
-                        link1: imageUrls[0] || '',
-                        link2: imageUrls[1] || '',
-                        link3: imageUrls[2] || '',
-                        link4: imageUrls[3] || ''
-                    }
+                    Links: imgsTemp
                 }
             };
     
@@ -261,7 +255,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
 
                 setIsLoading(false);
 
-                window.location.reload()
+                // window.location.reload()
             })
             .catch(error => {
                 console.error("Erro: " + error);
