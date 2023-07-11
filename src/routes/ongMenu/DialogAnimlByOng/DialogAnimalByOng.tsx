@@ -203,6 +203,12 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             axios
             .put('http://localhost:8080/MiauDoteCao/PetUpdateServlet', jsonData, config)
             .then(response => {
+                setShowAlert(true);
+                setSeverity('success');
+                setMsg('Animal editado com sucesso!');
+
+                setIsLoading(false);
+
                 window.location.reload()
             })
             .catch(error => {
@@ -248,7 +254,13 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             axios
             .post('http://localhost:8080/MiauDoteCao/PetRegisterServlet', jsonData, config)
             .then(response => {
-                //window.location.reload()
+                setShowAlert(true);
+                setSeverity('success');
+                setMsg('Animal cadastrado com sucesso!');
+
+                setIsLoading(false);
+
+                window.location.reload()
             })
             .catch(error => {
                 console.error("Erro: " + error);
