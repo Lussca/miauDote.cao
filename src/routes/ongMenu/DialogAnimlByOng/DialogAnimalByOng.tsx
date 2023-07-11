@@ -138,7 +138,6 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
         if (files) {
           const selectedImages: File[] = Array.from(files);
           setImages(selectedImages);
-          console.log(images)
         }
     };
 
@@ -149,10 +148,10 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
         const idAnimal = animalData?.id;
 
         if (images.length === 0) {
-            console.error('Erro: Nenhuma imagem selecionada');
             setShowAlert(true);
             setSeverity('error');
             setMsg('Atenção! Nenhuma imagem selecionada.');
+
             return;
         }
 
