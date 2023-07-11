@@ -6,7 +6,7 @@ import { storageRef, uploadBytes, getDownloadURL } from '../../../Components/Fir
 import styles from '../DialogAnimlByOng/DialogAnimalByOng.module.css';
 
 //imports MUI
-import { Alert, AlertColor, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Alert, AlertColor, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 interface Animal {
     id: string
@@ -70,6 +70,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
     const [nomeBotao, setNomeBotao] = useState('');
 
     const [msg, setMsg] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [severity, setSeverity] = useState('error');
     const [showAlert, setShowAlert] = useState(false);
 
@@ -143,6 +144,8 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
 
     async function handleButtonClick() {
 
+        setIsLoading(true);
+
         const idAnimal = animalData?.id;
 
         if (images.length === 0) {
@@ -213,9 +216,8 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             })
             .catch(error => {
                 console.error("Erro: " + error);
-                setImageUrls([]);
-                setAnimal({...animalsInformations});
             });
+
         } else{
 
             const data = {
@@ -264,17 +266,22 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             })
             .catch(error => {
                 console.error("Erro: " + error);
-                setImageUrls([]);
-                setAnimal({...animalsInformations});
             });
+            
         }
     }
 
   return (
     <Dialog open={open} onClose={onClose}>
+
         {showAlert && <Alert variant="filled" severity={alertSeverity}  onClose={() => {setShowAlert(false)}}>
             {msg}
         </Alert> }
+
+        {isLoading && <div className={styles.progress}>
+            <CircularProgress />
+        </div>}
+
       <DialogTitle>{titel} Animal</DialogTitle>
       <DialogContent className={styles.ajustesAnimalAdd}>
         <input type="file" accept="image/*" multiple onChange={handleImageChange} className={styles.input}/>

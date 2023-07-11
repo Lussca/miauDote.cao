@@ -32,3 +32,15 @@
 .input::file-selector-button:active {
     background-color: #e5e7eb;
 }
+
+.progress{
+    height: 100%;
+    width: 100%;
+    background: #cdcdcd82;
+    z-index: 1;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+}
