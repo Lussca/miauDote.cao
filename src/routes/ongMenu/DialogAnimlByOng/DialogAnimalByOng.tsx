@@ -6,7 +6,7 @@ import { storageRef, uploadBytes, getDownloadURL } from '../../../Components/Fir
 import styles from '../DialogAnimlByOng/DialogAnimalByOng.module.css';
 
 //imports MUI
-import { Alert, AlertColor, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Alert, AlertColor, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 interface Animal {
     id: string
@@ -70,6 +70,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
     const [nomeBotao, setNomeBotao] = useState('');
 
     const [msg, setMsg] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [severity, setSeverity] = useState('error');
     const [showAlert, setShowAlert] = useState(false);
 
@@ -137,11 +138,12 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
         if (files) {
           const selectedImages: File[] = Array.from(files);
           setImages(selectedImages);
-          console.log(images)
         }
     };
 
     async function handleButtonClick() {
+
+        setIsLoading(true);
 
         const idAnimal = animalData?.id;
 
@@ -158,7 +160,10 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             try {
               const snapshot = await uploadBytes(storageChildRef, image);
               const url = await getDownloadURL(snapshot.ref);
+              console.log(snapshot)
+              console.log(url)
               setImageUrls((prevImageUrls) => [...prevImageUrls, url]);
+              console.log(imageUrls)
             } catch (error) {
               console.error('Error uploading image: ', error);
             }
@@ -203,12 +208,17 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             axios
             .put('http://localhost:8080/MiauDoteCao/PetUpdateServlet', jsonData, config)
             .then(response => {
-                window.location.reload()
+                setShowAlert(true);
+                setSeverity('success');
+                setMsg('Animal editado com sucesso!');
+
+                setIsLoading(false);
+
+                // window.location.reload()
             })
             .catch(error => {
                 console.error("Erro: " + error);
-                setImageUrls([]);
-                setAnimal({...animalsInformations});
+                setIsLoading(false);
             });
         } else{
 
@@ -248,21 +258,32 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             axios
             .post('http://localhost:8080/MiauDoteCao/PetRegisterServlet', jsonData, config)
             .then(response => {
-                window.location.reload()
+                setShowAlert(true);
+                setSeverity('success');
+                setMsg('Animal cadastrado com sucesso!');
+
+                setIsLoading(false);
+
+                // window.location.reload()
             })
             .catch(error => {
                 console.error("Erro: " + error);
-                setImageUrls([]);
-                setAnimal({...animalsInformations});
+                setIsLoading(false);
             });
         }
     }
 
   return (
     <Dialog open={open} onClose={onClose}>
+        
         {showAlert && <Alert variant="filled" severity={alertSeverity}  onClose={() => {setShowAlert(false)}}>
             {msg}
         </Alert> }
+
+        {isLoading && <div className={styles.progress}>
+            <CircularProgress />
+        </div>}
+
       <DialogTitle>{titel} Animal</DialogTitle>
       <DialogContent className={styles.ajustesAnimalAdd}>
         <input type="file" accept="image/*" multiple onChange={handleImageChange} className={styles.input}/>
