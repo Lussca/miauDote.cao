@@ -214,7 +214,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
 
                 setIsLoading(false);
 
-                // window.location.reload()
+                window.location.reload()
             })
             .catch(error => {
                 console.error("Erro: " + error);
@@ -264,7 +264,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
 
                 setIsLoading(false);
 
-                // window.location.reload()
+                window.location.reload()
             })
             .catch(error => {
                 console.error("Erro: " + error);
