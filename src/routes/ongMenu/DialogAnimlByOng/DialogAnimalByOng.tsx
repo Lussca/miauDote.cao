@@ -248,7 +248,7 @@ const AnimalModalAddEdit = ({ open, onClose, animalData }: AnimalModalProps ) =>
             axios
             .post('http://localhost:8080/MiauDoteCao/PetRegisterServlet', jsonData, config)
             .then(response => {
-                window.location.reload()
+                //window.location.reload()
             })
             .catch(error => {
                 console.error("Erro: " + error);

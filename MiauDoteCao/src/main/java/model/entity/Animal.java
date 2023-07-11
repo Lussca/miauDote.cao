@@ -239,7 +239,9 @@ public class Animal {
             JsonObject linksObject = animalObject.getAsJsonObject("Links");
             for (String key : linksObject.keySet()) {
                 String link = linksObject.get(key).getAsString();
+                if(link != null || link != "") {
                 links.add(link);
+                }
             }
             return new Animal(String.valueOf(race), name, String.valueOf(size), String.valueOf(hairType), String.valueOf(animalToAnimal),
                     String.valueOf(animalToPerson), String.valueOf(sex), String.valueOf(age), String.valueOf(idOng), insertionDate, String.valueOf(color), description, links);
@@ -274,7 +276,9 @@ public class Animal {
 	                JsonObject linksObject = animalObject.getAsJsonObject("Links");
 	                for (String key : linksObject.keySet()) {
 	                    String link = linksObject.get(key).getAsString();
-	                    links.add(link);
+	                    if(link != null || link != "") {
+	                        links.add(link);
+	                        }
 	                }
 	            }
 	            return new Animal(String.valueOf(idAnimal), race, name, String.valueOf(size), String.valueOf(hairType), String.valueOf(animalToAnimal),

@@ -735,25 +735,14 @@ public class Dao {
 	    ArrayList<String> requestImages = (ArrayList<String>)animal.getLinks();
 	    List<String> keepImages = new ArrayList<>();
         List<String> newImages = new ArrayList<>();
-        List<String> imagesToBeRemoved = new ArrayList<>();
-        
-        // Iterate through the user's request ArrayList
-        for (String image : requestImages) {
-            if (databaseImages.contains(image)) {
-                keepImages.add(image);
-            } else {
-                newImages.add(image);
-            }
+            for (String image : requestImages) {
+		        if (databaseImages.contains(image)) {
+		            keepImages.add(image);
+		        } else {
+		            newImages.add(image);
+		        }
         }
-        
-        // Iterate through the database ArrayList
-        for (String image : databaseImages) {
-            if (!requestImages.contains(image)) {
-                imagesToBeRemoved.add(image);
-            }
-        }
-        
-        
+
 	    StringBuilder sqlBuilder = new StringBuilder();
 	    sqlBuilder.append("INSERT INTO image (idAnimal, imageUrl) VALUES ");
 	    for (int i = 0; i < newImages.size(); i++) {
@@ -762,38 +751,18 @@ public class Dao {
 	    sqlBuilder.setLength(sqlBuilder.length() - 2);
 	    String insertSql = sqlBuilder.toString();
 
-	    sqlBuilder = new StringBuilder();
-	    sqlBuilder.append("DELETE FROM image WHERE idAnimal = ? AND imageUrl IN (");
-	    for (int i = 0; i < imagesToBeRemoved.size(); i++) {
-	        sqlBuilder.append("?, ");
-	    }
-	    sqlBuilder.setLength(sqlBuilder.length() - 2);
-	    sqlBuilder.append(")");
-	    String deleteSql = sqlBuilder.toString();
-
-	    try (Connection conn = this.connectDB();
-	         PreparedStatement insertStatement = conn.prepareStatement(insertSql);
-	         PreparedStatement deleteStatement = conn.prepareStatement(deleteSql)) {
+	        try (Connection conn = this.connectDB();
+	         PreparedStatement insertStatement = conn.prepareStatement(insertSql)) {
 	    	int insertResult = 0;
-	    	int deleteResult = 0;
 	        int parameterIndex = 1;
 	        for (String imageUrl : newImages) {
 	            insertStatement.setString(parameterIndex++, animal.getId());
 	            insertStatement.setString(parameterIndex++, imageUrl);
 	        }
-
-	        deleteStatement.setString(1, animal.getId());
-	        for (int i = 0; i < imagesToBeRemoved.size(); i++) {
-	            deleteStatement.setString(i + 2, imagesToBeRemoved.get(i));
-	        }
-
 	        if (!newImages.isEmpty()) {
 	             insertResult = insertStatement.executeUpdate();
 	        }
-	        if (!imagesToBeRemoved.isEmpty()) {
-	             deleteResult = deleteStatement.executeUpdate();
-	        }
-	        if(insertResult > 0 || deleteResult > 0) {
+	        if(insertResult > 0) {
 	        	return 1;
 	        }else {
 	        	return 0;
