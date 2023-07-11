@@ -12,3 +12,15 @@
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 	border: 1px solid rgba(255, 255, 255, 0.3);
 }
+
+.progress{
+    height: 100%;
+    width: 100%;
+    background: #cdcdcd82;
+    z-index: 1;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+}

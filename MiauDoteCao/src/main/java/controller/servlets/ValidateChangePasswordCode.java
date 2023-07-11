@@ -31,7 +31,7 @@ public class ValidateChangePasswordCode extends HttpServlet {
 		String requestBody = RequestResponseHandler.getRequestBody(request);
 		Gson gson = new Gson();
 		JsonObject jsonObject = gson.fromJson(requestBody, JsonObject.class);
-           JsonObject dataObject = jsonObject.getAsJsonObject("data");
+           JsonObject dataObject = jsonObject.getAsJsonObject();
             String email = dataObject.get("email").getAsString();
             String validationCode = dataObject.get("validationCode").getAsString();
             String newPassword = dataObject.get("newPassword").getAsString();
